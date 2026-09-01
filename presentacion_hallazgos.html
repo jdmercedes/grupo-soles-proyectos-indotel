@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Levantamiento Previo — Retiro, Reubicación y Reorganización del Cableado | SOLES • INDOTEL-CCC-CP-2026-0010</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,800;9..144,1,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f1e;
+  --bg2:#0f1a33;
+  --card:#121e3a;
+  --card2:#162651;
+  --line:rgba(255,255,255,.08);
+  --text:#f2f5ff;
+  --muted:#a8b3d6;
+  --dim:#7d8ab0;
+  --brand:#1e7aff;
+  --brand2:#00d0ff;
+  --accent:#ff7a1a;
+  --nido:#ff7a1a;
+  --poda:#22c55e;
+  --tendido:#ef4444;
+  --radius:20px;
+  --radius-lg:28px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  background:radial-gradient(1200px 600px at 20% -10%, rgba(30,122,255,.22), transparent 60%),
+             radial-gradient(900px 600px at 95% 10%, rgba(0,208,255,.18), transparent 60%),
+             radial-gradient(800px 500px at 50% 120%, rgba(255,122,26,.12), transparent 60%),
+             var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+a{color:inherit; text-decoration:none}
+a:hover{ text-decoration:none}
+img{max-width:100%;display:block}
+/* HEADER */
+.header{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: blur(14px) saturate(1.4);
+  background:rgba(10,15,30,.72);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{
+  max-width:1280px; margin:0 auto; padding:10px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+}
+.brand{
+  display:flex; align-items:center; gap:14px; min-width:0;
+}
+.brand-logo{
+  width:92px; height:92px; border-radius:16px; background:#fff; padding:6px; object-fit:contain;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  flex-shrink:0;
+  transform:scale(1.08);
+  transform-origin:center;
+}
+.brand-text{line-height:1.05}
+.brand-text strong{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff; display:block}
+.brand-text span{font-size:13px; color:var(--muted); letter-spacing:.04em}
+.pliego{
+  text-align:right; min-width:0;
+}
+.pliego .badge{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:JetBrains Mono,monospace; font-size:12.5px; letter-spacing:.08em;
+  background:linear-gradient(135deg, rgba(30,122,255,.18), rgba(0,208,255,.14));
+  border:1px solid rgba(30,122,255,.35); color:#b8d1ff;
+  padding:6px 10px; border-radius:999px;
+}
+.pliego .proc{font-size:13px; color:var(--dim); margin-top:6px; line-height:1.35; max-width:560px}
+.pliego .proc b{color:var(--muted); font-weight:600}
+
+/* Progress bar */
+.progress{height:3px; background:linear-gradient(90deg, var(--brand), var(--brand2), var(--nido)); width:0; transition:width .25s}
+
+/* HERO */
+.hero{
+  max-width:1280px; margin:0 auto; padding:28px 20px 10px;
+  display:grid; grid-template-columns:1.15fr .85fr; gap:22px; align-items:stretch;
+}
+@media(max-width:980px){ .hero{grid-template-columns:1fr} .pliego{display:none} .brand-text span{display:none} }
+.hero-card{
+  position:relative; overflow:hidden;
+  background:
+    radial-gradient(600px 300px at 15% 10%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(135deg, #13264d 0%, #0f1a33 55%, #0b1226 100%);
+  border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:30px 28px 22px;
+}
+.hero-kicker{
+  display:inline-flex; gap:8px; align-items:center;
+  font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#9ec0ff;
+  background:rgba(30,122,255,.12); border:1px solid rgba(30,122,255,.25);
+  padding:7px 10px; border-radius:999px; font-weight:700;
+}
+.hero h1{
+  font-family:Fraunces,serif; font-weight:800; line-height:.95; letter-spacing:-.02em;
+  font-size: clamp(26px, 3.6vw, 38px); margin:14px 0 10px;
+}
+.hero h1 em{font-style:italic; background:linear-gradient(90deg, var(--brand2), var(--brand)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero p{color:var(--muted); font-size:14.5px; line-height:1.6; max-width:62ch; margin:0}
+.hero-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+.btn{
+  appearance:none; border:0; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.02em;
+  padding:12px 16px; border-radius:999px; display:inline-flex; align-items:center; gap:8px;
+  transition:transform .15s, box-shadow .15s, background .15s;
+}
+.btn-primary{background:linear-gradient(135deg, var(--brand), #5aa0ff); color:#fff; box-shadow:0 10px 24px rgba(30,122,255,.35)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,.08); color:#fff; border:1px solid rgba(255,255,255,.12)}
+.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.hero-meta{ display:flex; gap:14px; margin-top:18px; flex-wrap:wrap}
+.meta-pill{ display:flex; gap:10px; align-items:center; background:rgba(255,255,255,.06); border:1px solid var(--line); padding:10px 12px; border-radius:14px; min-width:140px}
+.meta-pill b{font-size:18px; line-height:1}
+.meta-pill span{font-size:13px; color:var(--muted); line-height:1.2}
+.icon{width:36px; height:36px; border-radius:10px; display:grid; place-items:center; font-size:16px}
+.icon.n{background:rgba(255,122,26,.15); border:1px solid rgba(255,122,26,.25)}
+.icon.p{background:rgba(34,197,94,.15); border:1px solid rgba(34,197,94,.25)}
+.icon.t{background:rgba(239,68,68,.15); border:1px solid rgba(239,68,68,.25)}
+
+/* Right visual */
+.visual{
+  position:relative; border-radius:var(--radius-lg); overflow:hidden;
+  border:1px solid var(--line); background:#0b1226; min-height:360px;
+  display:grid; grid-template-rows:1fr auto;
+}
+.visual-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:8px}
+.visual-grid img{ width:100%; height:132px; object-fit:cover; border-radius:14px; border:1px solid rgba(255,255,255,.08)}
+.visual-caption{
+  padding:14px 16px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.06));
+  border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:12px;
+}
+.visual-caption small{color:var(--muted); font-size:13px; letter-spacing:.08em; text-transform:uppercase; font-weight:700}
+.dots{display:flex; gap:6px}
+.dots i{width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.2)}
+.dots i.active{background:var(--brand); width:18px}
+
+/* NAV PILLS */
+.sticky-nav{
+  position:sticky; top:73px; z-index:40;
+  backdrop-filter: blur(12px); background:rgba(10,15,30,.55); border-bottom:1px solid var(--line);
+}
+.sticky-nav-inner{max-width:1280px; margin:0 auto; padding:10px 20px; display:flex; gap:8px; overflow:auto; scrollbar-width:none}
+.sticky-nav-inner::-webkit-scrollbar{display:none}
+.nav-pill{
+  white-space:nowrap; font-size:14px; font-weight:700; letter-spacing:.02em;
+  padding:9px 14px; border-radius:999px; border:1px solid var(--line);
+  background:rgba(255,255,255,.06); color:var(--muted); cursor:pointer; transition:.15s;
+}
+.nav-pill.active{background:#fff; color:#0a0f1e; border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+/* SECTIONS */
+.wrap{max-width:1280px; margin:0 auto; padding:18px 20px 40px}
+.section{ scroll-margin-top:130px; margin-top:26px}
+.section-head{ display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:14px; flex-wrap:wrap}
+.eyebrow{font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--brand2); font-weight:800}
+.section-head h2{font-family:Fraunces,serif; font-size:26px; line-height:1; margin:6px 0 0; letter-spacing:-.02em}
+.section-head p{color:var(--muted); font-size:15px; line-height:1.55; max-width:64ch; margin:6px 0 0}
+.kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+@media(max-width:980px){ .kpi-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:560px){ .kpi-grid{grid-template-columns:1fr} }
+.kpi{
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:20px; padding:16px;
+  position:relative; overflow:hidden;
+}
+.kpi::after{content:""; position:absolute; inset:auto -20% -40% auto; width:120px; height:120px; background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.08), transparent 70%); border-radius:50%}
+.kpi small{font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700}
+.kpi b{font-size:34px; letter-spacing:-.04em; display:block; margin:6px 0 2px}
+.kpi p{font-size:14px; color:var(--muted); margin:0; line-height:1.4}
+.bar{height:6px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; margin-top:10px}
+.bar i{display:block; height:100%; border-radius:999px}
+
+/* 3 hallazgos */
+.cards3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; align-items:stretch}
+@media(max-width:980px){ .cards3{grid-template-columns:1fr} }
+.find-card{
+  background:linear-gradient(180deg, var(--card2), var(--card)); border:1px solid var(--line);
+  border-radius:22px; overflow:hidden; display:flex; flex-direction:column;
+  min-width:0;
+}
+.find-card *{min-width:0; overflow-wrap:break-word; word-break:break-word}
+.find-head{padding:16px 16px 0; display:flex; gap:12px; align-items:flex-start}
+.find-head .icon{width:44px; height:44px; border-radius:12px; font-size:18px; flex-shrink:0}
+.find-head h3{margin:0; font-size:14px; line-height:1.25; flex:1; min-width:0}
+.find-head h3 span{display:block; font-size:12.5px; color:var(--muted); font-weight:500; margin-top:4px; line-height:1.45; overflow-wrap:break-word}
+.find-stats{display:flex; gap:8px; padding:12px 16px 10px; flex-wrap:wrap}
+.stat{ flex:1 1 90px; min-width:84px; background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:12px; padding:8px 6px; text-align:center; display:flex; flex-direction:column; justify-content:center}
+.stat b{font-size:17px; line-height:1}
+.stat small{display:block; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-top:4px; line-height:1.3; white-space:normal}
+.gallery{
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;
+  padding:10px 12px 12px; width:100%; max-width:100%;
+  justify-items:center; align-items:center; justify-content:center;
+  margin:0 auto; box-sizing:border-box;
+}
+.gallery img{
+  width:100%; max-width:100%; height:96px; object-fit:cover; border-radius:12px;
+  cursor:pointer; border:1px solid rgba(255,255,255,.08); transition:transform .15s, filter .15s;
+  display:block; margin:0 auto;
+}
+.gallery img:hover{transform:scale(1.02); filter:brightness(1.08)}
+.card-foot{padding:10px 14px 14px; margin-top:auto; display:flex; justify-content:center; text-align:center}
+.tag{
+  display:inline-flex; justify-content:center; align-items:center; text-align:center;
+  font-size:11.5px; font-weight:700; letter-spacing:.04em; line-height:1.35;
+  padding:7px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted);
+  max-width:100%; white-space:normal; overflow-wrap:break-word;
+}
+
+/* DASHBOARD */
+.dashboard{
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border:1px solid var(--line); border-radius:24px; overflow:hidden;
+}
+.dash-toolbar{
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+  padding:14px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.03);
+}
+.filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.filter{
+  padding:8px 12px; border-radius:999px; border:1px solid var(--line);
+  background:rgba(255,255,255,.06); color:var(--muted); font-weight:700; font-size:14px; cursor:pointer;
+}
+.filter.active{ background:#fff; color:#0a0f1e; border-color:#fff}
+.search{
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px;
+  padding:8px 12px; min-width:240px;
+}
+.search input{ background:transparent; border:0; outline:0; color:#fff; width:100%; font-size:14.5px}
+.search input::placeholder{color:var(--dim)}
+.dash-body{display:grid; grid-template-columns:1.15fr .85fr; gap:0}
+@media(max-width:1080px){ .dash-body{grid-template-columns:1fr} }
+.table-wrap{ overflow:auto; max-height:520px; border-right:1px solid var(--line)}
+@media(max-width:1080px){ .table-wrap{border-right:0; border-bottom:1px solid var(--line)} }
+table{width:100%; border-collapse:collapse; font-size:14.5px}
+thead th{
+  position:sticky; top:0; z-index:1;
+  background:#111e3d; color:#cbd5ff; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase;
+  text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); white-space:nowrap; cursor:pointer;
+}
+tbody td{padding:11px 12px; border-bottom:1px solid rgba(255,255,255,.06); white-space:nowrap}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+.lote{font-family:JetBrains Mono,monospace; font-size:12.5px; padding:4px 7px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06)}
+.l-L1{border-color:rgba(30,122,255,.35); color:#a9c6ff}
+.l-L2{border-color:rgba(34,197,94,.35); color:#a7f3d0}
+.l-L3{border-color:rgba(255,122,26,.35); color:#ffd1ad}
+.ncell{font-weight:800; color:#ffd1ad}
+.pcell{font-weight:800; color:#a7f3d0}
+.tcell{font-weight:800; color:#fca5a5}
+.total{font-weight:800}
+.chart-panel{padding:14px}
+.chart-title{font-weight:800; letter-spacing:-.02em; margin:0}
+.chart-sub{color:var(--muted); font-size:13.5px; margin:4px 0 12px}
+.bars{display:grid; gap:10px}
+.bar-row{display:grid; grid-template-columns:170px 1fr 36px; gap:10px; align-items:center}
+@media(max-width:560px){ .bar-row{grid-template-columns:110px 1fr 30px} }
+.bar-label{font-size:13.5px; color:var(--muted); line-height:1.2; text-align:right}
+.bar-track{height:14px; background:rgba(255,255,255,.07); border-radius:999px; overflow:hidden; display:flex}
+.bar-seg{height:100%}
+.bar-seg.n{background:linear-gradient(90deg, #ff7a1a, #ffb347)}
+.bar-seg.p{background:linear-gradient(90deg, #22c55e, #86efac)}
+.bar-seg.t{background:linear-gradient(90deg, #ef4444, #f87171)}
+.legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px}
+.legend span{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted); font-weight:700; letter-spacing:.04em}
+.legend i{width:10px; height:10px; border-radius:999px; display:inline-block}
+
+/* MAP + LINKS */
+.link-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media(max-width:900px){ .link-grid{grid-template-columns:1fr} }
+.ext-card{
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:22px; padding:16px; display:flex; gap:14px; align-items:flex-start;
+}
+.ext-icon{width:48px; height:48px; border-radius:14px; display:grid; place-items:center; flex-shrink:0; border:1px solid var(--line)}
+.ext-card h3{margin:0; font-size:14px}
+.ext-card p{margin:6px 0 12px; color:var(--muted); font-size:14px; line-height:1.5}
+.ext-card a.btn{ padding:10px 14px}
+.map-embed{
+  border-radius:22px; overflow:hidden; border:1px solid var(--line); background:#0b1226;
+  min-height:320px; position:relative;
+}
+.map-embed iframe{width:100%; height:360px; border:0; filter:saturate(1.1) contrast(1.05)}
+.map-overlay{
+  position:absolute; inset:auto 12px 12px 12px;
+  background:rgba(10,15,30,.78); backdrop-filter:blur(10px); border:1px solid var(--line);
+  border-radius:14px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:12px;
+}
+.map-overlay small{color:#cbd5ff; font-size:13.5px; line-height:1.3}
+.recom{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+}
+@media(max-width:980px){ .recom{grid-template-columns:1fr} }
+.rec{
+  background:linear-gradient(180deg, var(--card2), var(--card)); border:1px solid var(--line);
+  border-radius:20px; padding:16px;
+}
+.rec h4{margin:0 0 6px; font-size:13px; letter-spacing:.08em; text-transform:uppercase}
+.rec h4.n{color:#ffb47a}
+.rec h4.p{color:#86efac}
+.rec h4.t{color:#fca5a5}
+.rec p{margin:0; color:var(--muted); font-size:12.5px; line-height:1.6}
+.rec ul{margin:10px 0 0 16px; color:var(--muted); font-size:12.5px; line-height:1.6}
+
+/* SLIDE DOTS bottom */
+.slide-indicator{
+  position:fixed; right:14px; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:8px; z-index:45;
+}
+.slide-indicator button{
+  width:8px; height:22px; border-radius:999px; border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.12); cursor:pointer; transition:.2s;
+}
+.slide-indicator button.active{ background:#fff; height:30px; box-shadow:0 6px 18px rgba(0,0,0,.25)}
+@media(max-width:980px){ .slide-indicator{display:none} }
+
+/* reveal */
+.reveal{opacity:0; transform:translateY(10px); transition:opacity .6s, transform .6s}
+.reveal.in{opacity:1; transform:none}
+
+/* Lightbox */
+.lightbox{
+  position:fixed; inset:0; background:rgba(0,0,0,.72); backdrop-filter:blur(6px);
+  display:none; place-items:center; z-index:80; padding:20px;
+}
+.lightbox.open{display:grid}
+.lightbox img{max-width:min(92vw, 1100px); max-height:82vh; border-radius:16px; border:1px solid rgba(255,255,255,.15); box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.lightbox .close{
+  position:absolute; top:14px; right:14px; width:42px; height:42px; border-radius:999px;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); color:#fff; cursor:pointer; font-size:18px;
+}
+
+/* footer */
+.footer{
+  max-width:1280px; margin:18px auto 0; padding:18px 20px 30px;
+  border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center;
+  color:var(--dim); font-size:13.5px;
+}
+.footer b{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo_soles.png" alt="SOLES" class="brand-logo" onerror="this.style.display='none'">
+      <div class="brand-text">
+        <strong>Grupo Soluciones Energéticas — SOLES</strong>
+        <span>Contratista ejecutor del levantamiento previo en campo</span>
+      </div>
+    </div>
+    <div class="pliego">
+      <div class="badge">● INDOTEL-CCC-CP-2026-0010</div>
+      <div class="proc">Ordenamiento, Regularización y Adecuación de Infraestructura Aérea mediante el <b>Retiro, Reubicación y Reorganización del Cableado de Telecomunicaciones</b> en Zonas Urbanas del Distrito Nacional</div>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<nav class="sticky-nav" aria-label="Secciones">
+  <div class="sticky-nav-inner" id="pillNav">
+    <button class="nav-pill active" data-go="portada">Portada</button>
+    <button class="nav-pill" data-go="resumen">Resumen ejecutivo</button>
+    <button class="nav-pill" data-go="tipos">Hallazgos por tipo</button>
+    <button class="nav-pill" data-go="dashboard">Detalle por sector / corredor</button>
+    <button class="nav-pill" data-go="mapa">Mapa & Archivos</button>
+
+  </div>
+</nav>
+
+<div class="slide-indicator" aria-hidden="true" id="slideDots">
+  <button class="active" data-go="portada" title="Portada"></button>
+  <button data-go="resumen" title="Resumen"></button>
+  <button data-go="tipos" title="Tipos"></button>
+  <button data-go="dashboard" title="Detalle"></button>
+  <button data-go="mapa" title="Mapa"></button>
+
+</div>
+
+<!-- HERO -->
+<section class="hero" id="portada">
+  <div class="hero-card reveal in">
+    <div class="hero-kicker">◐ Levantamiento previo en terreno — Abril 2026 • Distrito Nacional</div>
+    <h1>Retiro, Reubicación y <em>Reorganización</em> del Cableado de Telecomunicaciones</h1>
+    <p>
+      Presentación de hallazgos del levantamiento previo a la ejecución del proyecto en <b>zonas urbanas del Distrito Nacional</b>.
+      Se identificaron tres situaciones críticas que condicionan la planificación, permisos y seguridad de los trabajos de regularización.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#dashboard" data-go="dashboard">▸ Explorar detalle por sector</a>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-pill"><div class="icon n">🪺</div><div><b id="kpiNidos">170</b><br><span>Nidos de aves</span></div></div>
+      <div class="meta-pill"><div class="icon p">🌿</div><div><b id="kpiPoda">469</b><br><span>Puntos con poda / vegetación</span></div></div>
+      <div class="meta-pill"><div class="icon t">⚡</div><div><b id="kpiTendido">38</b><br><span>Tendido MT muy cercano</span></div></div>
+      <div class="meta-pill"><div class="icon" style="background:rgba(30,122,255,.15); border:1px solid rgba(30,122,255,.25)">📍</div><div><b>677</b><br><span>Hallazgos totales</span></div></div>
+    </div>
+  </div>
+
+  <div class="visual reveal in" style="transition-delay:.08s">
+    <div class="visual-grid">
+      <img src="nido1.jpg" alt="Nido 1" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1444464666168-49d633b86797?w=600&q=80'">
+      <img src="poda1.jpg" alt="Poda 1" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80'">
+      <img src="tendido1.jpg" alt="Tendido 1" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1472145246861-b24cf25c4a36?w=600&q=80'">
+      <img src="nido2.jpg" alt="Nido 2" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=600&q=80'">
+      <img src="poda2.jpg" alt="Poda 2" loading="lazy" style="grid-column:span 2; height:88px" onerror="this.src='https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80'">
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- RESUMEN -->
+  <section class="section" id="resumen">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">01 — Resumen ejecutivo</div>
+        <h2>677 hallazgos condicionantes, georreferenciados</h2>
+        <p>El levantamiento cubrió 3 lotes con corredores avenidas y sectores priorizados. Cada hallazgo está catalogado, fotografiado y georreferenciado para tramitar permisos y coordinar intervenciones sin afectar avifauna, vegetación ni seguridad eléctrica.</p>
+      </div>
+    </div>
+
+    <div class="kpi-grid reveal">
+      <div class="kpi">
+        <small>🪺 Nidos de aves</small><b>170</b>
+        <p>Requieren evaluación con institución ambiental competente caso por caso.</p>
+        <div class="bar"><i style="width:36%; background:linear-gradient(90deg, #ff7a1a, #ffb347)"></i></div>
+        <p style="font-size:13px; color:var(--dim); margin-top:6px">25% del total • Lote más afectado: L1 (74)</p>
+      </div>
+      <div class="kpi">
+        <small>🌿 Vegetación invasiva en red aérea</small><b>469</b>
+        <p>Condiciona poda previa y permisos de intervención antes de regularizar.</p>
+        <div class="bar"><i style="width:69%; background:linear-gradient(90deg, #22c55e, #86efac)"></i></div>
+        <p style="font-size:13px; color:var(--dim); margin-top:6px">69% del total • Pico: Bella Vista (97) y Cristo Rey (81)</p>
+      </div>
+      <div class="kpi">
+        <small>⚡ Tendido MT muy cercano a telecom</small><b>38</b>
+        <p>Riesgo para cuadrillas. Exige medidas de seguridad y coordinación con distribuidora.</p>
+        <div class="bar"><i style="width:18%; background:linear-gradient(90deg, #ef4444, #f87171)"></i></div>
+        <p style="font-size:13px; color:var(--dim); margin-top:6px">6% del total • Crítico: San Carlos (16) y Sarasota (9)</p>
+      </div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent">
+        <small style="color:rgba(255,255,255,.85)">Total levantado</small><b style="color:#fff">677 puntos</b>
+        <p style="color:rgba(255,255,255,.88)">23 corredores/sectores • 3 lotes • Distrito Nacional</p>
+        <div class="bar" style="background:rgba(255,255,255,.25)"><i style="width:100%; background:#fff"></i></div>
+        <p style="color:rgba(255,255,255,.8); margin-top:6px; font-size:13px">L1 181 • L2 318 • L3 178</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- HALLAZGOS POR TIPO -->
+  <section class="section" id="tipos">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">02 — Evidencia fotográfica por tipo</div>
+        <h2>Tres situaciones, tres protocolos distintos</h2>
+        <p>Imágenes reales capturadas en campo. Toca cualquier foto para ampliar. Cada tipo dispara un flujo diferente de permisos y medidas preventivas.</p>
+      </div>
+      <div class="legend" style="margin:0">
+        <span><i style="background:#ff7a1a"></i> Nidos</span>
+        <span><i style="background:#22c55e"></i> Vegetación</span>
+        <span><i style="background:#ef4444"></i> Tendido MT</span>
+      </div>
+    </div>
+
+    <div class="cards3">
+      <article class="find-card reveal">
+        <div class="find-head">
+          <div class="icon n">🪺</div>
+          <h3>Presencia de nidos de aves
+            <span>Evaluación con institución correspondiente para definir manejo por caso. Registro fotográfico + georreferencia.</span>
+          </h3>
+        </div>
+        <div class="find-stats">
+          <div class="stat"><b class="ncell">170</b><small>Total nidos</small></div>
+          <div class="stat"><b>33</b><small>Máx. por sector<br>Independencia / Cristo Rey</small></div>
+          <div class="stat"><b>23</b><small>Sectores con hallazgo</small></div>
+        </div>
+        <div class="gallery">
+          <img src="nido1.jpg" alt="Nido ejemplo 1" data-group="nido" onerror="this.src='https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&q=80'">
+          <img src="nido2.jpg" alt="Nido ejemplo 2" data-group="nido" onerror="this.src='https://images.unsplash.com/photo-1452570053594-1b985d6ea890?w=400&q=80'">
+          <img src="nido3.jpg" alt="Nido ejemplo 3" data-group="nido" onerror="this.src='https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&q=80'">
+        </div>
+      </article>
+
+      <article class="find-card reveal" style="transition-delay:.06s">
+        <div class="find-head">
+          <div class="icon p">🌿</div>
+          <h3>Vegetación invasiva en redes aéreas
+            <span>Solicitud de permisos para acondicionamiento previo a trabajos de regularización.</span>
+          </h3>
+        </div>
+        <div class="find-stats">
+          <div class="stat"><b class="pcell">469</b><small>Puntos poda</small></div>
+          <div class="stat"><b>97</b><small>Máx. Bella Vista</small></div>
+          <div class="stat"><b>24</b><small>Sectores con hallazgo</small></div>
+        </div>
+        <div class="gallery">
+          <img src="poda1.jpg" alt="Poda ejemplo 1" onerror="this.src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=80'">
+          <img src="poda2.jpg" alt="Poda ejemplo 2" onerror="this.src='https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=400&q=80'">
+          <img src="poda3.jpg" alt="Poda ejemplo 3" onerror="this.src='https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=400&q=80'">
+        </div>
+      </article>
+
+      <article class="find-card reveal" style="transition-delay:.12s">
+        <div class="find-head">
+          <div class="icon t">⚡</div>
+          <h3>Tendido eléctrico MT muy cercano
+            <span>Medidas para evitar riesgo a técnicos durante trabajos de regularización.</span>
+          </h3>
+        </div>
+        <div class="find-stats">
+          <div class="stat"><b class="tcell">38</b><small>Puntos MT cercanos</small></div>
+          <div class="stat"><b>16</b><small>Máx. San Carlos</small></div>
+          <div class="stat"><b>8</b><small>Sectores críticos</small></div>
+        </div>
+        <div class="gallery">
+          <img src="tendido1.jpg" alt="Tendido ejemplo 1" onerror="this.src='https://images.unsplash.com/photo-1472145246861-b24cf25c4a36?w=400&q=80'">
+          <img src="tendido2.jpg" alt="Tendido ejemplo 2" onerror="this.src='https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=400&q=80'">
+          <img src="tendido3.jpg" alt="Tendido ejemplo 3" onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=80'">
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="section" id="dashboard">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">03 — Dashboard interactivo</div>
+        <h2>Detalle por lote, corredor y sector</h2>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn btn-ghost" id="btnReset">↺ Limpiar filtros</button>
+      </div>
+    </div>
+
+    <div class="dashboard reveal">
+      <div class="dash-toolbar">
+        <div class="filters" id="filters">
+          <button class="filter active" data-lote="ALL">Todos los lotes (23)</button>
+          <button class="filter" data-lote="L1">L1 — 181 hallazgos</button>
+          <button class="filter" data-lote="L2">L2 — 318 hallazgos</button>
+          <button class="filter" data-lote="L3">L3 — 178 hallazgos</button>
+        </div>
+        <label class="search" aria-label="Buscar">
+          <span style="color:var(--dim)">⌕</span>
+          <input id="searchInput" type="search" placeholder="Buscar sector o corredor… (ej. Bella Vista, Sarasota)">
+        </label>
+      </div>
+
+      <div class="dash-body">
+        <div class="table-wrap">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th data-sort="lote">Lote ▾</th>
+                <th data-sort="sector">Corredor / Sector</th>
+                <th data-sort="nido">🪺 Nido</th>
+                <th data-sort="poda">🌿 Poda</th>
+                <th data-sort="tendido">⚡ MT</th>
+                <th data-sort="total">Total</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="chart-panel">
+          <h3 class="chart-title">Comparativa por corredor / sector</h3>
+          <p class="chart-sub">Barras apiladas por tipo.</p>
+          <div class="bars" id="bars"></div>
+          <div class="legend">
+            <span><i style="background:linear-gradient(90deg,#ff7a1a,#ffb347)"></i> Nidos</span>
+            <span><i style="background:linear-gradient(90deg,#22c55e,#86efac)"></i> Vegetación / Poda</span>
+            <span><i style="background:linear-gradient(90deg,#ef4444,#f87171)"></i> Tendido MT</span>
+          </div>
+          <div style="margin-top:14px; background:rgba(30,122,255,.08); border:1px solid rgba(30,122,255,.2); border-radius:14px; padding:12px">
+            <b style="font-size:13.5px; color:#a9c6ff">Insight rápido</b>
+            <p id="insight" style="margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.55"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA + ENLACES -->
+  <section class="section" id="mapa">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">04 — Trazabilidad y archivos en línea</div>
+        <h2>Del hallazgo al permiso, todo georreferenciado</h2>
+        <p>Cada punto del levantamiento tiene foto, coordenadas y tipo. Consulta el detalle tabular y la distribución geográfica en los archivos oficiales.</p>
+      </div>
+    </div>
+
+    <div class="link-grid reveal">
+      <div class="ext-card">
+        <div class="ext-icon" style="background:rgba(34,197,94,.12)">📊</div>
+        <div>
+          <h3>Archivo en línea — Detalle por caso</h3>
+          <p>Google Sheets con 677 filas, una por hallazgo: lote, corredor/sector, tipo, coordenadas, fotos, estado y observaciones.</p>
+          <a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Google Sheets</a>
+        </div>
+      </div>
+      <div class="ext-card">
+        <div class="ext-icon" style="background:rgba(30,122,255,.12)">🗺</div>
+        <div>
+          <h3>Google My Maps — Distribución geográfica</h3>
+          <p>Mapa con capas por tipo (nido / poda / MT) y por lote.</p>
+          <a class="btn btn-primary" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">↗ Abrir My Maps</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+</div>
+
+<footer class="footer">
+  <div style="display:flex; gap:12px; align-items:center">
+    <img src="logo_soles.png" alt="SOLES" style="width:36px; height:36px; background:#fff; border-radius:8px; padding:4px; object-fit:contain">
+    <span><b>Grupo SOLES</b> — Soluciones Energéticas &nbsp;•&nbsp; Levantamiento previo en campo — Distrito Nacional &nbsp;•&nbsp; INDOTEL-CCC-CP-2026-0010</span>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="close" aria-label="Cerrar">✕</button>
+  <img alt="Preview ampliado">
+</div>
+
+<script>
+const DATA = [
+  {lote:"L1", sector:"Avenida Simón Bolivar", nido:17, poda:19, tendido:2},
+  {lote:"L1", sector:"Avenida Independencia", nido:33, poda:35, tendido:0},
+  {lote:"L1", sector:"Avenida George Washington", nido:1, poda:2, tendido:0},
+  {lote:"L1", sector:"Avenida México", nido:10, poda:11, tendido:0},
+  {lote:"L1", sector:"Avenida John F. Kennedy", nido:7, poda:6, tendido:0},
+  {lote:"L1", sector:"Sector San Carlos", nido:5, poda:10, tendido:16},
+  {lote:"L1", sector:"Sector Zona Colonial", nido:1, poda:1, tendido:5},
+  {lote:"L2", sector:"Avenida Sarasota", nido:4, poda:31, tendido:9},
+  {lote:"L2", sector:"Avenida Albert Thomas", nido:4, poda:29, tendido:2},
+  {lote:"L2", sector:"Avenida Nicolás de Ovando", nido:3, poda:9, tendido:0},
+  {lote:"L2", sector:"Anenida Pedro Livio Cedeño", nido:0, poda:3, tendido:0},
+  {lote:"L2", sector:"Avenida Máximo Gómez", nido:5, poda:12, tendido:0},
+  {lote:"L2", sector:"Sector Cristo Rey", nido:33, poda:81, tendido:0},
+  {lote:"L2", sector:"Sector 24 de Abril", nido:6, poda:41, tendido:0},
+  {lote:"L2", sector:"Ensanche Luperón", nido:5, poda:41, tendido:0},
+  {lote:"L3", sector:"Ave. Nuñez de Cáceres", nido:3, poda:3, tendido:0},
+  {lote:"L3", sector:"Sector Bella Vista", nido:0, poda:97, tendido:0},
+  {lote:"L3", sector:"Ave. Winston Churchill", nido:0, poda:1, tendido:0},
+  {lote:"L3", sector:"Ave. Abraham Lincoln", nido:0, poda:2, tendido:0},
+  {lote:"L3", sector:"Ave. Tiradentes", nido:7, poda:1, tendido:0},
+  {lote:"L3", sector:"Ave. Ortega y Gasset", nido:4, poda:0, tendido:0},
+  {lote:"L3", sector:"C/ Emma Balaguer", nido:2, poda:0, tendido:3},
+  {lote:"L3", sector:"Sector Naco", nido:19, poda:27, tendido:1},
+  {lote:"L3", sector:"Sector Piantini", nido:1, poda:7, tendido:0},
+].map(d=>({...d, total:d.nido+d.poda+d.tendido}));
+
+let state = {lote:"ALL", q:"", sort:"total", dir:"desc"};
+
+const tbody = document.getElementById('tbody');
+const bars = document.getElementById('bars');
+const insight = document.getElementById('insight');
+const searchInput = document.getElementById('searchInput');
+
+function filtered(){
+  let out = DATA.slice();
+  if(state.lote!=="ALL") out = out.filter(d=>d.lote===state.lote);
+  if(state.q){
+    const q=state.q.toLowerCase();
+    out = out.filter(d=> d.sector.toLowerCase().includes(q) || d.lote.toLowerCase().includes(q));
+  }
+  out.sort((a,b)=>{
+    const k=state.sort;
+    let va=a[k], vb=b[k];
+    if(typeof va==="string"){ va=va.toLowerCase(); vb=vb.toLowerCase(); }
+    if(va<vb) return state.dir==="asc"?-1:1;
+    if(va>vb) return state.dir==="asc"?1:-1;
+    return 0;
+  });
+  return out;
+}
+
+function render(){
+  const rows = filtered();
+  tbody.innerHTML = rows.map(r=>`
+    <tr>
+      <td><span class="lote l-${r.lote}">${r.lote}</span></td>
+      <td style="white-space:normal; min-width:220px; font-weight:600">${r.sector}</td>
+      <td class="ncell">${r.nido}</td>
+      <td class="pcell">${r.poda}</td>
+      <td class="tcell">${r.tendido}</td>
+      <td class="total">${r.total}</td>
+    </tr>
+  `).join('') || `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:22px">Sin resultados para "${state.q}"</td></tr>`;
+
+  // bars: top 8 by total within filter
+  const top = rows.slice(0,10);
+  const max = Math.max(1, ...rows.map(r=>r.total));
+  bars.innerHTML = top.map(r=>{
+    const pn = r.total? (r.nido/r.total*100):0;
+    const pp = r.total? (r.poda/r.total*100):0;
+    const pt = r.total? (r.tendido/r.total*100):0;
+    const w = (r.total/max*100).toFixed(1);
+    return `<div class="bar-row">
+      <div class="bar-label">${r.sector}</div>
+      <div class="bar-track" title="${r.nido} nidos · ${r.poda} poda · ${r.tendido} MT · total ${r.total}">
+        <div class="bar-seg n" style="width:${pn}%"></div>
+        <div class="bar-seg p" style="width:${pp}%"></div>
+        <div class="bar-seg t" style="width:${pt}%"></div>
+      </div>
+      <div style="font-weight:800; font-size:13.5px; text-align:right">${r.total}</div>
+    </div>`;
+  }).join('') || `<p style="color:var(--muted); font-size:13px">Ajusta los filtros para ver comparativa.</p>`;
+
+  // insight
+  const sum = rows.reduce((a,c)=>({n:a.n+c.nido, p:a.p+c.poda, t:a.t+c.tendido, tot:a.tot+c.total}), {n:0,p:0,t:0,tot:0});
+  const topSector = rows[0];
+  if(rows.length){
+    insight.innerHTML = `Mostrando <b style="color:#fff">${rows.length} corredores</b> · <b style="color:#ffb47a">${sum.n} nidos</b> · <b style="color:#86efac">${sum.p} poda</b> · <b style="color:#fca5a5">${sum.t} MT</b> · <b style="color:#fff">${sum.tot} total</b>.` +
+    (topSector? `<br>Mayor carga: <b style="color:#fff">${topSector.sector} (${topSector.lote}) — ${topSector.total} hallazgos</b> (${topSector.nido} 🪺 · ${topSector.poda} 🌿 · ${topSector.tendido} ⚡).` : "") +
+    (state.lote!=="ALL"? `<br>Lote filtrado: <b style="color:#fff">${state.lote}</b>.` : "");
+  } else insight.textContent="Sin datos con el filtro actual.";
+
+  // also update progress-ish filter badge
+  document.querySelectorAll('.filter').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lote===state.lote);
+  });
+}
+
+// filters
+document.getElementById('filters').addEventListener('click', e=>{
+  const b=e.target.closest('.filter');
+  if(!b) return;
+  state.lote=b.dataset.lote;
+  render();
+});
+searchInput.addEventListener('input', e=>{ state.q=e.target.value; render(); });
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  state={lote:"ALL", q:"", sort:"total", dir:"desc"};
+  searchInput.value="";
+  render();
+});
+const btnShare=document.getElementById('btnShare');
+if(btnShare) btnShare.addEventListener('click', ()=> window.print());
+
+// sort
+document.querySelectorAll('thead th[data-sort]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const k=th.dataset.sort;
+    if(state.sort===k) state.dir = state.dir==="asc"?"desc":"asc";
+    else { state.sort=k; state.dir = (k==="sector"||k==="lote")?"asc":"desc"; }
+    render();
+  });
+});
+
+// lightbox
+const lb=document.getElementById('lightbox');
+const lbImg=lb.querySelector('img');
+document.querySelectorAll('img').forEach(im=>{
+  if(im.closest('.brand')) return;
+  im.style.cursor="zoom-in";
+  im.addEventListener('click', ()=>{
+    lbImg.src=im.src;
+    lb.classList.add('open');
+  });
+});
+lb.addEventListener('click', e=>{
+  if(e.target===lb || e.target.classList.contains('close')) lb.classList.remove('open');
+});
+document.addEventListener('keydown', e=>{ if(e.key==="Escape") lb.classList.remove('open'); });
+
+// nav pills + dots
+function goTo(id){
+  document.getElementById(id)?.scrollIntoView({behavior:"smooth", block:"start"});
+}
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click', e=>{
+    e.preventDefault();
+    const id=el.dataset.go;
+    if(id) goTo(id);
+  });
+});
+
+// progress + active nav on scroll
+const sections=["portada","resumen","tipos","dashboard","mapa"];
+const progress=document.getElementById('progress');
+const pillNav=document.getElementById('pillNav');
+const slideDots=document.getElementById('slideDots');
+function onScroll(){
+  const sc=window.scrollY;
+  const docH=document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (docH? sc/docH*100 : 0) + "%";
+  // active
+  let cur=sections[0];
+  for(const id of sections){
+    const el=document.getElementById(id);
+    if(!el) continue;
+    if(window.scrollY + 140 >= el.offsetTop) cur=id;
+  }
+  document.querySelectorAll('.nav-pill').forEach(b=> b.classList.toggle('active', b.dataset.go===cur));
+  slideDots.querySelectorAll('button').forEach(b=> b.classList.toggle('active', b.dataset.go===cur));
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+
+// reveal
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(ent=>{ if(ent.isIntersecting) ent.target.classList.add('in'); });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+// init
+render();
+onScroll();
+
+// keyboard slide nav
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowDown"||e.key==="PageDown"){
+    const i=sections.findIndex(s=> document.querySelector('.nav-pill.active')?.dataset.go===s);
+    if(i>=0 && i<sections.length-1){ e.preventDefault(); goTo(sections[i+1]); }
+  }
+  if(e.key==="ArrowUp"||e.key==="PageUp"){
+    const i=sections.findIndex(s=> document.querySelector('.nav-pill.active')?.dataset.go===s);
+    if(i>0){ e.preventDefault(); goTo(sections[i-1]); }
+  }
+});
+
+// count-up for hero
+function countUp(el, to, dur=900){
+  let s=0; const t0=performance.now();
+  function tick(now){
+    const p=Math.min(1, (now-t0)/dur);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(eased*to).toString();
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+countUp(document.getElementById('kpiNidos'),170);
+countUp(document.getElementById('kpiPoda'),469);
+countUp(document.getElementById('kpiTendido'),38);
+</script>
+</body>
+</html>

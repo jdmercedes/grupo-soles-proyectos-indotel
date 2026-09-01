@@ -1,0 +1,11 @@
+﻿# OS
+Thumbs.db
+Desktop.ini
+*.tmp
+
+# Keep presentation + assets
+!presentacion_hallazgos.html
+!logo_soles.png
+!nido*.jpg
+!poda*.jpg
+!tendido*.jpg
