@@ -142,10 +142,13 @@ img{max-width:100%;display:block}
 .dots i{width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.2)}
 .dots i.active{background:var(--brand); width:18px}
 
-/* NAV PILLS */
+/* NAV PILLS - siempre visible bajo el header */
 .sticky-nav{
-  position:sticky; top:73px; z-index:40;
-  backdrop-filter: blur(12px); background:rgba(10,15,30,.55); border-bottom:1px solid var(--line);
+  position:sticky; top:112px; z-index:40;
+  backdrop-filter: blur(12px) saturate(1.4); background:rgba(10,15,30,.92); border-bottom:1px solid var(--line);
+}
+@supports not (position: sticky) {
+  .sticky-nav{ position:fixed; top:112px; left:0; right:0; }
 }
 .sticky-nav-inner{max-width:1280px; margin:0 auto; padding:10px 20px; display:flex; gap:8px; overflow:auto; scrollbar-width:none}
 .sticky-nav-inner::-webkit-scrollbar{display:none}
