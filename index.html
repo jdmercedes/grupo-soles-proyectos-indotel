@@ -55,10 +55,11 @@ img{max-width:100%;display:block}
   display:flex; align-items:center; gap:14px; min-width:0;
 }
 .brand-logo{
-  width:92px; height:92px; border-radius:16px; background:#fff; padding:6px; object-fit:contain;
+  width:92px; height:92px; border-radius:16px; background:#fff; padding:0; object-fit:cover; object-position:center;
   box-shadow:0 8px 24px rgba(0,0,0,.25);
   flex-shrink:0;
-  transform:scale(1.08);
+  overflow:hidden;
+  transform:scale(1.32);
   transform-origin:center;
 }
 .brand-text{line-height:1.05}
@@ -77,6 +78,12 @@ img{max-width:100%;display:block}
 .pliego .proc{font-size:13px; color:var(--dim); margin-top:6px; line-height:1.35; max-width:560px}
 .pliego .proc b{color:var(--muted); font-weight:600}
 
+/* Page tabs - debajo del header */
+.page-nav{position:sticky; top:112px; z-index:49; backdrop-filter:blur(12px) saturate(1.4); background:rgba(10,15,30,.94); border-bottom:1px solid var(--line); padding:12px 20px}
+.page-nav-inner{max-width:1280px; margin:0 auto; display:flex; gap:10px; align-items:center}
+.page-tab{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted); transition:.15s}
+.page-tab:hover{background:rgba(255,255,255,.1)}
+.page-tab.active{background:#fff; color:#0a0f1e; border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.2)}
 /* Progress bar */
 .progress{height:3px; background:linear-gradient(90deg, var(--brand), var(--brand2), var(--nido)); width:0; transition:width .25s}
 
@@ -142,11 +149,10 @@ img{max-width:100%;display:block}
 .dots i{width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.2)}
 .dots i.active{background:var(--brand); width:18px}
 
-/* NAV PILLS - siempre visible bajo el header */
+/* NAV PILLS - debajo de page-nav */
 .sticky-nav{
-  position:sticky; top:112px; z-index:40;
+  position:sticky; top:164px; z-index:40;
   backdrop-filter: blur(12px) saturate(1.4); background:rgba(10,15,30,.94); border-bottom:1px solid var(--line);
-  /* asegura que siempre se quede pegado */
   will-change:transform;
 }
 .sticky-nav-inner{max-width:1280px; margin:0 auto; padding:10px 20px; display:flex; gap:8px; overflow:auto; scrollbar-width:none}
@@ -158,9 +164,9 @@ img{max-width:100%;display:block}
 }
 .nav-pill.active{background:#fff; color:#0a0f1e; border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.2)}
 
-/* SECTIONS - scroll-margin compensa header(112px)+tabs(~50px) */
+/* SECTIONS - scroll-margin compensa header(112)+page-nav(~52)+tabs(~50) */
 .wrap{max-width:1280px; margin:0 auto; padding:18px 20px 40px}
-.section{ scroll-margin-top:172px; margin-top:26px}
+.section{ scroll-margin-top:220px; margin-top:26px}
 .section-head{ display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:14px; flex-wrap:wrap}
 .eyebrow{font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--brand2); font-weight:800}
 .section-head h2{font-family:Fraunces,serif; font-size:26px; line-height:1; margin:6px 0 0; letter-spacing:-.02em}
@@ -360,19 +366,20 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
         
       </div>
     </div>
-    <div style="display:flex; align-items:center; gap:12px">
-      <nav style="display:flex; gap:8px" aria-label="Principal">
-        <a href="index.html" style="font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:#fff; color:#0a0f1e">Hallazgos</a>
-        <a href="programacion.html" style="font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted)">Programación</a>
-      </nav>
-      <div class="pliego">
+    <div class="pliego">
         <div class="badge">● INDOTEL-CCC-CP-2026-0010</div>
         <div class="proc">Ordenamiento, Regularización y Adecuación de Infraestructura Aérea mediante el <b>Retiro, Reubicación y Reorganización del Cableado de Telecomunicaciones</b> en Zonas Urbanas del Distrito Nacional</div>
       </div>
     </div>
-  </div>
   <div class="progress" id="progress"></div>
 </header>
+
+<nav class="page-nav" aria-label="Principal">
+  <div class="page-nav-inner">
+    <a href="index.html" class="page-tab active">Levantamiento Previo</a>
+    <a href="programacion.html" class="page-tab">Programaciones Semanales</a>
+  </div>
+</nav>
 
 <nav class="sticky-nav" aria-label="Secciones">
   <div class="sticky-nav-inner" id="pillNav">

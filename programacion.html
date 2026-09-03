@@ -16,7 +16,7 @@ img{max-width:100%; display:block}
 .header{position:sticky; top:0; z-index:50; backdrop-filter:blur(14px) saturate(1.4); background:rgba(10,15,30,.72); border-bottom:1px solid var(--line)}
 .header-inner{max-width:1280px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; gap:18px}
 .brand{display:flex; align-items:center; gap:14px; min-width:0}
-.brand-logo{width:92px; height:92px; border-radius:16px; background:#fff; padding:6px; object-fit:contain; box-shadow:0 8px 24px rgba(0,0,0,.25); flex-shrink:0; transform:scale(1.08); transform-origin:center}
+.brand-logo{width:92px; height:92px; border-radius:16px; background:#fff; padding:0; object-fit:cover; object-position:center; box-shadow:0 8px 24px rgba(0,0,0,.25); flex-shrink:0; overflow:hidden; transform:scale(1.32); transform-origin:center}
 .brand-text{line-height:1.05}
 .brand-text strong{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff; display:block}
 .brand-text span{font-size:13px; color:var(--muted)}
@@ -27,6 +27,11 @@ img{max-width:100%; display:block}
 .topnav{display:flex; gap:8px; align-items:center}
 .topnav a{font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted)}
 .topnav a.active{background:#fff; color:#0a0f1e; border-color:#fff}
+.page-nav{position:sticky; top:112px; z-index:49; backdrop-filter:blur(12px) saturate(1.4); background:rgba(10,15,30,.94); border-bottom:1px solid var(--line); padding:12px 20px}
+.page-nav-inner{max-width:1280px; margin:0 auto; display:flex; gap:10px; align-items:center}
+.page-tab{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted); transition:.15s}
+.page-tab:hover{background:rgba(255,255,255,.1)}
+.page-tab.active{background:#fff; color:#0a0f1e; border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.2)}
 .wrap{max-width:1280px; margin:0 auto; padding:18px 20px 40px}
 .week-index{position:static; backdrop-filter:blur(12px) saturate(1.4); background:rgba(10,15,30,.94); border:1px solid var(--line); border-radius:22px; padding:12px; display:flex; flex-direction:column; gap:10px}
 .week-tabs{display:flex; flex-direction:column; gap:8px; max-height:232px; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; padding-right:4px; scrollbar-color: rgba(255,255,255,.2) transparent}
@@ -95,20 +100,20 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
       <img src="logo_soles.png" alt="SOLES" class="brand-logo" onerror="this.style.display='none'">
       <div class="brand-text"><strong>Grupo Soluciones Energéticas — SOLES</strong></div>
     </div>
-    <div style="display:flex; align-items:center; gap:12px">
-      <nav class="topnav" aria-label="Navegación principal">
-        <a href="index.html">Hallazgos</a>
-        <a href="programacion.html" class="active">Programación</a>
-      </nav>
-      <div class="pliego" style="display:none"></div>
-      <div class="pliego">
-        <div class="badge">● INDOTEL-CCC-CP-2026-0010</div>
-        <div class="proc">Ordenamiento, Regularización y Adecuación de Infraestructura Aérea mediante el <b>Retiro, Reubicación y Reorganización del Cableado</b> en Zonas Urbanas del Distrito Nacional</div>
-      </div>
+    <div class="pliego">
+      <div class="badge">● INDOTEL-CCC-CP-2026-0010</div>
+      <div class="proc">Ordenamiento, Regularización y Adecuación de Infraestructura Aérea mediante el <b>Retiro, Reubicación y Reorganización del Cableado</b> en Zonas Urbanas del Distrito Nacional</div>
     </div>
   </div>
   <div class="progress" id="progress"></div>
 </header>
+
+<nav class="page-nav" aria-label="Principal">
+  <div class="page-nav-inner">
+    <a href="index.html" class="page-tab">Levantamiento Previo</a>
+    <a href="programacion.html" class="page-tab active">Programaciones Semanales</a>
+  </div>
+</nav>
 
 <div class="wrap" id="programacion">
   <h1 style="font-family:Fraunces,serif; font-weight:800; letter-spacing:-.02em; font-size:28px; margin:6px 0 14px; color:#9ec0ff">Programaciones Semanales</h1>
