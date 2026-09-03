@@ -269,7 +269,6 @@ function showWeek(id){
   document.querySelectorAll('.panel').forEach(p=>{
     p.classList.toggle('active', p.id==="panel-"+id);
   });
-  history.replaceState(null,'', '#'+id);
   const wrap = document.getElementById('programacion');
   const el = document.getElementById('panel-'+id);
   if(wrap && el) wrap.scrollTo({top: 0, behavior:'smooth'});
@@ -280,7 +279,7 @@ async function loadProgramacion(){
   const panelsEl = document.getElementById("panelsContainer");
   try{
     const url = API_URL + "?action=programacion";
-    const res = await fetch(url);
+    const res = await fetch(url, {cache: "no-store"});
     if(!res.ok) throw new Error("HTTP "+res.status);
     const data = await res.json();
     const semanas = data.semanas || data || [];
@@ -292,13 +291,8 @@ async function loadProgramacion(){
     buildPanels(semanas);
     // buscador
     setupSearch();
-    // deep link
-    const hash = (location.hash||"").replace("#","");
-    if(hash && document.getElementById("panel-"+hash)){
-      showWeek(hash);
-    } else {
-      showWeek(String(semanas[0].id));
-    }
+    // siempre la más reciente (max year/numero), ignora #hash
+    showWeek(String(semanas[0].id));
   }catch(err){
     console.error(err);
     tabsEl.innerHTML = `<div style="text-align:center; padding:16px; color:#fca5a5; font-size:13px">Error cargando programaciones: ${escapeHtml(err.message)}<br><small style="color:var(--muted)">Verifica la API o recarga la página.</small></div>`;
