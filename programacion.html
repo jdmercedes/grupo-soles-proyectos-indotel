@@ -218,10 +218,14 @@ function buildPanels(semanas){
       </div>
     </div>
     <div class="map-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 16px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border-bottom:1px solid var(--line)">
+        <div>
+          <b style="font-size:14px; display:flex; align-items:center; gap:8px; flex-wrap:wrap">🗺 Mapa — ${escapeHtml(s.codigo)} <span style="font-weight:400; color:var(--muted); font-size:12px">${escapeHtml(s.mapa && s.mapa.mapName ? s.mapa.mapName : '')}</span></b>
+          <small style="color:var(--muted); font-size:12px">${escapeHtml(s.label_corto)} • ${escapeHtml(s.resumen_lote)}</small>
+        </div>
+        <a class="btn" href="${escapeHtml(detallesUrl)}" target="_blank" rel="noopener" style="background:#ffffff; color:#0a0f1e; border:1px solid #ffffff; padding:10px 16px; font-size:13px; font-weight:800; letter-spacing:.02em; box-shadow:0 8px 20px rgba(0,0,0,.18); border-radius:999px; white-space:nowrap">Ver Detalles ↗</a>
+      </div>
       <iframe src="${escapeHtml(mapSrc)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map ${escapeHtml(s.codigo)}"></iframe>
-    </div>
-    <div class="sheet-grid">
-      <div class="sheet-card"><h4>📋 Detalle — ${escapeHtml(s.codigo)}</h4><a class="btn" href="${escapeHtml(detallesUrl)}" target="_blank" rel="noopener" style="background:#ffffff; color:#0a0f1e; border:1px solid #ffffff; justify-content:center; width:100%; padding:14px 22px; font-size:14px; font-weight:800; letter-spacing:.02em; box-shadow:0 8px 20px rgba(0,0,0,.18); border-radius:12px">Ver Detalles ↗</a></div>
     </div>`;
     container.appendChild(panel);
   });
