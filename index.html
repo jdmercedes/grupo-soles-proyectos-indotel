@@ -42,10 +42,12 @@ a:hover{ text-decoration:none}
 img{max-width:100%;display:block}
 /* HEADER */
 .header{
-  position:sticky; top:0; z-index:50;
+  position:sticky; top:0; z-index:51;
   backdrop-filter: blur(14px) saturate(1.4);
   background:rgba(10,15,30,.72);
   border-bottom:1px solid var(--line);
+  transform:translateZ(0);
+  will-change:transform;
 }
 .header-inner{
   max-width:1280px; margin:0 auto; padding:10px 20px;
@@ -349,6 +351,10 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
   background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); color:#fff; cursor:pointer; font-size:18px;
 }
 
+/* top-stack para evitar solape header/page-nav */
+.top-stack{position:sticky; top:0; z-index:51}
+.top-stack .header{position:relative; top:auto; z-index:auto; transform:none; will-change:auto}
+.top-stack .page-nav{position:relative; top:auto; z-index:auto; margin-top:0; transform:none; will-change:auto}
 /* footer */
 .footer{
   max-width:1280px; margin:18px auto 0; padding:18px 20px 30px;
@@ -360,6 +366,7 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
 </head>
 <body>
 
+<div class="top-stack">
 <header class="header">
   <div class="header-inner">
     <div class="brand">
@@ -376,13 +383,13 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
     </div>
   <div class="progress" id="progress"></div>
 </header>
-
 <nav class="page-nav" aria-label="Principal">
   <div class="page-nav-inner">
     <a href="index.html" class="page-tab active">Levantamiento Previo</a>
     <a href="programacion.html" class="page-tab">Programaciones Semanales</a>
   </div>
 </nav>
+</div>
 
 <nav class="sticky-nav" aria-label="Secciones">
   <div class="sticky-nav-inner" id="pillNav">
