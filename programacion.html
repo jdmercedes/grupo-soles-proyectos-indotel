@@ -53,15 +53,19 @@ img{max-width:100%; display:block}
 .week-info small{font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; opacity:.7; display:block}
 .week-info b{font-size:13.5px; display:block; margin:2px 0 2px; letter-spacing:-.01em; font-weight:800}
 .week-info span{font-size:12.5px; color:var(--muted); line-height:1.3; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.week-tab.active .week-info span{color:#3a4a6b}
+.week-tab .week-info small{color:#8ea0cc}
+.week-tab .week-info b{color:#eef2ff}
+.week-tab .week-info span{color:#9aa9ce}
 .week-tab.active .week-info small{color:#4a5a82}
+.week-tab.active .week-info b{color:#0a0f1e}
+.week-tab.active .week-info span{color:#3a4a6b}
 .week-arrow{font-size:20px; color:var(--dim); flex-shrink:0}
 .week-tab.active .week-arrow{color:#0a0f1e}
 .badge-dot{width:8px; height:8px; border-radius:999px; display:inline-block; vertical-align:middle; margin-right:6px}
-.panel{display:none; animation:fade .35s ease}
+.panel{display:none; animation:fade .35s ease; padding-top:6px}
 .panel.active{display:block}
 @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
-.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:14px 0}
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:28px 0 14px}
 @media(max-width:980px){ .kpi-row{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:560px){ .kpi-row{grid-template-columns:1fr} }
 .kpi{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid var(--line); border-radius:18px; padding:14px}
@@ -130,8 +134,8 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
       <b style="font-size:13px; letter-spacing:.1em; text-transform:uppercase">Índice de programaciones</b>
     </div>
-    <label class="search" style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px; padding:9px 12px">
-      <span style="color:var(--dim)">⌕</span>
+    <label class="search" style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px; padding:9px 12px">
+      <span style="color:var(--dim); display:grid; place-items:center; width:26px; height:26px; font-size:18px; line-height:1; flex-shrink:0">⌕</span>
       <input id="weekSearch" type="search" placeholder="Buscar por semana (2026-S19), fechas o lote (L1/L2/L3)…" style="background:transparent; border:0; outline:0; color:#fff; width:100%; font-size:13.5px">
     </label>
     <div id="weekNoResults" style="display:none; font-size:13px; color:var(--muted); text-align:center; padding:8px; border:1px dashed var(--line); border-radius:10px">Sin resultados para la búsqueda</div>
