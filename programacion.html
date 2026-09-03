@@ -43,7 +43,7 @@ img{max-width:100%; display:block}
 .chip{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); background:rgba(255,255,255,.06); border:1px solid var(--line); padding:6px 9px; border-radius:999px}
 .wrap{max-width:1280px; margin:0 auto; padding:18px 20px 40px}
 .week-index{position:static; backdrop-filter:blur(12px) saturate(1.4); background:rgba(10,15,30,.94); border:1px solid var(--line); border-radius:22px; padding:12px; display:flex; flex-direction:column; gap:10px}
-.week-tabs{display:flex; flex-direction:column; gap:8px}
+.week-tabs{display:flex; flex-direction:column; gap:8px; max-height:232px; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; padding-right:4px; scrollbar-color: rgba(255,255,255,.2) transparent}
 .week-tab{display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid var(--line); border-radius:14px; padding:12px 14px; transition:.15s}
 .week-tab:hover{background:rgba(255,255,255,.08)}
 .week-tab.active{background:#fff; color:#0a0f1e; border-color:#fff; box-shadow:0 12px 28px rgba(0,0,0,.25)}
@@ -61,6 +61,9 @@ img{max-width:100%; display:block}
 .week-tab.active .week-info span{color:#3a4a6b}
 .week-arrow{font-size:20px; color:var(--dim); flex-shrink:0}
 .week-tab.active .week-arrow{color:#0a0f1e}
+.week-tabs::-webkit-scrollbar{width:6px}
+.week-tabs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15); border-radius:999px}
+.week-tabs::-webkit-scrollbar-track{background:transparent}
 .badge-dot{width:8px; height:8px; border-radius:999px; display:inline-block; vertical-align:middle; margin-right:6px}
 .panel{display:none; animation:fade .35s ease; padding-top:6px}
 .panel.active{display:block}
@@ -168,6 +171,69 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
           <small><i class="badge-dot" style="background:#ff7a1a"></i> Semana 3</small>
           <b>Mar 19/05 — Dom 24/05/2026</b>
           <span>Lote L3 • 8 tramos • Bella Vista, Naco, Piantini, Tiradentes y Churchill</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s4" role="tab" aria-selected="false">
+        <div class="week-code">2026-S22</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#ff7a1a"></i> Semana 4</small>
+          <b>Mar 26/05 — Dom 31/05/2026</b>
+          <span>Lote L1/L2 • 2 tramos • Repaso San Carlos + Cristo Rey (contingencia)</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s5" role="tab" aria-selected="false">
+        <div class="week-code">2026-S23</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#1e7aff"></i> Semana 5</small>
+          <b>Mar 02/06 — Dom 07/06/2026</b>
+          <span>Lote L2 • 2 tramos • 24 de Abril + Luperón — cierre poda</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s6" role="tab" aria-selected="false">
+        <div class="week-code">2026-S24</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#22c55e"></i> Semana 6</small>
+          <b>Mar 09/06 — Dom 14/06/2026</b>
+          <span>Lote L3 • 2 tramos • Abraham Lincoln + Ortega y Gasset — remate</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s7" role="tab" aria-selected="false">
+        <div class="week-code">2026-S25</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#ff7a1a"></i> Semana 7</small>
+          <b>Mar 16/06 — Dom 21/06/2026</b>
+          <span>Lote L1/L3 • 2 tramos • Zona Colonial + Bella Vista — verificación</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s8" role="tab" aria-selected="false">
+        <div class="week-code">2026-S26</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#1e7aff"></i> Semana 8</small>
+          <b>Mar 23/06 — Dom 28/06/2026</b>
+          <span>Lote L2 • 2 tramos • Sarasota + Máximo Gómez — auditoría MT</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s9" role="tab" aria-selected="false">
+        <div class="week-code">2026-S27</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#22c55e"></i> Semana 9</small>
+          <b>Mar 30/06 — Dom 05/07/2026</b>
+          <span>Lote L3 • 2 tramos • Naco + Piantini — control calidad</span>
+        </div>
+        <div class="week-arrow">›</div>
+      </button>
+      <button class="week-tab" data-week="s10" role="tab" aria-selected="false">
+        <div class="week-code">2026-S28</div>
+        <div class="week-info">
+          <small><i class="badge-dot" style="background:#ff7a1a"></i> Semana 10</small>
+          <b>Mar 07/07 — Dom 12/07/2026</b>
+          <span>Todos los lotes • Cierre • Entrega y planos as-built</span>
         </div>
         <div class="week-arrow">›</div>
       </button>
@@ -333,7 +399,263 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
     </div>
   </div>
 
-  <p class="note" style="text-align:center; margin-top:18px">Tip: reemplaza cada URL de My Map / Sheet por el <code>mid</code> y <code>gid</code> filtrado de la semana si creas vistas separadas. La estructura ya está lista para 3 semanas — añade S4 duplicando un panel y un tab.</p>
+
+  <!-- PANEL SEMANA 4 -->
+  <div class="panel" id="panel-s4">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>2</b><p>Lotes mixtos — 26 al 31 May</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>12</b><p>Revisión pendiente</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>18</b><p>Repaso</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">2</b><p style="color:rgba(255,255,255,.85)">Zona Colonial</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S22 — Semana 4 (Mar 26/05 al Dom 31/05/2026) • Repaso</h3><span style="font-size:12px; color:var(--dim)">2 registros</span></div>
+      <div class="lot-filter" data-target="panel-s4">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L1"><td>26/05/2026</td><td>28/05/2026</td><td><span class="id">S4-001</span></td><td><span class="lote l-L1">L1</span></td><td class="wrap">Sector San Carlos — Repaso</td><td class="wrap">Verificación final y remate de poda</td><td>0.7 km</td></tr>
+            <tr data-lote="L2"><td>28/05/2026</td><td>31/05/2026</td><td><span class="id">S4-002</span></td><td><span class="lote l-L2">L2</span></td><td class="wrap">Sector Cristo Rey — Repaso</td><td class="wrap">Inspección nidos y cierre</td><td>1.0 km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card">
+      <div class="map-head"><div><b>🗺 My Map — Semana 4</b><br><span>Rutas S4 + repaso</span></div><div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip">2 perímetros</span><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div></div>
+      <iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 4"></iframe>
+      <div style="padding:10px 14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; background:rgba(255,255,255,.03); border-top:1px solid var(--line)"><div class="legend"><span><i style="background:#ff7a1a"></i> Nidos</span><span><i style="background:#22c55e"></i> Poda</span><span><i style="background:#ef4444"></i> MT cercano</span></div><span style="font-size:12px; color:var(--dim)">Repaso S4</span></div>
+    </div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S4</h4><p>Revisión de nidos pendientes S4.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S4</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S4</h4><p>Repaso de poda S4.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S4</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S4</h4><p>MT S4.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S4</a></div>
+    </div>
+  </div>
+
+  <!-- PANEL SEMANA 5 -->
+  <div class="panel" id="panel-s5">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>2</b><p>Lote L2 — 02 al 07 Jun</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>8</b><p>24 de Abril</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>22</b><p>Luperón</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">1</b><p style="color:rgba(255,255,255,.85)">Sarasota</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S23 — Semana 5 (Mar 02/06 al Dom 07/06/2026) • Lote L2</h3><span style="font-size:12px; color:var(--dim)">2 registros</span></div>
+      <div class="lot-filter" data-target="panel-s5">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L2"><td>02/06/2026</td><td>04/06/2026</td><td><span class="id">S5-001</span></td><td><span class="lote l-L2">L2</span></td><td class="wrap">Sector 24 de Abril</td><td class="wrap">Cierre y verificación</td><td>0.8 km</td></tr>
+            <tr data-lote="L2"><td>04/06/2026</td><td>07/06/2026</td><td><span class="id">S5-002</span></td><td><span class="lote l-L2">L2</span></td><td class="wrap">Ensanche Luperón</td><td class="wrap">Remate y limpieza</td><td>0.9 km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card">
+      <div class="map-head"><div><b>🗺 My Map — Semana 5</b><br><span>Rutas S5</span></div><div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip">2 perímetros</span><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div></div>
+      <iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 5"></iframe>
+    </div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S5</h4><p>Nidos S5.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S5</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S5</h4><p>Podas S5.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S5</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S5</h4><p>MT S5.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S5</a></div>
+    </div>
+  </div>
+
+  <!-- PANEL SEMANA 6 -->
+  <div class="panel" id="panel-s6">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>2</b><p>Lote L3 — 09 al 14 Jun</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>6</b><p>Tiradentes/Ortega</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>12</b><p>Lincoln</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">1</b><p style="color:rgba(255,255,255,.85)">Emma Balaguer</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S24 — Semana 6 (Mar 09/06 al Dom 14/06/2026) • Lote L3</h3><span style="font-size:12px; color:var(--dim)">2 registros</span></div>
+      <div class="lot-filter" data-target="panel-s6">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L3"><td>09/06/2026</td><td>11/06/2026</td><td><span class="id">S6-001</span></td><td><span class="lote l-L3">L3</span></td><td class="wrap">Ave. Abraham Lincoln</td><td class="wrap">Remate</td><td>0.8 km</td></tr>
+            <tr data-lote="L3"><td>11/06/2026</td><td>14/06/2026</td><td><span class="id">S6-002</span></td><td><span class="lote l-L3">L3</span></td><td class="wrap">Ave. Ortega y Gasset</td><td class="wrap">Remate</td><td>0.7 km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card">
+      <div class="map-head"><div><b>🗺 My Map — Semana 6</b><br><span>Rutas S6</span></div><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div>
+      <iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 6"></iframe>
+    </div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S6</h4><p>Nidos S6.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S6</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S6</h4><p>Podas S6.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S6</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S6</h4><p>MT S6.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S6</a></div>
+    </div>
+  </div>
+
+  <!-- PANEL SEMANA 7 -->
+  <div class="panel" id="panel-s7">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>2</b><p>Mixto — 16 al 21 Jun</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>5</b><p>Verificación</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>14</b><p>Bella Vista</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">1</b><p style="color:rgba(255,255,255,.85)">Zona Colonial</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S25 — Semana 7 (Mar 16/06 al Dom 21/06/2026) • Verificación</h3><span style="font-size:12px; color:var(--dim)">2 registros</span></div>
+      <div class="lot-filter" data-target="panel-s7">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L1"><td>16/06/2026</td><td>18/06/2026</td><td><span class="id">S7-001</span></td><td><span class="lote l-L1">L1</span></td><td class="wrap">Sector Zona Colonial — Verificación</td><td class="wrap">Revisión final</td><td>0.6 km</td></tr>
+            <tr data-lote="L3"><td>18/06/2026</td><td>21/06/2026</td><td><span class="id">S7-002</span></td><td><span class="lote l-L3">L3</span></td><td class="wrap">Sector Bella Vista — Verificación</td><td class="wrap">Control poda</td><td>0.9 km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card"><div class="map-head"><div><b>🗺 My Map — Semana 7</b><br><span>Rutas S7</span></div><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div><iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 7"></iframe></div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S7</h4><p>Nidos S7.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S7</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S7</h4><p>Podas S7.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S7</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S7</h4><p>MT S7.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S7</a></div>
+    </div>
+  </div>
+
+  <!-- PANEL SEMANA 8 -->
+  <div class="panel" id="panel-s8">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>2</b><p>Lote L2 — 23 al 28 Jun</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>4</b><p>Sarasota</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>10</b><p>Máximo Gómez</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">2</b><p style="color:rgba(255,255,255,.85)">Sarasota</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S26 — Semana 8 (Mar 23/06 al Dom 28/06/2026) • Lote L2</h3><span style="font-size:12px; color:var(--dim)">2 registros</span></div>
+      <div class="lot-filter" data-target="panel-s8">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L2"><td>23/06/2026</td><td>25/06/2026</td><td><span class="id">S8-001</span></td><td><span class="lote l-L2">L2</span></td><td class="wrap">Avenida Sarasota — Auditoría</td><td class="wrap">Revisión MT</td><td>0.7 km</td></tr>
+            <tr data-lote="L2"><td>25/06/2026</td><td>28/06/2026</td><td><span class="id">S8-002</span></td><td><span class="lote l-L2">L2</span></td><td class="wrap">Avenida Máximo Gómez — Auditoría</td><td class="wrap">Revisión final</td><td>0.8 km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card"><div class="map-head"><div><b>🗺 My Map — Semana 8</b><br><span>Rutas S8</span></div><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div><iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 8"></iframe></div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S8</h4><p>Nidos S8.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S8</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S8</h4><p>Podas S8.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S8</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S8</h4><p>MT S8.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S8</a></div>
+    </div>
+  </div>
+
+  <!-- PANEL SEMANA 9 -->
+  <div class="panel" id="panel-s9">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>2</b><p>Lote L3 — 30 Jun al 05 Jul</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>7</b><p>Naco/Piantini</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>16</b><p>Naco</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">1</b><p style="color:rgba(255,255,255,.85)">Naco</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S27 — Semana 9 (Mar 30/06 al Dom 05/07/2026) • Lote L3</h3><span style="font-size:12px; color:var(--dim)">2 registros</span></div>
+      <div class="lot-filter" data-target="panel-s9">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L3"><td>30/06/2026</td><td>02/07/2026</td><td><span class="id">S9-001</span></td><td><span class="lote l-L3">L3</span></td><td class="wrap">Sector Naco — Control</td><td class="wrap">Control calidad</td><td>1.0 km</td></tr>
+            <tr data-lote="L3"><td>02/07/2026</td><td>05/07/2026</td><td><span class="id">S9-002</span></td><td><span class="lote l-L3">L3</span></td><td class="wrap">Sector Piantini — Control</td><td class="wrap">Control calidad</td><td>0.8 km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card"><div class="map-head"><div><b>🗺 My Map — Semana 9</b><br><span>Rutas S9</span></div><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div><iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 9"></iframe></div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S9</h4><p>Nidos S9.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S9</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S9</h4><p>Podas S9.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S9</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S9</h4><p>MT S9.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S9</a></div>
+    </div>
+  </div>
+
+  <!-- PANEL SEMANA 10 -->
+  <div class="panel" id="panel-s10">
+    <div class="kpi-row">
+      <div class="kpi"><small>Tramos programados</small><b>1</b><p>Cierre — 07 al 12 Jul</p></div>
+      <div class="kpi"><small>🪺 Nidos en rutas</small><b>0</b><p>Cierre</p></div>
+      <div class="kpi"><small>🌿 Poda en rutas</small><b>0</b><p>Cierre</p></div>
+      <div class="kpi" style="background:linear-gradient(135deg, #1e7aff, #00d0ff); color:#fff; border-color:transparent"><small style="color:rgba(255,255,255,.85)">⚡ MT cercano</small><b style="color:#fff">0</b><p style="color:rgba(255,255,255,.85)">Entrega</p></div>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h3>2026-S28 — Semana 10 (Mar 07/07 al Dom 12/07/2026) • Cierre</h3><span style="font-size:12px; color:var(--dim)">1 registro</span></div>
+      <div class="lot-filter" data-target="panel-s10">
+        <span>Filtrar por lote:</span>
+        <button class="lot-btn active" data-lote="ALL">Todos</button>
+        <button class="lot-btn" data-lote="L1">L1</button>
+        <button class="lot-btn" data-lote="L2">L2</button>
+        <button class="lot-btn" data-lote="L3">L3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fecha inicio</th><th>Fecha fin</th><th>ID</th><th>Lote</th><th>Corredor / Sector</th><th>Perímetro</th><th>KM Aprox.</th></tr></thead>
+          <tbody>
+            <tr data-lote="L1"><td>07/07/2026</td><td>12/07/2026</td><td><span class="id">S10-001</span></td><td><span class="lote l-L1">L1</span></td><td class="wrap">Todos los lotes — Entrega</td><td class="wrap">Planos as-built, limpieza y entrega final</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="map-card"><div class="map-head"><div><b>🗺 My Map — Semana 10 (Cierre)</b><br><span>Entrega global</span></div><a class="btn btn-ghost" href="https://www.google.com/maps/d/edit?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ll=18.471065345284973%2C-69.92616790339324&z=15" target="_blank" rel="noopener">Abrir en My Maps ↗</a></div><iframe src="https://www.google.com/maps/d/embed?mid=1McW5sMJNI25gzKIMo8QY5ERDH0bFbqg&ehbc=2E312F" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="My Map Semana 10"></iframe></div>
+    <div class="sheet-grid">
+      <div class="sheet-card"><h4>🪺 Detalle Nidos — S10</h4><p>Cierre — sin nidos.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Nidos S10</a></div>
+      <div class="sheet-card"><h4>🌿 Detalle Podas — S10</h4><p>Cierre — sin poda.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet Podas S10</a></div>
+      <div class="sheet-card"><h4>⚡ Detalle MT Cercano — S10</h4><p>Cierre.</p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1fYMhJbpNoFRaT699lCyS7ZCRD6GonJxUyukwcEIEifU/edit?gid=1221423586#gid=1221423586" target="_blank" rel="noopener">↗ Abrir Sheet MT S10</a></div>
+    </div>
+  </div>
+
+
+  <p class="note" style="text-align:center; margin-top:18px">Tip: reemplaza cada URL de My Map / Sheet por el <code>mid</code> y <code>gid</code> filtrado de la semana si creas vistas separadas. La estructura ya está lista para 10 semanas — añade S4 duplicando un panel y un tab.</p>
 </div>
 
 <footer class="footer">
@@ -358,7 +680,7 @@ document.querySelectorAll('.lot-filter').forEach(bar=>{
 });
 // tabs
 const tabs=document.querySelectorAll('.week-tab');
-const panels={ s1:document.getElementById('panel-s1'), s2:document.getElementById('panel-s2'), s3:document.getElementById('panel-s3') };
+const panels={ s1:document.getElementById('panel-s1'), s2:document.getElementById('panel-s2'), s3:document.getElementById('panel-s3'), s4:document.getElementById('panel-s4'), s5:document.getElementById('panel-s5'), s6:document.getElementById('panel-s6'), s7:document.getElementById('panel-s7'), s8:document.getElementById('panel-s8'), s9:document.getElementById('panel-s9'), s10:document.getElementById('panel-s10') };
 function show(week){
   tabs.forEach(t=>{ const on=t.dataset.week===week; t.classList.toggle('active', on); t.setAttribute('aria-selected', on); });
   Object.entries(panels).forEach(([k,el])=> el.classList.toggle('active', k===week));
