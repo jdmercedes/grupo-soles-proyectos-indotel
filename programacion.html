@@ -131,6 +131,11 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
       <b style="font-size:13px; letter-spacing:.1em; text-transform:uppercase">Índice de programaciones</b>
       <span style="font-size:12.5px; color:var(--muted)">Selecciona una semana para ver su tabla, mapa y enlaces</span>
     </div>
+    <label class="search" style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px; padding:9px 12px">
+      <span style="color:var(--dim)">⌕</span>
+      <input id="weekSearch" type="search" placeholder="Buscar por semana (2026-S19), fechas o lote (L1/L2/L3)…" style="background:transparent; border:0; outline:0; color:#fff; width:100%; font-size:13.5px">
+    </label>
+    <div id="weekNoResults" style="display:none; font-size:13px; color:var(--muted); text-align:center; padding:8px; border:1px dashed var(--line); border-radius:10px">Sin resultados para la búsqueda</div>
     <div class="week-tabs" role="tablist" aria-label="Semanas">
       <button class="week-tab active" data-week="s1" role="tab" aria-selected="true">
         <div class="week-code">2026-S19</div>
@@ -319,6 +324,28 @@ function show(week){
   window.scrollTo({top: document.getElementById('programacion').offsetTop - 170, behavior:'smooth'});
 }
 tabs.forEach(t=> t.addEventListener('click', ()=> show(t.dataset.week)));
+// buscador en lista de semanas
+const weekSearch=document.getElementById('weekSearch');
+const weekNoResults=document.getElementById('weekNoResults');
+if(weekSearch){
+  weekSearch.addEventListener('input', ()=>{
+    const q=weekSearch.value.trim().toLowerCase();
+    let visible=0;
+    tabs.forEach(t=>{
+      const txt=t.innerText.toLowerCase();
+      const hit=!q || txt.includes(q);
+      t.style.display= hit ? '' : 'none';
+      if(hit) visible++;
+    });
+    weekNoResults.style.display = visible===0 ? 'block' : 'none';
+    // si la activa queda oculta, activa la primera visible
+    const activeVisible=[...tabs].find(t=> t.classList.contains('active') && t.style.display!=='none');
+    if(!activeVisible && visible>0){
+      const first=[...tabs].find(t=> t.style.display!=='none');
+      if(first) show(first.dataset.week);
+    }
+  });
+}
 // deep link
 const hash=(location.hash||'').replace('#','');
 if(hash && panels[hash]) show(hash);
