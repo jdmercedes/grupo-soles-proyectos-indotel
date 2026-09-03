@@ -91,9 +91,10 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
 .sheet-card{background:linear-gradient(180deg, var(--card2), var(--card)); border:1px solid var(--line); border-radius:20px; padding:20px; display:flex; flex-direction:column; gap:14px; align-items:stretch}
 .sheet-card h4{margin:0; font-size:15px; display:flex; align-items:center; gap:8px; justify-content:center; text-align:center}
 .sheet-card .btn{justify-content:center; width:100%; padding:14px 22px; font-size:14px; font-weight:800; letter-spacing:.02em; box-shadow:0 8px 20px rgba(30,122,255,.28); border-radius:12px}
-.top-stack{position:sticky; top:0; z-index:51}
-.top-stack .header{position:relative; top:auto; z-index:auto; transform:none; will-change:auto}
-.top-stack .page-nav{position:relative; top:auto; z-index:auto; margin-top:0; transform:none; will-change:auto}
+.top-stack{display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden}
+.top-stack .header{position:relative; top:auto; z-index:auto; transform:none; will-change:auto; flex-shrink:0}
+.top-stack .page-nav{position:relative; top:auto; z-index:auto; margin-top:0; transform:none; will-change:auto; flex-shrink:0}
+#programacion{flex:1; overflow-y:auto; min-height:0; -webkit-overflow-scrolling:touch}
 .footer{max-width:1280px; margin:18px auto 0; padding:18px 20px 30px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center; color:var(--dim); font-size:13px}
 </style>
 </head>
@@ -144,6 +145,7 @@ tbody tr:hover{background:rgba(255,255,255,.04)}
 <footer class="footer">
   <div style="display:flex; gap:12px; align-items:center"><div style="width:36px; height:36px; background:#fff; border-radius:8px; padding:0; overflow:hidden; display:grid; place-items:center; flex-shrink:0"><img src="logo_soles.png" alt="SOLES" style="width:100%; height:100%; object-fit:cover; object-position:center; transform:scale(1.32); display:block"></div><span><b>Grupo SOLES</b> — Programación semanal • INDOTEL-CCC-CP-2026-0010</span></div>
 </footer>
+</div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzXryQyx5OVWaQsn2-kimcI8SKL9B3frl0e01qIr3u0oTjhvV3otNDhYVpl4umbrpd7/exec";
@@ -267,8 +269,9 @@ function showWeek(id){
     p.classList.toggle('active', p.id==="panel-"+id);
   });
   history.replaceState(null,'', '#'+id);
+  const wrap = document.getElementById('programacion');
   const el = document.getElementById('panel-'+id);
-  if(el) window.scrollTo({top: document.getElementById('programacion').offsetTop - 20, behavior:'smooth'});
+  if(wrap && el) wrap.scrollTo({top: 0, behavior:'smooth'});
 }
 
 async function loadProgramacion(){
@@ -325,12 +328,19 @@ function setupSearch(){
   });
 }
 
-// progress
+// progress - sigue scroll del wrap (flex scroll interno)
 const progress=document.getElementById('progress');
-window.addEventListener('scroll', ()=>{
-  const sc=window.scrollY, docH=document.documentElement.scrollHeight - window.innerHeight;
+const progWrap = document.getElementById('programacion');
+function updateProgress(){
+  const sc = progWrap ? progWrap.scrollTop : window.scrollY;
+  const docH = progWrap ? (progWrap.scrollHeight - progWrap.clientHeight) : (document.documentElement.scrollHeight - window.innerHeight);
   progress.style.width = (docH? sc/docH*100:0)+'%';
-},{passive:true});
+}
+if(progWrap){
+  progWrap.addEventListener('scroll', updateProgress, {passive:true});
+} else {
+  window.addEventListener('scroll', updateProgress, {passive:true});
+}
 
 loadProgramacion();
 </script>
