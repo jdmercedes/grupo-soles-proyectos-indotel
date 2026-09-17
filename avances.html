@@ -166,14 +166,12 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
             <th data-sort="lote">Lote</th>
             <th data-sort="sector">Corredor/Sector</th>
             <th>Perímetro</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
             <th>Días Plan</th>
-            <th>KM Aprox.</th>
-            <th>Inicio Est.</th>
-            <th>Fin Est.</th>
-            <th>Inicio Real</th>
-            <th>Fin Real</th>
-            <th>KM Ejec.</th>
             <th>Días Real</th>
+            <th>KM Aprox.</th>
+            <th>KM Ejec.</th>
             <th data-sort="pct">Ejecutado %</th>
           </tr>
         </thead>
@@ -335,14 +333,12 @@ function renderPlan(filterLote="ALL", q=""){
       <td><span class="lote l-${r.lote}">${r.lote}</span></td>
       <td class="wrap">${r.sector}</td>
       <td class="wrap">${r.perimetro}</td>
-      <td>${r.diasPlan}</td>
-      <td>${r.kmAprox.toFixed(1)} km</td>
-      <td>${fmt(r.estIni)}</td>
-      <td>${fmt(r.estFin)}</td>
       <td>${fmt(r.iniReal)}</td>
       <td>${fmt(r.finReal)}</td>
-      <td>${r.kmEj.toFixed(1)} km</td>
+      <td>${r.diasPlan}</td>
       <td>${r.diasReal||"—"}</td>
+      <td>${r.kmAprox.toFixed(1)} km</td>
+      <td>${r.kmEj.toFixed(1)} km</td>
       <td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td>
     </tr>`).join("");
   document.getElementById("planCount").textContent = rows.length+" corredores";
