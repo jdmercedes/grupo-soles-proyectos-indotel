@@ -268,8 +268,8 @@ async function loadData(){
     if(!res.ok) throw new Error("HTTP "+res.status);
     const data = await res.json();
     kpisData = data.kpis_por_lote || [];
-    PLAN = (data.plan||[]).filter(r=> r.id!=null || (r.sector && r.sector.trim() && r.sector.trim()!=="")).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
-    REPORTE = (data.reporte||[]).filter(r=> r.sector && r.sector.trim());
+    PLAN = (data.plan||[]).filter(r=> r.sector!==null && r.sector!==undefined && String(r.sector).trim()).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
+    REPORTE = (data.reporte||[]).filter(r=> r.sector && String(r.sector).trim());
     renderKpis(); renderPlan(); renderReporte();
     if(status) status.style.display="none";
   }catch(err){
@@ -327,12 +327,9 @@ function renderKpis(){
 
 function renderPlan(f="ALL",q=""){
   const tb=document.getElementById("tbodyPlan");
-  let rows=PLAN.slice();
-  if(f!=="ALL") rows=rows.filter(r=>r.lote===f);
-  if(q) rows=rows.filter(r=>(r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
-  rows.sort((a,b)=>b.pct-a.pct);
-  const rows = PLAN.slice();
+  const rows=PLAN.slice();
   const filtered = rows.filter(r=> f==="ALL" || r.lote===f).filter(r=> !q || (r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
+  filtered.sort((a,b)=>b.pct-a.pct);
   tb.innerHTML= filtered.length ? filtered.map(r=>`<tr><td><span class="lote l-${r.lote||""}">${r.lote||""}</span></td><td class="wrap">${r.sector||""}</td><td class="wrap">${r.perimetro||""}</td><td>${fmt(r.fecha_inicio_real)}</td><td>${fmt(r.fecha_fin_real)}</td><td>${r.dias_plan||"—"}</td><td>${r.dias_real||"—"}</td><td>${(r.km_aprox||0).toFixed(1)} km</td><td>${(r.km_ejecutado||0).toFixed(1)} km</td><td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td></tr>`).join("") : `<tr><td colspan="10" style="text-align:center; color:var(--muted); padding:22px">Sin datos de ejecución — la hoja plan del spreadsheet está vacía</td></tr>`;
   document.getElementById("planCount").textContent=filtered.length+" corredores";
 }
