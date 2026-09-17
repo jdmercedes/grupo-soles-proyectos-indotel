@@ -201,13 +201,13 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
     <div class="card">
       <h3>Bitácoras — Incidentes del día a día</h3>
       <p class="muted" style="margin:6px 0 12px">Filtra por lote y fecha, o selecciona un sector en las tablas. Mock con 18 entradas.</p>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px">
-        <select id="filtroBitLote" style="background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:8px 12px; font-size:13px">
-          <option value="ALL">Todos los lotes</option>
-          <option value="L1">L1</option>
-          <option value="L2">L2</option>
-          <option value="L3">L3</option>
-        </select>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center">
+        <div style="display:flex; gap:8px; flex-wrap:wrap" id="bitLoteFilters">
+          <button class="filter active" data-lote="ALL" data-bit="true">Todos</button>
+          <button class="filter" data-lote="L1" data-bit="true">L1</button>
+          <button class="filter" data-lote="L2" data-bit="true">L2</button>
+          <button class="filter" data-lote="L3" data-bit="true">L3</button>
+        </div>
         <input id="filtroBitFecha" type="date" style="background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:8px 12px; font-size:13px">
         <button onclick="clearBitFilters()" style="background:rgba(255,255,255,.08); border:1px solid var(--line); color:#fff; border-radius:999px; padding:8px 12px; font-size:12px; cursor:pointer">↺ Limpiar</button>
       </div>
@@ -371,7 +371,7 @@ function renderReporte(filterLote="ALL"){
 
 function renderTimeline(filterSector=null){
   const c = document.getElementById("timeline");
-  const loteF = document.getElementById("filtroBitLote")?.value || "ALL";
+  const loteF = document.querySelector('#bitLoteFilters .filter.active')?.dataset.lote || "ALL";
   const fechaF = document.getElementById("filtroBitFecha")?.value || "";
   let rows = BITACORAS.slice().sort((a,b)=> new Date(b.fecha)-new Date(a.fecha));
   if(loteF!=="ALL") rows = rows.filter(r=> r.lote===loteF);
@@ -390,12 +390,10 @@ function renderTimeline(filterSector=null){
     </div>`).join("") || `<p class="muted" style="text-align:center; padding:12px">Sin bitácoras para los filtros seleccionados</p>`;
 }
 function clearBitFilters(){
-  const sel=document.getElementById("filtroBitLote");
+  document.querySelectorAll('#bitLoteFilters .filter').forEach(b=> b.classList.toggle('active', b.dataset.lote==="ALL"));
   const dat=document.getElementById("filtroBitFecha");
-  if(sel) sel.value="ALL";
   if(dat) dat.value="";
   renderTimeline(document.getElementById("sectorDetail").style.display!=="none" ? PLAN.find(p=> document.getElementById("detSector").textContent.includes(p.sector))?.sector : null);
-  // si no hay sector seleccionado, muestra todo
   if(document.getElementById("sectorDetail").style.display==="none") renderTimeline();
 }
 
@@ -434,10 +432,14 @@ document.getElementById("searchAv").addEventListener('input', e=>{
   const lote = document.querySelector('.table-card .filter.active')?.dataset.lote || "ALL";
   renderPlan(lote, q);
 });
-// filtros bitácoras por lote y fecha
-document.getElementById("filtroBitLote")?.addEventListener("change", ()=>{
-  const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
-  renderTimeline(sector);
+// filtros bitácoras por lote (radio pills) y fecha
+document.querySelectorAll('#bitLoteFilters .filter').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#bitLoteFilters .filter').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
+    renderTimeline(sector);
+  });
 });
 document.getElementById("filtroBitFecha")?.addEventListener("change", ()=>{
   const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
