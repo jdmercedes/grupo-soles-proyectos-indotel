@@ -268,8 +268,8 @@ async function loadData(){
     if(!res.ok) throw new Error("HTTP "+res.status);
     const data = await res.json();
     kpisData = data.kpis_por_lote || [];
-    PLAN = (data.plan||[]).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
-    REPORTE = data.reporte||[];
+    PLAN = (data.plan||[]).filter(r=> r.lote && r.sector).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
+    REPORTE = (data.reporte||[]).filter(r=> r.lote && r.sector);
     renderKpis(); renderPlan(); renderReporte();
     if(status) status.style.display="none";
   }catch(err){
@@ -282,24 +282,26 @@ function closeModal(){ document.getElementById("modal").classList.remove("open")
 
 function calcLote(k){
   const ejec=Number(k.ejec_km)||0, plan=Number(k.plan_km)||0, dias=Number(k.dias_real)||0;
-  const av=k.avance_pct||Math.round(ejec/plan*100)||0;
-  const kmRest=plan-ejec;
-  const rend=dias>0?ejec/dias:0;
-  const diasRest=rend>0?Math.ceil(kmRest/rend):0;
-  const finProj=k.fecha_fin_proyectada||(diasRest>0?(()=>{const x=new Date();x.setDate(x.getDate()+diasRest);return x;})():null);
-  return {ejec,plan,dias,av,kmRest,rend,diasRest,finProj};
+  const av=plan>0?Math.round(ejec/plan*100):(k.avance_pct||0);
+  const kmRest=Math.max(0,plan-ejec);
+  // km/d: si hay dias_reales, calcular; si no, mostrar 0 pero no ocultar
+  const rend = k.rend_km_dia!=null ? Number(k.rend_km_dia) : (dias>0 ? ejec/dias : 0);
+  const diasRest = rend>0 ? Math.ceil(kmRest/rend) : (plan>0 ? Math.ceil(plan/1) : 0);
+  const finProj = k.fecha_fin_proyectada || (diasRest>0 ? addDays(new Date(), diasRest) : null);
+  return {ejec,plan,dias,av,kmRest,rend:rend||0,diasRest,finProj};
 }
 
 function renderKpis(){
+  console.log("renderKpis: kpisData=", kpisData.length, kpisData);
   (kpisData||[]).forEach(k=>{
-    const {ejec,plan,av,rend,finProj}=calcLote(k);
+    const {ejec,plan,dias,av,rend,finProj}=calcLote(k);
     const lote=k.lote;
     const avEl=document.getElementById(`kpiAvance${lote}`);
     if(avEl) avEl.textContent=av+"%";
     const kmEl=document.getElementById(`kpiKm${lote}`);
     if(kmEl) kmEl.textContent=`${ejec.toFixed(1)} / ${plan.toFixed(1)} km`;
     const finEl=document.getElementById(`kpiFin${lote}`);
-    if(finEl) finEl.textContent=finProj?fmt(finProj):"—";
+    if(finEl) finEl.textContent=finProj?fmt(finProj):"— sin datos";
     const barEl=document.getElementById(`bar${lote}`);
     if(barEl) barEl.style.width=av+"%";
     const ringEl=document.getElementById(`ring${lote}`);
@@ -308,7 +310,7 @@ function renderKpis(){
       ringEl.innerHTML=`<div style="background:var(--bg);width:62px;height:62px;border-radius:50%;display:grid;place-items:center"><div style="text-align:center"><b style="font-size:16px">${av}%</b></div></div>`;
     }
     const rendEl=document.getElementById(`kpiRend${lote}`);
-    if(rendEl) rendEl.textContent=rend?rend.toFixed(2)+" km/d":"— km/d";
+    if(rendEl) rendEl.textContent=rend>0?rend.toFixed(2)+" km/d":`${ejec.toFixed(1)}/${plan.toFixed(1)} km total`;
   });
   const c=document.getElementById("loteBars");
   if(!c) return;
