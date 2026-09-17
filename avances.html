@@ -268,8 +268,8 @@ async function loadData(){
     if(!res.ok) throw new Error("HTTP "+res.status);
     const data = await res.json();
     kpisData = data.kpis_por_lote || [];
-    PLAN = (data.plan||[]).filter(r=> r.lote && r.sector).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
-    REPORTE = (data.reporte||[]).filter(r=> r.lote && r.sector);
+    PLAN = (data.plan||[]).filter(r=> r.id!=null || (r.sector && r.sector.trim() && r.sector.trim()!=="")).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
+    REPORTE = (data.reporte||[]).filter(r=> r.sector && r.sector.trim());
     renderKpis(); renderPlan(); renderReporte();
     if(status) status.style.display="none";
   }catch(err){
@@ -280,26 +280,31 @@ async function loadData(){
 
 function closeModal(){ document.getElementById("modal").classList.remove("open"); }
 
+// Totales conocidos por lote (del levantamiento) — usado cuando API no provee plan_km
+const TOTAL_KM={L1:56.42, L2:30.28, L3:74.61};
+
 function calcLote(k){
-  const ejec=Number(k.ejec_km)||0, plan=Number(k.plan_km)||0, dias=Number(k.dias_real)||0;
-  const av=plan>0?Math.round(ejec/plan*100):(k.avance_pct||0);
-  const kmRest=Math.max(0,plan-ejec);
-  // km/d: si hay dias_reales, calcular; si no, mostrar 0 pero no ocultar
-  const rend = k.rend_km_dia!=null ? Number(k.rend_km_dia) : (dias>0 ? ejec/dias : 0);
-  const diasRest = rend>0 ? Math.ceil(kmRest/rend) : (plan>0 ? Math.ceil(plan/1) : 0);
-  const finProj = k.fecha_fin_proyectada || (diasRest>0 ? addDays(new Date(), diasRest) : null);
-  return {ejec,plan,dias,av,kmRest,rend:rend||0,diasRest,finProj};
+  const ejec=Number(k.ejec_km)||0;
+  const plan=Number(k.plan_km)||0;
+  const dias=Number(k.dias_real)||0;
+  // av: si API tiene avance_pct > 0 usarlo; si no, calcular de ejec/total_known
+  const totalKnown=TOTAL_KM[k.lote]||0;
+  const av=k.avance_pct>0 ? Number(k.avance_pct) : (totalKnown>0 ? Math.round(ejec/totalKnown*100) : 0);
+  const kmRest=Math.max(0,totalKnown-ejec);
+  const rend=Number(k.rend_km_dia)||0;
+  const diasRest=rend>0?Math.ceil(kmRest/rend):0;
+  const finProj=k.fecha_fin_proyectada||(diasRest>0?addDays(new Date(),diasRest):null);
+  return {ejec,plan,totalKnown,dias,av,kmRest,rend,diasRest,finProj};
 }
 
 function renderKpis(){
-  console.log("renderKpis: kpisData=", kpisData.length, kpisData);
   (kpisData||[]).forEach(k=>{
-    const {ejec,plan,dias,av,rend,finProj}=calcLote(k);
+    const {ejec,totalKnown,av,rend,finProj}=calcLote(k);
     const lote=k.lote;
     const avEl=document.getElementById(`kpiAvance${lote}`);
     if(avEl) avEl.textContent=av+"%";
     const kmEl=document.getElementById(`kpiKm${lote}`);
-    if(kmEl) kmEl.textContent=`${ejec.toFixed(1)} / ${plan.toFixed(1)} km`;
+    if(kmEl) kmEl.textContent=`${ejec.toFixed(1)} / ${totalKnown.toFixed(1)} km`;
     const finEl=document.getElementById(`kpiFin${lote}`);
     if(finEl) finEl.textContent=finProj?fmt(finProj):"— sin datos";
     const barEl=document.getElementById(`bar${lote}`);
@@ -310,13 +315,13 @@ function renderKpis(){
       ringEl.innerHTML=`<div style="background:var(--bg);width:62px;height:62px;border-radius:50%;display:grid;place-items:center"><div style="text-align:center"><b style="font-size:16px">${av}%</b></div></div>`;
     }
     const rendEl=document.getElementById(`kpiRend${lote}`);
-    if(rendEl) rendEl.textContent=rend>0?rend.toFixed(2)+" km/d":`${ejec.toFixed(1)}/${plan.toFixed(1)} km total`;
+    if(rendEl) rendEl.textContent=rend>0?rend.toFixed(2)+" km/d":"Sin datos aún";
   });
   const c=document.getElementById("loteBars");
   if(!c) return;
   c.innerHTML=(kpisData||[]).map(k=>{
-    const {ejec,plan,dias,av,rend,finProj}=calcLote(k);
-    return `<div style="display:grid;grid-template-columns:70px 1fr 48px;gap:10px;align-items:center"><span class="lote l-${k.lote}">${k.lote}</span><div class="bar"><i style="width:${av}%"></i></div><b class="pct ${pctClass(av)}">${av}%</b></div><small style="font-size:11px;color:var(--dim)">${ejec.toFixed(1)}/${plan.toFixed(1)} km • ${dias}d • ${rend?rend.toFixed(2):"—"} km/d → ${finProj?fmt(finProj):"—"}</small>`;
+    const {ejec,totalKnown,av,rend,finProj}=calcLote(k);
+    return `<div style="display:grid;grid-template-columns:70px 1fr 48px;gap:10px;align-items:center"><span class="lote l-${k.lote}">${k.lote}</span><div class="bar"><i style="width:${av}%"></i></div><b class="pct ${pctClass(av)}">${av}%</b></div><small style="font-size:11px;color:var(--dim)">${ejec.toFixed(1)}/${totalKnown.toFixed(1)} km • ${rend?rend.toFixed(2):"—"} km/d → ${finProj?fmt(finProj):"—"}</small>`;
   }).join("");
 }
 
@@ -326,16 +331,16 @@ function renderPlan(f="ALL",q=""){
   if(f!=="ALL") rows=rows.filter(r=>r.lote===f);
   if(q) rows=rows.filter(r=>(r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
   rows.sort((a,b)=>b.pct-a.pct);
-  tb.innerHTML=rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer"><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector||""}</td><td class="wrap">${r.perimetro||""}</td><td>${fmt(r.fecha_inicio_real)}</td><td>${fmt(r.fecha_fin_real)}</td><td>${r.dias_plan||"—"}</td><td>${r.dias_real||"—"}</td><td>${(r.km_aprox||0).toFixed(1)} km</td><td>${(r.km_ejecutado||0).toFixed(1)} km</td><td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td></tr>`).join("");
-  document.getElementById("planCount").textContent=rows.length+" corredores";
+  const rows = PLAN.slice();
+  const filtered = rows.filter(r=> f==="ALL" || r.lote===f).filter(r=> !q || (r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
+  tb.innerHTML= filtered.length ? filtered.map(r=>`<tr><td><span class="lote l-${r.lote||""}">${r.lote||""}</span></td><td class="wrap">${r.sector||""}</td><td class="wrap">${r.perimetro||""}</td><td>${fmt(r.fecha_inicio_real)}</td><td>${fmt(r.fecha_fin_real)}</td><td>${r.dias_plan||"—"}</td><td>${r.dias_real||"—"}</td><td>${(r.km_aprox||0).toFixed(1)} km</td><td>${(r.km_ejecutado||0).toFixed(1)} km</td><td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td></tr>`).join("") : `<tr><td colspan="10" style="text-align:center; color:var(--muted); padding:22px">Sin datos de ejecución — la hoja plan del spreadsheet está vacía</td></tr>`;
+  document.getElementById("planCount").textContent=filtered.length+" corredores";
 }
 
 function renderReporte(f="ALL",q=""){
   const tb=document.getElementById("tbodyRep");
-  let rows=REPORTE.slice();
-  if(f!=="ALL") rows=rows.filter(r=>r.lote===f);
-  if(q) rows=rows.filter(r=>(r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
-  tb.innerHTML=rows.map(r=>`<tr><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace;font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:3px 6px;border-radius:999px">${r.semana}</span></td><td>${r.dias} días</td><td>${r.km} km</td></tr>`).join("");
+  const rows=REPORTE.filter(r=> f==="ALL" || r.lote===f).filter(r=> !q || (r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
+  tb.innerHTML=rows.length ? rows.map(r=>`<tr><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace;font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:3px 6px;border-radius:999px">${r.semana}</span></td><td>${r.dias} días</td><td>${r.km} km</td></tr>`).join("") : `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:22px">Sin datos de ejecución — la hoja reporte del spreadsheet está vacía</td></tr>`;
   document.getElementById("repCount").textContent=rows.length+" registros";
 }
 
