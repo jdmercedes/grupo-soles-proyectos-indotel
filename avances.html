@@ -118,29 +118,46 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
 </div>
 
 <div class="wrap">
-  <!-- HERO AVANCE -->
+  <!-- HERO AVANCE POR LOTE -->
   <div class="hero">
     <div class="card" style="display:flex; flex-direction:column; align-items:center; gap:18px; text-align:center">
       <div style="display:flex; flex-direction:column; align-items:center; gap:8px; width:100%">
-        <h3 style="font-family:Fraunces,serif; font-size:22px; margin:0">Avance de Ejecución — Proyecto</h3>
-        <p class="muted" style="margin:0; max-width:52ch">Porcentaje global, KM ejecutados y proyección de fecha fin basada en rendimiento real. Datos mock para validar UI (reemplazables por API).</p>
+        <h3 style="font-family:Fraunces,serif; font-size:22px; margin:0">Avance por Lote — Ejecución</h3>
+        <p class="muted" style="margin:0; max-width:56ch">1 registro/semana por lote — avance y proyección calculados por lote (no global). Mock por lote.</p>
       </div>
-      <div style="display:grid; grid-template-columns:140px 1fr; gap:24px; align-items:center; justify-items:center; width:100%; max-width:520px">
-        <div class="ring" id="ring" style="background:conic-gradient(var(--brand) 0deg, var(--brand2) 126deg, rgba(255,255,255,.08) 126deg)"></div>
-        <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; text-align:center">
-          <div style="display:flex; gap:24px; flex-wrap:wrap; justify-content:center; align-items:flex-start; width:100%">
-            <div style="flex:1 1 90px; min-width:90px"><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance global</small><b id="kpiAvance" style="font-size:32px; display:block">35%</b></div>
-            <div style="flex:1 1 110px; min-width:110px"><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">KM ejecutados</small><b id="kpiKm" style="font-size:20px; display:block">12.4 / 35.2 km</b></div>
-            <div style="flex:1 1 110px; min-width:110px"><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Proyección fin</small><b id="kpiFin" style="font-size:18px; color:#86efac; display:block">14 Ene 2027</b></div>
-          </div>
-          <div class="bar" style="height:10px; width:100%; max-width:420px"><i id="barGlobal" style="width:35%"></i></div>
-          <p class="muted" style="font-size:12px; margin:0; text-align:center">Rendimiento: <b id="kpiRend" style="color:#fff">0.42 km/día</b> • Días reales: <b id="kpiDias" style="color:#fff">29</b> • Restante: <b id="kpiRest" style="color:#fff">22.8 km</b></p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; align-items:center; width:100%">
-            <span class="lote l-L1">L1 38%</span>
-            <span class="lote l-L2">L2 41%</span>
-            <span class="lote l-L3">L3 24%</span>
-            <span style="font-size:11px; color:var(--dim); align-self:center" id="kpiVelDet">Vel. L1 0.45 • L2 0.48 • L3 0.31 km/d</span>
-          </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:100%">
+        <div style="background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:16px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:8px">
+          <span class="lote l-L1">L1</span>
+          <div class="ring" id="ringL1" style="width:90px; height:90px; background:conic-gradient(var(--brand) 0deg, var(--brand2) 0deg, rgba(255,255,255,.08) 0deg)"></div>
+          <b id="kpiAvanceL1" style="font-size:22px">—</b>
+          <small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance L1</small>
+          <div class="bar" style="width:100%; height:6px"><i id="barL1" style="width:0%"></i></div>
+          <small id="kpiKmL1" style="font-size:11px; color:var(--muted)">—</small>
+          <b id="kpiFinL1" style="font-size:13px; color:#86efac">—</b>
+          <small style="font-size:11px; color:var(--dim)">Proyección fin L1</small>
+          <small id="kpiRendL1" style="font-size:11px; color:var(--dim)">— km/d</small>
+        </div>
+        <div style="background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:16px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:8px">
+          <span class="lote l-L2">L2</span>
+          <div class="ring" id="ringL2" style="width:90px; height:90px; background:conic-gradient(var(--brand) 0deg, var(--brand2) 0deg, rgba(255,255,255,.08) 0deg)"></div>
+          <b id="kpiAvanceL2" style="font-size:22px">—</b>
+          <small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance L2</small>
+          <div class="bar" style="width:100%; height:6px"><i id="barL2" style="width:0%"></i></div>
+          <small id="kpiKmL2" style="font-size:11px; color:var(--muted)">—</small>
+          <b id="kpiFinL2" style="font-size:13px; color:#86efac">—</b>
+          <small style="font-size:11px; color:var(--dim)">Proyección fin L2</small>
+          <small id="kpiRendL2" style="font-size:11px; color:var(--dim)">— km/d</small>
+        </div>
+        <div style="background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:16px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:8px">
+          <span class="lote l-L3">L3</span>
+          <div class="ring" id="ringL3" style="width:90px; height:90px; background:conic-gradient(var(--brand) 0deg, var(--brand2) 0deg, rgba(255,255,255,.08) 0deg)"></div>
+          <b id="kpiAvanceL3" style="font-size:22px">—</b>
+          <small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance L3</small>
+          <div class="bar" style="width:100%; height:6px"><i id="barL3" style="width:0%"></i></div>
+          <small id="kpiKmL3" style="font-size:11px; color:var(--muted)">—</small>
+          <b id="kpiFinL3" style="font-size:13px; color:#86efac">—</b>
+          <small style="font-size:11px; color:var(--dim)">Proyección fin L3</small>
+          <small id="kpiRendL3" style="font-size:11px; color:var(--dim)">— km/d</small>
         </div>
       </div>
     </div>
@@ -299,39 +316,56 @@ const BITACORAS = [
 
 function pctClass(p){ return p>=75?"high": p>=35?"mid":"low"; }
 
-// KPIs globales y proyección
-function computeKpis(){
-  const totalKm = PLAN.reduce((a,b)=>a+b.kmAprox,0);
-  const ejecKm = PLAN.reduce((a,b)=>a+b.kmEj,0);
-  const totalDiasPlan = PLAN.reduce((a,b)=>a+b.diasPlan,0);
-  const diasReal = PLAN.reduce((a,b)=>a+b.diasReal,0);
-  const avance = Math.round(ejecKm/totalKm*100);
-  const kmRest = +(totalKm - ejecKm).toFixed(1);
-  const rend = diasReal? (ejecKm/diasReal) : 0.42;
-  const diasRest = rend? Math.ceil(kmRest/rend) : Math.ceil(kmRest/0.42);
-  const finProj = addDays(new Date(), diasRest);
-  return {totalKm, ejecKm, avance, diasReal, kmRest, rend, diasRest, finProj, totalDiasPlan};
+// KPIs por lote (1 registro/semana por lote) — avance y proyección por lote
+function computeKpisPorLote(){
+  const byLote = {};
+  PLAN.forEach(p=>{
+    if(!byLote[p.lote]) byLote[p.lote] = {plan:0, ejec:0, dias:0};
+    byLote[p.lote].plan += p.kmAprox;
+    byLote[p.lote].ejec += p.kmEj;
+    byLote[p.lote].dias += p.diasReal;
+  });
+  const res = {};
+  for(const lote of ["L1","L2","L3"]){
+    const v = byLote[lote] || {plan:0, ejec:0, dias:0};
+    const avance = v.plan ? Math.round(v.ejec / v.plan * 100) : 0;
+    const kmRest = +(v.plan - v.ejec).toFixed(1);
+    const rend = v.dias ? (v.ejec / v.dias) : 0;
+    const diasRest = rend ? Math.ceil(kmRest / rend) : 0;
+    const finProj = diasRest ? addDays(new Date(), diasRest) : null;
+    res[lote] = {plan: v.plan, ejec: v.ejec, dias: v.dias, avance, kmRest, rend, diasRest, finProj};
+  }
+  return res;
 }
 
 function renderKpis(){
-  const k = computeKpis();
-  document.getElementById("kpiAvance").textContent = k.avance+"%";
-  document.getElementById("kpiKm").textContent = `${k.ejecKm.toFixed(1)} / ${k.totalKm.toFixed(1)} km`;
-  document.getElementById("kpiFin").textContent = fmt(k.finProj);
-  document.getElementById("kpiRend").textContent = k.rend.toFixed(2)+" km/día";
-  document.getElementById("kpiDias").textContent = k.diasReal;
-  document.getElementById("kpiRest").textContent = k.kmRest+" km";
-  document.getElementById("barGlobal").style.width = k.avance+"%";
-  document.getElementById("ring").style.background = `conic-gradient(var(--brand) 0deg, var(--brand2) ${k.avance*3.6}deg, rgba(255,255,255,.08) ${k.avance*3.6}deg)`;
-  document.getElementById("ring").innerHTML = `<div style="background:var(--bg); width:110px; height:110px; border-radius:50%; display:grid; place-items:center"><div style="text-align:center"><b style="font-size:28px">${k.avance}%</b><br><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance</small></div></div>`;
-  // barras por lote
-  const byLote = {};
-  PLAN.forEach(p=>{ byLote[p.lote]= byLote[p.lote]||{plan:0, ejec:0, dias:0}; byLote[p.lote].plan+=p.kmAprox; byLote[p.lote].ejec+=p.kmEj; });
+  const byLote = computeKpisPorLote();
+  ["L1","L2","L3"].forEach(lote=>{
+    const k = byLote[lote];
+    const avEl = document.getElementById(`kpiAvance${lote}`);
+    if(avEl) avEl.textContent = k.avance + "%";
+    const kmEl = document.getElementById(`kpiKm${lote}`);
+    if(kmEl) kmEl.textContent = `${k.ejec.toFixed(1)} / ${k.plan.toFixed(1)} km`;
+    const finEl = document.getElementById(`kpiFin${lote}`);
+    if(finEl) finEl.textContent = k.finProj ? fmt(k.finProj) : "—";
+    const barEl = document.getElementById(`bar${lote}`);
+    if(barEl) barEl.style.width = k.avance + "%";
+    const ringEl = document.getElementById(`ring${lote}`);
+    if(ringEl){
+      ringEl.style.background = `conic-gradient(var(--brand) 0deg, var(--brand2) ${k.avance*3.6}deg, rgba(255,255,255,.08) ${k.avance*3.6}deg)`;
+      ringEl.innerHTML = `<div style="background:var(--bg); width:62px; height:62px; border-radius:50%; display:grid; place-items:center"><div style="text-align:center"><b style="font-size:16px">${k.avance}%</b></div></div>`;
+    }
+    const rendEl = document.getElementById(`kpiRend${lote}`);
+    if(rendEl) rendEl.textContent = k.rend ? k.rend.toFixed(2) + " km/d" : "— km/d";
+  });
+  // barras por lote (card derecha) - mantiene detalle por lote
   const c = document.getElementById("loteBars");
-  c.innerHTML = Object.entries(byLote).map(([lote,v])=>{
-    const pct = Math.round(v.ejec/v.plan*100);
-    return `<div style="display:grid; grid-template-columns:70px 1fr 48px; gap:10px; align-items:center"><span class="lote l-${lote}">${lote}</span><div class="bar"><i style="width:${pct}%"></i></div><b class="pct ${pctClass(pct)}">${pct}%</b></div><small style="font-size:11px; color:var(--dim)">${v.ejec.toFixed(1)}/${v.plan.toFixed(1)} km</small>`;
-  }).join("");
+  if(c){
+    c.innerHTML = Object.entries(byLote).map(([lote,v])=>{
+      const pct = v.avance;
+      return `<div style="display:grid; grid-template-columns:70px 1fr 48px; gap:10px; align-items:center"><span class="lote l-${lote}">${lote}</span><div class="bar"><i style="width:${pct}%"></i></div><b class="pct ${pctClass(pct)}">${pct}%</b></div><small style="font-size:11px; color:var(--dim)">${v.ejec.toFixed(1)}/${v.plan.toFixed(1)} km • ${v.dias}d • ${v.rend ? v.rend.toFixed(2) : "—"} km/d → ${v.finProj ? fmt(v.finProj) : "—"}</small>`;
+    }).join("");
+  }
 }
 
 function renderPlan(filterLote="ALL", q=""){
