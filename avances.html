@@ -280,19 +280,26 @@ async function loadData(){
 
 function closeModal(){ document.getElementById("modal").classList.remove("open"); }
 
+function calcLote(k){
+  const ejec=Number(k.ejec_km)||0, plan=Number(k.plan_km)||0, dias=Number(k.dias_real)||0;
+  const av=k.avance_pct||Math.round(ejec/plan*100)||0;
+  const kmRest=plan-ejec;
+  const rend=dias>0?ejec/dias:0;
+  const diasRest=rend>0?Math.ceil(kmRest/rend):0;
+  const finProj=k.fecha_fin_proyectada||(diasRest>0?(()=>{const x=new Date();x.setDate(x.getDate()+diasRest);return x;})():null);
+  return {ejec,plan,dias,av,kmRest,rend,diasRest,finProj};
+}
+
 function renderKpis(){
   (kpisData||[]).forEach(k=>{
+    const {ejec,plan,av,rend,finProj}=calcLote(k);
     const lote=k.lote;
-    const av = k.avance_pct ?? 0;
     const avEl=document.getElementById(`kpiAvance${lote}`);
     if(avEl) avEl.textContent=av+"%";
     const kmEl=document.getElementById(`kpiKm${lote}`);
-    if(kmEl){
-      const ejec=Number(k.ejec_km)||0, plan=Number(k.plan_km)||0;
-      kmEl.textContent=`${ejec.toFixed(1)} / ${plan.toFixed(1)} km`;
-    }
+    if(kmEl) kmEl.textContent=`${ejec.toFixed(1)} / ${plan.toFixed(1)} km`;
     const finEl=document.getElementById(`kpiFin${lote}`);
-    if(finEl) finEl.textContent=fmt(k.fecha_fin_proyectada);
+    if(finEl) finEl.textContent=finProj?fmt(finProj):"—";
     const barEl=document.getElementById(`bar${lote}`);
     if(barEl) barEl.style.width=av+"%";
     const ringEl=document.getElementById(`ring${lote}`);
@@ -301,16 +308,13 @@ function renderKpis(){
       ringEl.innerHTML=`<div style="background:var(--bg);width:62px;height:62px;border-radius:50%;display:grid;place-items:center"><div style="text-align:center"><b style="font-size:16px">${av}%</b></div></div>`;
     }
     const rendEl=document.getElementById(`kpiRend${lote}`);
-    if(rendEl) rendEl.textContent=(k.rend_km_dia||0).toFixed(2)+" km/d";
+    if(rendEl) rendEl.textContent=rend?rend.toFixed(2)+" km/d":"— km/d";
   });
   const c=document.getElementById("loteBars");
   if(!c) return;
-  const byLote={};
-  PLAN.forEach(p=>{byLote[p.lote]=(byLote[p.lote]||0)+p.km_aprox;});
   c.innerHTML=(kpisData||[]).map(k=>{
-    const pct=k.avance_pct||0;
-    const km=k.ejec_km||0; const tot=k.plan_km||0;
-    return `<div style="display:grid;grid-template-columns:70px 1fr 48px;gap:10px;align-items:center"><span class="lote l-${k.lote}">${k.lote}</span><div class="bar"><i style="width:${pct}%"></i></div><b class="pct ${pctClass(pct)}">${pct}%</b></div><small style="font-size:11px;color:var(--dim)">${km.toFixed(1)}/${tot.toFixed(1)} km • ${k.dias_real||0}d • ${(k.rend_km_dia||0).toFixed(2)} km/d → ${fmt(k.fecha_fin_proyectada)}</small>`;
+    const {ejec,plan,dias,av,rend,finProj}=calcLote(k);
+    return `<div style="display:grid;grid-template-columns:70px 1fr 48px;gap:10px;align-items:center"><span class="lote l-${k.lote}">${k.lote}</span><div class="bar"><i style="width:${av}%"></i></div><b class="pct ${pctClass(av)}">${av}%</b></div><small style="font-size:11px;color:var(--dim)">${ejec.toFixed(1)}/${plan.toFixed(1)} km • ${dias}d • ${rend?rend.toFixed(2):"—"} km/d → ${finProj?fmt(finProj):"—"}</small>`;
   }).join("");
 }
 
