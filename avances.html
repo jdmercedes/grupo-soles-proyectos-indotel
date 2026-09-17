@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avances de Ejecución — SOLES • INDOTEL-CCC-CP-2026-0010</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,800;9..144,1,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#0a0f1e; --card:#121e3a; --card2:#162651; --line:rgba(255,255,255,.08); --text:#f2f5ff; --muted:#a8b3d6; --dim:#7d8ab0; --brand:#1e7aff; --brand2:#00d0ff; --radius:20px; --radius-lg:28px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; overflow-x:clip}
+body{margin:0; font-family:Inter,system-ui,sans-serif; background:radial-gradient(1200px 600px at 20% -10%, rgba(30,122,255,.22), transparent 60%),radial-gradient(900px 600px at 95% 10%, rgba(0,208,255,.18), transparent 60%),var(--bg); color:var(--text); overflow-x:clip}
+a{color:inherit; text-decoration:none}
+img{max-width:100%; display:block}
+.header{position:sticky; top:0; z-index:51; backdrop-filter:blur(14px) saturate(1.4); background:rgba(10,15,30,.72); border-bottom:1px solid var(--line); transform:translateZ(0); will-change:transform}
+.header-inner{max-width:1280px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; gap:18px}
+.brand{display:flex; align-items:center; gap:14px; min-width:0}
+.brand-logo{width:52px; height:52px; border-radius:14px; background:#fff; padding:0; overflow:hidden; display:grid; place-items:center; box-shadow:0 8px 24px rgba(0,0,0,.25); flex-shrink:0}
+.brand-logo img{width:100%; height:100%; object-fit:cover; object-position:center; transform:scale(1.32); transform-origin:center; display:block}
+.brand-text{line-height:1.05}
+.brand-text strong{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff; display:block}
+.pliego{text-align:right; min-width:0}
+.pliego .badge{display:inline-flex; align-items:center; gap:8px; font-family:JetBrains Mono,monospace; font-size:12.5px; letter-spacing:.08em; background:linear-gradient(135deg, rgba(30,122,255,.18), rgba(0,208,255,.14)); border:1px solid rgba(30,122,255,.35); color:#b8d1ff; padding:6px 10px; border-radius:999px}
+.pliego .proc{font-size:13px; color:var(--dim); margin-top:6px; line-height:1.35; max-width:560px}
+.top-stack{position:sticky; top:0; z-index:51; will-change:transform}
+.top-stack .header{position:relative; top:auto; z-index:auto; transform:none; will-change:auto}
+.top-stack .page-nav{position:relative; top:auto; z-index:auto; margin-top:0; transform:none; will-change:auto; flex-shrink:0}
+.page-nav{position:sticky; top:72px; z-index:49; backdrop-filter:blur(12px) saturate(1.4); background:rgba(10,15,30,.94); border-bottom:1px solid var(--line); padding:12px 20px}
+.page-nav-inner{max-width:1280px; margin:0 auto; display:flex; gap:10px; align-items:center}
+.page-tab{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted); transition:.15s}
+.page-tab:hover{background:rgba(255,255,255,.1)}
+.page-tab.active{background:#fff; color:#0a0f1e; border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.progress{height:3px; background:linear-gradient(90deg, var(--brand), var(--brand2), #ff7a1a); width:0; transition:width .25s}
+.wrap{max-width:1280px; margin:0 auto; padding:18px 20px 40px}
+.hero{display:grid; grid-template-columns:1.05fr .95fr; gap:16px; margin:14px 0}
+@media(max-width:980px){ .hero{grid-template-columns:1fr} .pliego{display:none} }
+.card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid var(--line); border-radius:22px; padding:18px}
+.card h3{margin:0; font-size:14px; letter-spacing:.02em}
+.muted{color:var(--muted); font-size:13px; line-height:1.5}
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+@media(max-width:980px){ .kpi-row{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:560px){ .kpi-row{grid-template-columns:1fr} }
+.kpi{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid var(--line); border-radius:18px; padding:14px}
+.kpi small{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:800}
+.kpi b{font-size:28px; display:block; margin:4px 0 2px}
+.kpi p{font-size:13px; color:var(--muted); margin:0; line-height:1.4}
+.ring{width:140px; height:140px; border-radius:50%; display:grid; place-items:center; position:relative; margin:0 auto}
+.ring b{font-size:28px}
+.ring small{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.table-card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:22px; overflow:hidden; margin-top:16px}
+.table-head{padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; border-bottom:1px solid var(--line); background:rgba(255,255,255,.03)}
+.table-head h3{margin:0; font-size:15px}
+.table-wrap{overflow:auto}
+table{width:100%; border-collapse:collapse; font-size:13.5px; min-width:1100px}
+thead th{position:sticky; top:0; background:#111e3d; color:#cbd5ff; font-size:11px; letter-spacing:.1em; text-transform:uppercase; text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); white-space:nowrap; cursor:pointer}
+tbody td{padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.06); white-space:nowrap}
+tbody td.wrap{white-space:normal; min-width:180px}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+tbody tr.selected{background:rgba(30,122,255,.12)}
+.lote{font-family:JetBrains Mono,monospace; font-size:11px; padding:4px 7px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06)}
+.l-L1{color:#a9c6ff; border-color:rgba(30,122,255,.35)}
+.l-L2{color:#a7f3d0; border-color:rgba(34,197,94,.35)}
+.l-L3{color:#ffd1ad; border-color:rgba(255,122,26,.35)}
+.bar{height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; margin-top:6px}
+.bar i{display:block; height:100%; border-radius:999px; background:linear-gradient(90deg, var(--brand), var(--brand2))}
+.pct{font-weight:800; font-size:12px}
+.pct.low{color:#fca5a5}
+.pct.mid{color:#fde68a}
+.pct.high{color:#86efac}
+.timeline{position:relative; padding-left:22px; display:grid; gap:14px}
+.timeline::before{content:""; position:absolute; left:7px; top:4px; bottom:4px; width:2px; background:rgba(255,255,255,.08); border-radius:999px}
+.t-dot{position:absolute; left:0; width:16px; height:16px; border-radius:50%; border:2px solid var(--brand); background:#0a0f1e; display:grid; place-items:center; font-size:8px}
+.t-card{background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:14px; padding:12px}
+.t-card small{font-size:11px; color:var(--dim); letter-spacing:.06em}
+.t-card b{font-size:13px; display:block; margin:4px 0}
+.t-card p{font-size:13px; color:var(--muted); margin:0; line-height:1.5}
+.filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.filter{font-size:12px; font-weight:800; padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted); cursor:pointer}
+.filter.active{background:#fff; color:#0a0f1e; border-color:#fff}
+.search{display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px; padding:8px 12px; min-width:240px}
+.search input{background:transparent; border:0; outline:0; color:#fff; width:100%; font-size:13.5px}
+.search input::placeholder{color:var(--dim)}
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(8px); display:none; place-items:center; z-index:80; padding:20px}
+.modal.open{display:grid}
+.modal-card{max-width:860px; width:100%; max-height:85vh; overflow:auto; background:linear-gradient(180deg, #162651, #121e3a); border:1px solid var(--line); border-radius:20px; padding:18px}
+.footer{max-width:1280px; margin:18px auto 0; padding:18px 20px 30px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center; color:var(--dim); font-size:13px}
+</style>
+</head>
+<body>
+<div class="top-stack">
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo"><img src="logo_soles.png" alt="SOLES" onerror="this.style.display='none'"></div>
+      <div class="brand-text"><strong>Grupo Soluciones Energéticas — SOLES</strong></div>
+    </div>
+    <div class="pliego">
+      <div class="badge">● INDOTEL-CCC-CP-2026-0010</div>
+      <div class="proc">Ordenamiento, Regularización y Adecuación de Infraestructura Aérea mediante el <b>Retiro, Reubicación y Reorganización del Cableado</b> en Zonas Urbanas del Distrito Nacional</div>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+<nav class="page-nav" aria-label="Principal">
+  <div class="page-nav-inner">
+    <a href="levantamiento-previo.html" class="page-tab">Levantamiento Previo</a>
+    <a href="programacion.html" class="page-tab">Programaciones Semanales</a>
+    <a href="avances.html" class="page-tab active">Avances</a>
+  </div>
+</nav>
+</div>
+
+<div class="wrap">
+  <!-- HERO AVANCE -->
+  <div class="hero">
+    <div class="card" style="display:flex; flex-direction:column; align-items:center; gap:18px; text-align:center">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px; width:100%">
+        <h3 style="font-family:Fraunces,serif; font-size:22px; margin:0">Avance de Ejecución — Proyecto</h3>
+        <p class="muted" style="margin:0; max-width:52ch">Porcentaje global, KM ejecutados y proyección de fecha fin basada en rendimiento real. Datos mock para validar UI (reemplazables por API).</p>
+      </div>
+      <div style="display:grid; grid-template-columns:140px 1fr; gap:24px; align-items:center; justify-items:center; width:100%; max-width:520px">
+        <div class="ring" id="ring" style="background:conic-gradient(var(--brand) 0deg, var(--brand2) 126deg, rgba(255,255,255,.08) 126deg)"></div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; text-align:center">
+          <div style="display:flex; gap:24px; flex-wrap:wrap; justify-content:center; align-items:flex-start; width:100%">
+            <div style="flex:1 1 90px; min-width:90px"><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance global</small><b id="kpiAvance" style="font-size:32px; display:block">35%</b></div>
+            <div style="flex:1 1 110px; min-width:110px"><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">KM ejecutados</small><b id="kpiKm" style="font-size:20px; display:block">12.4 / 35.2 km</b></div>
+            <div style="flex:1 1 110px; min-width:110px"><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Proyección fin</small><b id="kpiFin" style="font-size:18px; color:#86efac; display:block">14 Ene 2027</b></div>
+          </div>
+          <div class="bar" style="height:10px; width:100%; max-width:420px"><i id="barGlobal" style="width:35%"></i></div>
+          <p class="muted" style="font-size:12px; margin:0; text-align:center">Rendimiento: <b id="kpiRend" style="color:#fff">0.42 km/día</b> • Días reales: <b id="kpiDias" style="color:#fff">29</b> • Restante: <b id="kpiRest" style="color:#fff">22.8 km</b></p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; align-items:center; width:100%">
+            <span class="lote l-L1">L1 38%</span>
+            <span class="lote l-L2">L2 41%</span>
+            <span class="lote l-L3">L3 24%</span>
+            <span style="font-size:11px; color:var(--dim); align-self:center" id="kpiVelDet">Vel. L1 0.45 • L2 0.48 • L3 0.31 km/d</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Avance por Lote</h3>
+      <p class="muted" style="margin:6px 0 10px">Haz click en un lote para filtrar las tablas inferiores.</p>
+      <div id="loteBars" style="display:grid; gap:10px"></div>
+      <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+        <button class="filter active" data-lote="ALL">Todos</button>
+        <button class="filter" data-lote="L1">L1</button>
+        <button class="filter" data-lote="L2">L2</button>
+        <button class="filter" data-lote="L3">L3</button>
+        <label class="search" style="flex:1; min-width:180px"><span style="color:var(--dim)">⌕</span><input id="searchAv" type="search" placeholder="Buscar sector…"></label>
+      </div>
+      <p class="muted" style="font-size:12px; margin-top:10px">Proyección calculada: <code style="background:rgba(255,255,255,.06); padding:2px 6px; border-radius:6px">días_restantes = km_restante / km_por_día_promedio</code>. Ajusta si cambias rendimiento.</p>
+    </div>
+  </div>
+
+  <!-- PLAN TRABAJO -->
+  <div class="table-card">
+    <div class="table-head">
+      <h3>Plan de Trabajo — Estimado vs Real</h3>
+      <span style="font-size:12px; color:var(--dim)" id="planCount">23 corredores</span>
+    </div>
+    <div class="table-wrap">
+      <table id="tblPlan">
+        <thead>
+          <tr>
+            <th data-sort="id">ID</th>
+            <th data-sort="lote">Lote</th>
+            <th data-sort="sector">Corredor/Sector</th>
+            <th>Perímetro</th>
+            <th>Días Plan</th>
+            <th>KM Aprox.</th>
+            <th>Inicio Est.</th>
+            <th>Fin Est.</th>
+            <th>Inicio Real</th>
+            <th>Fin Real</th>
+            <th>KM Ejec.</th>
+            <th>Días Real</th>
+            <th data-sort="pct">Ejecutado %</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyPlan"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REPORTE EJECUCION + BITACORAS GRID -->
+  <div style="display:grid; grid-template-columns:1.1fr .9fr; gap:16px; margin-top:16px">
+    <div class="table-card">
+      <div class="table-head"><h3>Reporte de Ejecución</h3><span style="font-size:12px; color:var(--dim)" id="repCount">—</span></div>
+      <div class="table-wrap" style="max-height:420px">
+        <table id="tblRep">
+          <thead><tr><th>ID</th><th>Lote</th><th>Corredor/Sector</th><th>Perímetro</th><th>Semana</th><th>KM</th></tr></thead>
+          <tbody id="tbodyRep"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Bitácoras — Incidentes del día a día</h3>
+      <p class="muted" style="margin:6px 0 12px">Selecciona un sector en las tablas para filtrar su bitácora. Mock con 18 entradas.</p>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </div>
+
+  <!-- DETALLE SECTOR -->
+  <div class="card" id="sectorDetail" style="margin-top:16px; display:none">
+    <h3>Detalle del sector: <span id="detSector" style="color:#9ec0ff"></span></h3>
+    <p class="muted" id="detResumen"></p>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px" id="detKpis"></div>
+    <div class="table-wrap" style="margin-top:10px">
+      <table>
+        <thead><tr><th>Fecha</th><th>Puntos clave</th><th>Notas</th></tr></thead>
+        <tbody id="detBit"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div style="display:flex; gap:12px; align-items:center"><div style="width:36px; height:36px; background:#fff; border-radius:8px; padding:0; overflow:hidden; display:grid; place-items:center; flex-shrink:0"><img src="logo_soles.png" alt="SOLES" style="width:100%; height:100%; object-fit:cover; object-position:center; transform:scale(1.32); display:block"></div><span><b>Grupo SOLES</b> — Avances • INDOTEL-CCC-CP-2026-0010</span></div>
+</footer>
+
+<div class="modal" id="modal"><div class="modal-card"><div style="display:flex; justify-content:space-between; align-items:center; gap:12px"><h3 id="modalTitle" style="margin:0"></h3><button onclick="closeModal()" style="background:rgba(255,255,255,.08); border:1px solid var(--line); color:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer">✕</button></div><div id="modalBody" style="margin-top:12px"></div></div></div>
+
+<script>
+// ===== MOCK DATA - reemplazar por API =====
+// Plan: 23 sectores base (de levantamiento-previo)
+const BASE = [
+  {id:1, lote:"L1", sector:"Avenida Simón Bolivar", perimetro:"C/ Palo Hincando hasta Ave. Isabel Aguiar", diasPlan:8, kmAprox:10.3},
+  {id:2, lote:"L1", sector:"Avenida Independencia", perimetro:"Av. 27 de Febrero a George Washington", diasPlan:8, kmAprox:2.8},
+  {id:3, lote:"L1", sector:"Avenida George Washington", perimetro:"Malecón Alma Mater a Independencia", diasPlan:3, kmAprox:1.5},
+  {id:4, lote:"L1", sector:"Avenida México", perimetro:"Av. Duarte a 30 de Marzo", diasPlan:5, kmAprox:1.9},
+  {id:5, lote:"L1", sector:"Avenida John F. Kennedy", perimetro:"Postes 12-38 este-oeste", diasPlan:5, kmAprox:2.0},
+  {id:6, lote:"L1", sector:"Sector San Carlos", perimetro:"Barahona, 16 de Agosto, Abreu", diasPlan:6, kmAprox:1.8},
+  {id:7, lote:"L1", sector:"Sector Zona Colonial", perimetro:"Calle El Conde y adyacentes", diasPlan:4, kmAprox:1.2},
+  {id:8, lote:"L2", sector:"Avenida Sarasota", perimetro:"Winston Churchill a Núñez de Cáceres", diasPlan:5, kmAprox:2.0},
+  {id:9, lote:"L2", sector:"Avenida Albert Thomas", perimetro:"Duarte a Nicolás de Ovando", diasPlan:5, kmAprox:2.2},
+  {id:10, lote:"L2", sector:"Avenida Nicolás de Ovando", perimetro:"María Montez a Ortega y Gasset", diasPlan:4, kmAprox:1.4},
+  {id:11, lote:"L2", sector:"Avenida Pedro Livio Cedeño", perimetro:"Tramo completo L2", diasPlan:3, kmAprox:1.0},
+  {id:12, lote:"L2", sector:"Avenida Máximo Gómez", perimetro:"Kennedy a 27 de Febrero", diasPlan:5, kmAprox:1.9},
+  {id:13, lote:"L2", sector:"Sector Cristo Rey", perimetro:"Calles 42,38, Ovando", diasPlan:8, kmAprox:4.2},
+  {id:14, lote:"L2", sector:"Sector 24 de Abril", perimetro:"C/10 a C/18 norte", diasPlan:4, kmAprox:1.5},
+  {id:15, lote:"L2", sector:"Ensanche Luperón", perimetro:"Duarte, Mella, C/13", diasPlan:4, kmAprox:1.6},
+  {id:16, lote:"L3", sector:"Ave. Nuñez de Cáceres", perimetro:"Kennedy a 27 de Febrero", diasPlan:4, kmAprox:1.7},
+  {id:17, lote:"L3", sector:"Sector Bella Vista", perimetro:"Sarasota, Independencia, Fantino Falco", diasPlan:7, kmAprox:2.6},
+  {id:18, lote:"L3", sector:"Ave. Winston Churchill", perimetro:"Postes 05-22", diasPlan:3, kmAprox:1.2},
+  {id:19, lote:"L3", sector:"Ave. Abraham Lincoln", perimetro:"27 de Febrero a Sarasota", diasPlan:3, kmAprox:1.0},
+  {id:20, lote:"L3", sector:"Ave. Tiradentes", perimetro:"Kennedy a 27 de Febrero", diasPlan:4, kmAprox:1.4},
+  {id:21, lote:"L3", sector:"Ave. Ortega y Gasset", perimetro:"Kennedy a C/27", diasPlan:3, kmAprox:1.1},
+  {id:22, lote:"L3", sector:"C/ Emma Balaguer", perimetro:"Gracita Álvarez a P. Henríquez Ureña", diasPlan:2, kmAprox:0.6},
+  {id:23, lote:"L3", sector:"Sector Naco", perimetro:"Tiradentes a Winston Churchill", diasPlan:5, kmAprox:2.4},
+];
+// Plan extendido con fechas y avance mock
+const startBase = new Date("2026-09-07");
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function fmt(d){ if(!d) return "—"; const dd=String(d.getDate()).padStart(2,"0"), mm=String(d.getMonth()+1).padStart(2,"0"); return `${dd}/${mm}/${d.getFullYear()}`; }
+
+let cum=0;
+const PLAN = BASE.map((b,i)=>{
+  const estIni = addDays(startBase, cum);
+  const estFin = addDays(estIni, b.diasPlan-1);
+  cum+= b.diasPlan+1;
+  // mock avance: primeros 8 ejecutados, siguientes 5 en progreso, resto pendiente
+  let pct=0, kmEj=0, diasReal=0, iniReal=null, finReal=null;
+  if(i<8){ pct = 100; kmEj=b.kmAprox; diasReal=b.diasPlan; iniReal=estIni; finReal=estFin; }
+  else if(i<13){ pct = Math.round(30+Math.random()*50); kmEj= +(b.kmAprox * pct/100).toFixed(1); diasReal= Math.round(b.diasPlan * pct/100); iniReal=addDays(estIni,1); finReal=null; }
+  else { pct=0; }
+  return {...b, estIni, estFin, iniReal, finReal, kmEj, diasReal, pct};
+});
+
+// Reporte ejecucion: solo ejecutados y en progreso
+const REPORTE = PLAN.filter(p=> p.pct>0).map(p=> ({
+  id: p.id, lote:p.lote, sector:p.sector, perimetro:p.perimetro, semana: `2026-S${37 + Math.floor(p.id/4)}`, km:p.kmEj
+}));
+
+// Bitacoras mock
+const BITACORAS = [
+  {fecha:"2026-09-07", puntos:"Av. Simón Bolivar - poste 12", notas:"Retiro de 8 vanos, nido inactivo reubicado con aval ambiental", sector:"Avenida Simón Bolivar"},
+  {fecha:"2026-09-08", puntos:"Sarasota - tramo central", notas:"Poda autorizada completada, 12 árboles despejados", sector:"Avenida Sarasota"},
+  {fecha:"2026-09-09", puntos:"Cristo Rey - Calle 42", notas:"Incidente menor: herramienta rozó MT, charla de seguridad reforzada", sector:"Sector Cristo Rey"},
+  {fecha:"2026-09-10", puntos:"Bella Vista - Fantino Falco", notas:"Avance 60%, vegetación densa retrasa 1 día", sector:"Sector Bella Vista"},
+  {fecha:"2026-09-11", puntos:"Independencia - poste 28", notas:"Nido activo balizado, tramo excluido hasta dictamen", sector:"Avenida Independencia"},
+  {fecha:"2026-09-12", puntos:"Naco - Tiradentes", notas:"Reorganización de 15 vanos, sin incidentes", sector:"Sector Naco"},
+  {fecha:"2026-09-13", puntos:"Albert Thomas", notas:"Lluvia intermitente, avance parcial 40%", sector:"Avenida Albert Thomas"},
+  {fecha:"2026-09-14", puntos:"Zona Colonial", notas:"Coordinación con Alcaldía para desvío peatonal", sector:"Sector Zona Colonial"},
+  {fecha:"2026-09-15", puntos:"Máximo Gómez", notas:"Tendido MT cercano señalizado, EPP verificado", sector:"Avenida Máximo Gómez"},
+  {fecha:"2026-09-16", puntos:"Núñez de Cáceres", notas:"Inicio de zanja, interferencia con acera", sector:"Ave. Nuñez de Cáceres"},
+  {fecha:"2026-09-17", puntos:"Tiradentes", notas:"Avance 75%, pendiente remate de 2 postes", sector:"Ave. Tiradentes"},
+  {fecha:"2026-09-18", puntos:"San Carlos", notas:"Entrega parcial, 1.1 km liberados", sector:"Sector San Carlos"},
+];
+
+function pctClass(p){ return p>=75?"high": p>=35?"mid":"low"; }
+
+// KPIs globales y proyección
+function computeKpis(){
+  const totalKm = PLAN.reduce((a,b)=>a+b.kmAprox,0);
+  const ejecKm = PLAN.reduce((a,b)=>a+b.kmEj,0);
+  const totalDiasPlan = PLAN.reduce((a,b)=>a+b.diasPlan,0);
+  const diasReal = PLAN.reduce((a,b)=>a+b.diasReal,0);
+  const avance = Math.round(ejecKm/totalKm*100);
+  const kmRest = +(totalKm - ejecKm).toFixed(1);
+  const rend = diasReal? (ejecKm/diasReal) : 0.42;
+  const diasRest = rend? Math.ceil(kmRest/rend) : Math.ceil(kmRest/0.42);
+  const finProj = addDays(new Date(), diasRest);
+  return {totalKm, ejecKm, avance, diasReal, kmRest, rend, diasRest, finProj, totalDiasPlan};
+}
+
+function renderKpis(){
+  const k = computeKpis();
+  document.getElementById("kpiAvance").textContent = k.avance+"%";
+  document.getElementById("kpiKm").textContent = `${k.ejecKm.toFixed(1)} / ${k.totalKm.toFixed(1)} km`;
+  document.getElementById("kpiFin").textContent = fmt(k.finProj);
+  document.getElementById("kpiRend").textContent = k.rend.toFixed(2)+" km/día";
+  document.getElementById("kpiDias").textContent = k.diasReal;
+  document.getElementById("kpiRest").textContent = k.kmRest+" km";
+  document.getElementById("barGlobal").style.width = k.avance+"%";
+  document.getElementById("ring").style.background = `conic-gradient(var(--brand) 0deg, var(--brand2) ${k.avance*3.6}deg, rgba(255,255,255,.08) ${k.avance*3.6}deg)`;
+  document.getElementById("ring").innerHTML = `<div style="background:var(--bg); width:110px; height:110px; border-radius:50%; display:grid; place-items:center"><div style="text-align:center"><b style="font-size:28px">${k.avance}%</b><br><small style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)">Avance</small></div></div>`;
+  // barras por lote
+  const byLote = {};
+  PLAN.forEach(p=>{ byLote[p.lote]= byLote[p.lote]||{plan:0, ejec:0, dias:0}; byLote[p.lote].plan+=p.kmAprox; byLote[p.lote].ejec+=p.kmEj; });
+  const c = document.getElementById("loteBars");
+  c.innerHTML = Object.entries(byLote).map(([lote,v])=>{
+    const pct = Math.round(v.ejec/v.plan*100);
+    return `<div style="display:grid; grid-template-columns:70px 1fr 48px; gap:10px; align-items:center"><span class="lote l-${lote}">${lote}</span><div class="bar"><i style="width:${pct}%"></i></div><b class="pct ${pctClass(pct)}">${pct}%</b></div><small style="font-size:11px; color:var(--dim)">${v.ejec.toFixed(1)}/${v.plan.toFixed(1)} km</small>`;
+  }).join("");
+}
+
+function renderPlan(filterLote="ALL", q=""){
+  const tb = document.getElementById("tbodyPlan");
+  let rows = PLAN.slice();
+  if(filterLote!=="ALL") rows = rows.filter(r=> r.lote===filterLote);
+  if(q) rows = rows.filter(r=> r.sector.toLowerCase().includes(q) || r.lote.toLowerCase().includes(q));
+  rows.sort((a,b)=> b.pct - a.pct);
+  tb.innerHTML = rows.map(r=>`
+    <tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')">
+      <td><span class="id">${r.id}</span></td>
+      <td><span class="lote l-${r.lote}">${r.lote}</span></td>
+      <td class="wrap">${r.sector}</td>
+      <td class="wrap">${r.perimetro}</td>
+      <td>${r.diasPlan}</td>
+      <td>${r.kmAprox.toFixed(1)} km</td>
+      <td>${fmt(r.estIni)}</td>
+      <td>${fmt(r.estFin)}</td>
+      <td>${fmt(r.iniReal)}</td>
+      <td>${fmt(r.finReal)}</td>
+      <td>${r.kmEj.toFixed(1)} km</td>
+      <td>${r.diasReal||"—"}</td>
+      <td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td>
+    </tr>`).join("");
+  document.getElementById("planCount").textContent = rows.length+" corredores";
+}
+
+function renderReporte(filterLote="ALL"){
+  const tb = document.getElementById("tbodyRep");
+  let rows = REPORTE.slice();
+  if(filterLote!=="ALL") rows = rows.filter(r=> r.lote===filterLote);
+  tb.innerHTML = rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')"><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace; font-size:11px; background:rgba(255,255,255,.06); border:1px solid var(--line); padding:3px 6px; border-radius:999px">${r.semana}</span></td><td>${r.km} km</td></tr>`).join("");
+  document.getElementById("repCount").textContent = rows.length+" registros";
+}
+
+function renderTimeline(filterSector=null){
+  const c = document.getElementById("timeline");
+  let rows = BITACORAS.slice().sort((a,b)=> new Date(b.fecha)-new Date(a.fecha));
+  if(filterSector) rows = rows.filter(r=> r.sector===filterSector);
+  c.innerHTML = rows.map(r=>`
+    <div style="position:relative">
+      <div class="t-dot">●</div>
+      <div class="t-card">
+        <small>${fmt(new Date(r.fecha))} • ${r.sector}</small>
+        <b>${r.puntos}</b>
+        <p>${r.notas}</p>
+      </div>
+    </div>`).join("") || `<p class="muted" style="text-align:center; padding:12px">Sin bitácoras para este sector</p>`;
+}
+
+function openSector(sector){
+  const plan = PLAN.find(p=> p.sector===sector);
+  if(!plan) return;
+  document.getElementById("sectorDetail").style.display="block";
+  document.getElementById("detSector").textContent = sector + ` — Lote ${plan.lote}`;
+  document.getElementById("detResumen").textContent = `${plan.perimetro} • Plan ${plan.diasPlan}d / ${plan.kmAprox}km • Ejecutado ${plan.pct}% (${plan.kmEj}km en ${plan.diasReal||0}d)`;
+  document.getElementById("detKpis").innerHTML = `
+    <div class="kpi"><small>Avance</small><b class="pct ${pctClass(plan.pct)}">${plan.pct}%</b><div class="bar"><i style="width:${plan.pct}%"></i></div></div>
+    <div class="kpi"><small>KM</small><b>${plan.kmEj}/${plan.kmAprox} km</b><p class="muted">${(plan.kmAprox - plan.kmEj).toFixed(1)} km restantes</p></div>
+    <div class="kpi"><small>Fechas</small><b style="font-size:14px">${fmt(plan.iniReal)} → ${fmt(plan.finReal)||"—"}</b><p class="muted">Est: ${fmt(plan.estIni)} → ${fmt(plan.estFin)}</p></div>`;
+  const bits = BITACORAS.filter(b=> b.sector===sector);
+  document.getElementById("detBit").innerHTML = bits.map(b=>`<tr><td>${fmt(new Date(b.fecha))}</td><td class="wrap">${b.puntos}</td><td class="wrap">${b.notas}</td></tr>`).join("") || `<tr><td colspan="3" style="text-align:center; color:var(--muted); padding:12px">Sin bitácoras</td></tr>`;
+  document.getElementById("sectorDetail").scrollIntoView({behavior:"smooth", block:"start"});
+  renderTimeline(sector);
+}
+
+function closeModal(){ document.getElementById("modal").classList.remove("open"); }
+
+// filtros
+document.querySelectorAll('.filter').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    const lote = btn.dataset.lote;
+    const q = document.getElementById("searchAv").value.trim().toLowerCase();
+    renderPlan(lote, q);
+    renderReporte(lote);
+  });
+});
+document.getElementById("searchAv").addEventListener('input', e=>{
+  const q = e.target.value.trim().toLowerCase();
+  const lote = document.querySelector('.filter.active')?.dataset.lote || "ALL";
+  renderPlan(lote, q);
+});
+
+// sort plan por % al click en th
+document.querySelectorAll('#tblPlan thead th[data-sort]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const k = th.dataset.sort;
+    if(k==="pct") PLAN.sort((a,b)=> b.pct - a.pct);
+    if(k==="id") PLAN.sort((a,b)=> a.id - b.id);
+    if(k==="lote") PLAN.sort((a,b)=> a.lote.localeCompare(b.lote));
+    if(k==="sector") PLAN.sort((a,b)=> a.sector.localeCompare(b.sector));
+    const lote = document.querySelector('.filter.active')?.dataset.lote || "ALL";
+    renderPlan(lote, document.getElementById("searchAv").value.trim().toLowerCase());
+  });
+});
+
+// progress
+const progress=document.getElementById('progress');
+window.addEventListener('scroll', ()=>{
+  const sc=window.scrollY, h=document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = h? sc/h*100+"%" : "0";
+},{passive:true});
+
+renderKpis();
+renderPlan();
+renderReporte();
+renderTimeline();
+</script>
+</body>
+</html>
