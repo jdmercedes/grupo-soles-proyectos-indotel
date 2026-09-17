@@ -71,10 +71,15 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
 .timeline{position:relative; padding-left:22px; display:grid; gap:14px}
 .timeline::before{content:""; position:absolute; left:7px; top:4px; bottom:4px; width:2px; background:rgba(255,255,255,.08); border-radius:999px}
 .t-dot{position:absolute; left:0; width:16px; height:16px; border-radius:50%; border:2px solid var(--brand); background:#0a0f1e; display:grid; place-items:center; font-size:8px}
-.t-card{background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:14px; padding:12px}
+.t-card{background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:14px; padding:12px; cursor:pointer; transition:border-color .2s}
+.t-card:hover{border-color:rgba(30,122,255,.25)}
+.t-card.open{border-color:rgba(30,122,255,.35)}
 .t-card small{font-size:11px; color:var(--dim); letter-spacing:.06em}
 .t-card b{font-size:13px; display:block; margin:4px 0}
 .t-card p{font-size:13px; color:var(--muted); margin:0; line-height:1.5}
+.t-card .t-notas{display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--line)}
+.t-card.open .t-notas{display:block}
+.t-toggle{color:var(--brand); font-size:11px; font-weight:700; margin-top:6px; display:block; letter-spacing:.02em}
 .filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
 .filter{font-size:12px; font-weight:800; padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted); cursor:pointer}
 .filter.active{background:#fff; color:#0a0f1e; border-color:#fff}
@@ -193,7 +198,17 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
     </div>
     <div class="card">
       <h3>Bitácoras — Incidentes del día a día</h3>
-      <p class="muted" style="margin:6px 0 12px">Selecciona un sector en las tablas para filtrar su bitácora. Mock con 18 entradas.</p>
+      <p class="muted" style="margin:6px 0 12px">Filtra por lote y fecha, o selecciona un sector en las tablas. Mock con 18 entradas.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px">
+        <select id="filtroBitLote" style="background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:8px 12px; font-size:13px">
+          <option value="ALL">Todos los lotes</option>
+          <option value="L1">L1</option>
+          <option value="L2">L2</option>
+          <option value="L3">L3</option>
+        </select>
+        <input id="filtroBitFecha" type="date" style="background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:8px 12px; font-size:13px">
+        <button onclick="clearBitFilters()" style="background:rgba(255,255,255,.08); border:1px solid var(--line); color:#fff; border-radius:999px; padding:8px 12px; font-size:12px; cursor:pointer">↺ Limpiar</button>
+      </div>
       <div class="timeline" id="timeline"></div>
     </div>
   </div>
@@ -205,7 +220,7 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px" id="detKpis"></div>
     <div class="table-wrap" style="margin-top:10px">
       <table>
-        <thead><tr><th>Fecha</th><th>Puntos clave</th><th>Notas</th></tr></thead>
+        <thead><tr><th>Fecha</th><th>Lote</th><th>Corredor/Sector</th><th>Perímetro</th><th>Puntos clave</th><th>Notas</th></tr></thead>
         <tbody id="detBit"></tbody>
       </table>
     </div>
@@ -269,20 +284,20 @@ const REPORTE = PLAN.filter(p=> p.pct>0).map(p=> ({
   id: p.id, lote:p.lote, sector:p.sector, perimetro:p.perimetro, semana: `2026-S${37 + Math.floor(p.id/4)}`, km:p.kmEj
 }));
 
-// Bitacoras mock
+// Bitacoras mock con Lote, Corredor/Sector, Perímetro para filtros
 const BITACORAS = [
-  {fecha:"2026-09-07", puntos:"Av. Simón Bolivar - poste 12", notas:"Retiro de 8 vanos, nido inactivo reubicado con aval ambiental", sector:"Avenida Simón Bolivar"},
-  {fecha:"2026-09-08", puntos:"Sarasota - tramo central", notas:"Poda autorizada completada, 12 árboles despejados", sector:"Avenida Sarasota"},
-  {fecha:"2026-09-09", puntos:"Cristo Rey - Calle 42", notas:"Incidente menor: herramienta rozó MT, charla de seguridad reforzada", sector:"Sector Cristo Rey"},
-  {fecha:"2026-09-10", puntos:"Bella Vista - Fantino Falco", notas:"Avance 60%, vegetación densa retrasa 1 día", sector:"Sector Bella Vista"},
-  {fecha:"2026-09-11", puntos:"Independencia - poste 28", notas:"Nido activo balizado, tramo excluido hasta dictamen", sector:"Avenida Independencia"},
-  {fecha:"2026-09-12", puntos:"Naco - Tiradentes", notas:"Reorganización de 15 vanos, sin incidentes", sector:"Sector Naco"},
-  {fecha:"2026-09-13", puntos:"Albert Thomas", notas:"Lluvia intermitente, avance parcial 40%", sector:"Avenida Albert Thomas"},
-  {fecha:"2026-09-14", puntos:"Zona Colonial", notas:"Coordinación con Alcaldía para desvío peatonal", sector:"Sector Zona Colonial"},
-  {fecha:"2026-09-15", puntos:"Máximo Gómez", notas:"Tendido MT cercano señalizado, EPP verificado", sector:"Avenida Máximo Gómez"},
-  {fecha:"2026-09-16", puntos:"Núñez de Cáceres", notas:"Inicio de zanja, interferencia con acera", sector:"Ave. Nuñez de Cáceres"},
-  {fecha:"2026-09-17", puntos:"Tiradentes", notas:"Avance 75%, pendiente remate de 2 postes", sector:"Ave. Tiradentes"},
-  {fecha:"2026-09-18", puntos:"San Carlos", notas:"Entrega parcial, 1.1 km liberados", sector:"Sector San Carlos"},
+  {fecha:"2026-09-07", lote:"L1", sector:"Avenida Simón Bolivar", perimetro:"C/ Palo Hincando hasta Ave. Isabel Aguiar", puntos:"Av. Simón Bolivar - poste 12", notas:"Retiro de 8 vanos, nido inactivo reubicado con aval ambiental"},
+  {fecha:"2026-09-08", lote:"L2", sector:"Avenida Sarasota", perimetro:"Winston Churchill a Núñez de Cáceres", puntos:"Sarasota - tramo central", notas:"Poda autorizada completada, 12 árboles despejados"},
+  {fecha:"2026-09-09", lote:"L2", sector:"Sector Cristo Rey", perimetro:"Calles 42,38, Ovando", puntos:"Cristo Rey - Calle 42", notas:"Incidente menor: herramienta rozó MT, charla de seguridad reforzada"},
+  {fecha:"2026-09-10", lote:"L3", sector:"Sector Bella Vista", perimetro:"Sarasota, Independencia, Fantino Falco", puntos:"Bella Vista - Fantino Falco", notas:"Avance 60%, vegetación densa retrasa 1 día"},
+  {fecha:"2026-09-11", lote:"L1", sector:"Avenida Independencia", perimetro:"Av. 27 de Febrero a George Washington", puntos:"Independencia - poste 28", notas:"Nido activo balizado, tramo excluido hasta dictamen"},
+  {fecha:"2026-09-12", lote:"L3", sector:"Sector Naco", perimetro:"Tiradentes a Winston Churchill", puntos:"Naco - Tiradentes", notas:"Reorganización de 15 vanos, sin incidentes"},
+  {fecha:"2026-09-13", lote:"L2", sector:"Avenida Albert Thomas", perimetro:"Duarte a Nicolás de Ovando", puntos:"Albert Thomas", notas:"Lluvia intermitente, avance parcial 40%"},
+  {fecha:"2026-09-14", lote:"L1", sector:"Sector Zona Colonial", perimetro:"Calle El Conde y adyacentes", puntos:"Zona Colonial", notas:"Coordinación con Alcaldía para desvío peatonal"},
+  {fecha:"2026-09-15", lote:"L2", sector:"Avenida Máximo Gómez", perimetro:"Kennedy a 27 de Febrero", puntos:"Máximo Gómez", notas:"Tendido MT cercano señalizado, EPP verificado"},
+  {fecha:"2026-09-16", lote:"L3", sector:"Ave. Nuñez de Cáceres", perimetro:"Kennedy a 27 de Febrero", puntos:"Núñez de Cáceres", notas:"Inicio de zanja, interferencia con acera"},
+  {fecha:"2026-09-17", lote:"L3", sector:"Ave. Tiradentes", perimetro:"Kennedy a 27 de Febrero", puntos:"Tiradentes", notas:"Avance 75%, pendiente remate de 2 postes"},
+  {fecha:"2026-09-18", lote:"L1", sector:"Sector San Carlos", perimetro:"Barahona, 16 de Agosto, Abreu", puntos:"San Carlos", notas:"Entrega parcial, 1.1 km liberados"},
 ];
 
 function pctClass(p){ return p>=75?"high": p>=35?"mid":"low"; }
@@ -354,17 +369,32 @@ function renderReporte(filterLote="ALL"){
 
 function renderTimeline(filterSector=null){
   const c = document.getElementById("timeline");
+  const loteF = document.getElementById("filtroBitLote")?.value || "ALL";
+  const fechaF = document.getElementById("filtroBitFecha")?.value || "";
   let rows = BITACORAS.slice().sort((a,b)=> new Date(b.fecha)-new Date(a.fecha));
+  if(loteF!=="ALL") rows = rows.filter(r=> r.lote===loteF);
+  if(fechaF) rows = rows.filter(r=> r.fecha===fechaF);
   if(filterSector) rows = rows.filter(r=> r.sector===filterSector);
   c.innerHTML = rows.map(r=>`
     <div style="position:relative">
       <div class="t-dot">●</div>
-      <div class="t-card">
-        <small>${fmt(new Date(r.fecha))} • ${r.sector}</small>
+      <div class="t-card" onclick="this.classList.toggle('open'); this.querySelector('.t-toggle').textContent = this.classList.contains('open') ? 'Ocultar detalle ▴' : 'Ver detalle ▾'">
+        <small>${fmt(new Date(r.fecha))} • <span class="lote l-${r.lote}" style="font-size:10px">${r.lote}</span> • ${r.sector}</small>
         <b>${r.puntos}</b>
-        <p>${r.notas}</p>
+        <p style="font-size:12px; color:var(--dim); margin:2px 0 4px">${r.perimetro}</p>
+        <div class="t-notas"><p>${r.notas}</p></div>
+        <span class="t-toggle">Ver detalle ▾</span>
       </div>
-    </div>`).join("") || `<p class="muted" style="text-align:center; padding:12px">Sin bitácoras para este sector</p>`;
+    </div>`).join("") || `<p class="muted" style="text-align:center; padding:12px">Sin bitácoras para los filtros seleccionados</p>`;
+}
+function clearBitFilters(){
+  const sel=document.getElementById("filtroBitLote");
+  const dat=document.getElementById("filtroBitFecha");
+  if(sel) sel.value="ALL";
+  if(dat) dat.value="";
+  renderTimeline(document.getElementById("sectorDetail").style.display!=="none" ? PLAN.find(p=> document.getElementById("detSector").textContent.includes(p.sector))?.sector : null);
+  // si no hay sector seleccionado, muestra todo
+  if(document.getElementById("sectorDetail").style.display==="none") renderTimeline();
 }
 
 function openSector(sector){
@@ -378,7 +408,7 @@ function openSector(sector){
     <div class="kpi"><small>KM</small><b>${plan.kmEj}/${plan.kmAprox} km</b><p class="muted">${(plan.kmAprox - plan.kmEj).toFixed(1)} km restantes</p></div>
     <div class="kpi"><small>Fechas</small><b style="font-size:14px">${fmt(plan.iniReal)} → ${fmt(plan.finReal)||"—"}</b><p class="muted">Est: ${fmt(plan.estIni)} → ${fmt(plan.estFin)}</p></div>`;
   const bits = BITACORAS.filter(b=> b.sector===sector);
-  document.getElementById("detBit").innerHTML = bits.map(b=>`<tr><td>${fmt(new Date(b.fecha))}</td><td class="wrap">${b.puntos}</td><td class="wrap">${b.notas}</td></tr>`).join("") || `<tr><td colspan="3" style="text-align:center; color:var(--muted); padding:12px">Sin bitácoras</td></tr>`;
+  document.getElementById("detBit").innerHTML = bits.map(b=>`<tr><td>${fmt(new Date(b.fecha))}</td><td><span class="lote l-${b.lote}">${b.lote}</span></td><td class="wrap">${b.sector}</td><td class="wrap">${b.perimetro}</td><td class="wrap">${b.puntos}</td><td class="wrap">${b.notas}</td></tr>`).join("") || `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:12px">Sin bitácoras</td></tr>`;
   document.getElementById("sectorDetail").scrollIntoView({behavior:"smooth", block:"start"});
   renderTimeline(sector);
 }
@@ -400,6 +430,15 @@ document.getElementById("searchAv").addEventListener('input', e=>{
   const q = e.target.value.trim().toLowerCase();
   const lote = document.querySelector('.filter.active')?.dataset.lote || "ALL";
   renderPlan(lote, q);
+});
+// filtros bitácoras por lote y fecha
+document.getElementById("filtroBitLote")?.addEventListener("change", ()=>{
+  const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
+  renderTimeline(sector);
+});
+document.getElementById("filtroBitFecha")?.addEventListener("change", ()=>{
+  const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
+  renderTimeline(sector);
 });
 
 // sort plan por % al click en th
