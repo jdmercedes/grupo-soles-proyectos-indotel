@@ -51,7 +51,8 @@ img{max-width:100%; display:block}
 .table-card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:22px; overflow:hidden; margin-top:16px}
 .table-head{padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; border-bottom:1px solid var(--line); background:rgba(255,255,255,.03)}
 .table-head h3{margin:0; font-size:15px}
-.table-wrap{overflow:auto}
+.table-wrap{overflow:auto; scrollbar-width:none; -ms-overflow-style:none}
+.table-wrap::-webkit-scrollbar{ display:none; width:0; height:0}
 table{width:100%; border-collapse:collapse; font-size:13.5px; min-width:1100px}
 thead th{position:sticky; top:0; background:#111e3d; color:#cbd5ff; font-size:11px; letter-spacing:.1em; text-transform:uppercase; text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); white-space:nowrap; cursor:pointer}
 tbody td{padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.06); white-space:nowrap}
@@ -197,21 +198,6 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
           <tbody id="tbodyRep"></tbody>
         </table>
       </div>
-    </div>
-    <div class="card">
-      <h3>Bitácoras — Incidentes del día a día</h3>
-      <p class="muted" style="margin:6px 0 12px">Filtra por lote y fecha, o selecciona un sector en las tablas. Mock con 18 entradas.</p>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center">
-        <div style="display:flex; gap:8px; flex-wrap:wrap" id="bitLoteFilters">
-          <button class="filter active" data-lote="ALL" data-bit="true">Todos</button>
-          <button class="filter" data-lote="L1" data-bit="true">L1</button>
-          <button class="filter" data-lote="L2" data-bit="true">L2</button>
-          <button class="filter" data-lote="L3" data-bit="true">L3</button>
-        </div>
-        <input id="filtroBitFecha" type="date" style="background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:8px 12px; font-size:13px">
-        <button onclick="clearBitFilters()" style="background:rgba(255,255,255,.08); border:1px solid var(--line); color:#fff; border-radius:999px; padding:8px 12px; font-size:12px; cursor:pointer">↺ Limpiar</button>
-      </div>
-      <div class="timeline" id="timeline"></div>
     </div>
   </div>
 
@@ -371,6 +357,7 @@ function renderReporte(filterLote="ALL"){
 
 function renderTimeline(filterSector=null){
   const c = document.getElementById("timeline");
+  if(!c) return;
   const loteF = document.querySelector('#bitLoteFilters .filter.active')?.dataset.lote || "ALL";
   const fechaF = document.getElementById("filtroBitFecha")?.value || "";
   let rows = BITACORAS.slice().sort((a,b)=> new Date(b.fecha)-new Date(a.fecha));
