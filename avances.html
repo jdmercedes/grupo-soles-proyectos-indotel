@@ -203,7 +203,7 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
       </div>
       <div class="table-wrap" style="max-height:420px">
         <table id="tblRep">
-          <thead><tr><th>ID</th><th>Lote</th><th>Corredor/Sector</th><th>Perímetro</th><th>Semana</th><th>KM</th></tr></thead>
+          <thead><tr><th>ID</th><th>Lote</th><th>Corredor/Sector</th><th>Perímetro</th><th>Semana</th><th>Días</th><th>KM</th></tr></thead>
           <tbody id="tbodyRep"></tbody>
         </table>
       </div>
@@ -276,9 +276,9 @@ const PLAN = BASE.map((b,i)=>{
   return {...b, estIni, estFin, iniReal, finReal, kmEj, diasReal, pct};
 });
 
-// Reporte ejecucion: solo ejecutados y en progreso
+// Reporte ejecucion: solo ejecutados y en progreso (con Días)
 const REPORTE = PLAN.filter(p=> p.pct>0).map(p=> ({
-  id: p.id, lote:p.lote, sector:p.sector, perimetro:p.perimetro, semana: `2026-S${37 + Math.floor(p.id/4)}`, km:p.kmEj
+  id: p.id, lote:p.lote, sector:p.sector, perimetro:p.perimetro, semana: `2026-S${37 + Math.floor(p.id/4)}`, km:p.kmEj, dias: p.diasReal || p.diasPlan
 }));
 
 // Bitacoras mock con Lote, Corredor/Sector, Perímetro para filtros
@@ -361,7 +361,7 @@ function renderReporte(filterLote="ALL", q=""){
   let rows = REPORTE.slice();
   if(filterLote!=="ALL") rows = rows.filter(r=> r.lote===filterLote);
   if(q) rows = rows.filter(r=> r.sector.toLowerCase().includes(q) || r.lote.toLowerCase().includes(q));
-  tb.innerHTML = rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')"><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace; font-size:11px; background:rgba(255,255,255,.06); border:1px solid var(--line); padding:3px 6px; border-radius:999px">${r.semana}</span></td><td>${r.km} km</td></tr>`).join("");
+  tb.innerHTML = rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')"><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace; font-size:11px; background:rgba(255,255,255,.06); border:1px solid var(--line); padding:3px 6px; border-radius:999px">${r.semana}</span></td><td>${r.dias} días</td><td>${r.km} km</td></tr>`).join("");
   document.getElementById("repCount").textContent = rows.length+" registros";
 }
 
