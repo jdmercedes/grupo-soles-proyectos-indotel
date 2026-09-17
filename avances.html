@@ -169,6 +169,11 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
     </div>
   </div>
 
+  <div id="apiStatus" style="background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:14px; padding:16px; margin-top:16px; text-align:center; color:var(--muted); font-size:14px">
+    <div>⏳ Cargando datos de la API…</div>
+    <a href="https://script.google.com/macros/s/AKfycbzXryQyx5OVWaQsn2-kimcI8SKL9B3frl0e01qIr3u0oTjhvV3otNDhYVpl4umbrpd7/exec?reporte=ejecucion" target="_blank" style="color:#9ec0ff; font-size:12px; margin-top:6px; display:inline-block">Verificar API directamente ↗</a>
+  </div>
+
   <!-- EJECUTADO -->
   <div class="table-card">
     <div class="table-head">
@@ -248,272 +253,99 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
 <div class="modal" id="modal"><div class="modal-card"><div style="display:flex; justify-content:space-between; align-items:center; gap:12px"><h3 id="modalTitle" style="margin:0"></h3><button onclick="closeModal()" style="background:rgba(255,255,255,.08); border:1px solid var(--line); color:#fff; border-radius:999px; width:36px; height:36px; cursor:pointer">✕</button></div><div id="modalBody" style="margin-top:12px"></div></div></div>
 
 <script>
-// ===== MOCK DATA - reemplazar por API =====
-// Plan: 23 sectores base (de levantamiento-previo)
-const BASE = [
-  {id:1, lote:"L1", sector:"Avenida Simón Bolivar", perimetro:"C/ Palo Hincando hasta Ave. Isabel Aguiar", diasPlan:8, kmAprox:10.3},
-  {id:2, lote:"L1", sector:"Avenida Independencia", perimetro:"Av. 27 de Febrero a George Washington", diasPlan:8, kmAprox:2.8},
-  {id:3, lote:"L1", sector:"Avenida George Washington", perimetro:"Malecón Alma Mater a Independencia", diasPlan:3, kmAprox:1.5},
-  {id:4, lote:"L1", sector:"Avenida México", perimetro:"Av. Duarte a 30 de Marzo", diasPlan:5, kmAprox:1.9},
-  {id:5, lote:"L1", sector:"Avenida John F. Kennedy", perimetro:"Postes 12-38 este-oeste", diasPlan:5, kmAprox:2.0},
-  {id:6, lote:"L1", sector:"Sector San Carlos", perimetro:"Barahona, 16 de Agosto, Abreu", diasPlan:6, kmAprox:1.8},
-  {id:7, lote:"L1", sector:"Sector Zona Colonial", perimetro:"Calle El Conde y adyacentes", diasPlan:4, kmAprox:1.2},
-  {id:8, lote:"L2", sector:"Avenida Sarasota", perimetro:"Winston Churchill a Núñez de Cáceres", diasPlan:5, kmAprox:2.0},
-  {id:9, lote:"L2", sector:"Avenida Albert Thomas", perimetro:"Duarte a Nicolás de Ovando", diasPlan:5, kmAprox:2.2},
-  {id:10, lote:"L2", sector:"Avenida Nicolás de Ovando", perimetro:"María Montez a Ortega y Gasset", diasPlan:4, kmAprox:1.4},
-  {id:11, lote:"L2", sector:"Avenida Pedro Livio Cedeño", perimetro:"Tramo completo L2", diasPlan:3, kmAprox:1.0},
-  {id:12, lote:"L2", sector:"Avenida Máximo Gómez", perimetro:"Kennedy a 27 de Febrero", diasPlan:5, kmAprox:1.9},
-  {id:13, lote:"L2", sector:"Sector Cristo Rey", perimetro:"Calles 42,38, Ovando", diasPlan:8, kmAprox:4.2},
-  {id:14, lote:"L2", sector:"Sector 24 de Abril", perimetro:"C/10 a C/18 norte", diasPlan:4, kmAprox:1.5},
-  {id:15, lote:"L2", sector:"Ensanche Luperón", perimetro:"Duarte, Mella, C/13", diasPlan:4, kmAprox:1.6},
-  {id:16, lote:"L3", sector:"Ave. Nuñez de Cáceres", perimetro:"Kennedy a 27 de Febrero", diasPlan:4, kmAprox:1.7},
-  {id:17, lote:"L3", sector:"Sector Bella Vista", perimetro:"Sarasota, Independencia, Fantino Falco", diasPlan:7, kmAprox:2.6},
-  {id:18, lote:"L3", sector:"Ave. Winston Churchill", perimetro:"Postes 05-22", diasPlan:3, kmAprox:1.2},
-  {id:19, lote:"L3", sector:"Ave. Abraham Lincoln", perimetro:"27 de Febrero a Sarasota", diasPlan:3, kmAprox:1.0},
-  {id:20, lote:"L3", sector:"Ave. Tiradentes", perimetro:"Kennedy a 27 de Febrero", diasPlan:4, kmAprox:1.4},
-  {id:21, lote:"L3", sector:"Ave. Ortega y Gasset", perimetro:"Kennedy a C/27", diasPlan:3, kmAprox:1.1},
-  {id:22, lote:"L3", sector:"C/ Emma Balaguer", perimetro:"Gracita Álvarez a P. Henríquez Ureña", diasPlan:2, kmAprox:0.6},
-  {id:23, lote:"L3", sector:"Sector Naco", perimetro:"Tiradentes a Winston Churchill", diasPlan:5, kmAprox:2.4},
-];
-// Plan extendido con fechas y avance mock
-const startBase = new Date("2026-09-07");
-function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
-function fmt(d){ if(!d) return "—"; const dd=String(d.getDate()).padStart(2,"0"), mm=String(d.getMonth()+1).padStart(2,"0"); return `${dd}/${mm}/${d.getFullYear()}`; }
+const API_URL="https://script.google.com/macros/s/AKfycbzXryQyx5OVWaQsn2-kimcI8SKL9B3frl0e01qIr3u0oTjhvV3otNDhYVpl4umbrpd7/exec";
+let PLAN=[], REPORTE=[], kpisData=[];
 
-let cum=0;
-const PLAN = BASE.map((b,i)=>{
-  const estIni = addDays(startBase, cum);
-  const estFin = addDays(estIni, b.diasPlan-1);
-  cum+= b.diasPlan+1;
-  // mock avance: primeros 8 ejecutados, siguientes 5 en progreso, resto pendiente
-  let pct=0, kmEj=0, diasReal=0, iniReal=null, finReal=null;
-  if(i<8){ pct = 100; kmEj=b.kmAprox; diasReal=b.diasPlan; iniReal=estIni; finReal=estFin; }
-  else if(i<13){ pct = Math.round(30+Math.random()*50); kmEj= +(b.kmAprox * pct/100).toFixed(1); diasReal= Math.round(b.diasPlan * pct/100); iniReal=addDays(estIni,1); finReal=null; }
-  else { pct=0; }
-  return {...b, estIni, estFin, iniReal, finReal, kmEj, diasReal, pct};
-});
+function addDays(d,n){const x=new Date(d); x.setDate(x.getDate()+n); return x;}
+function fmt(d){if(!d) return "—"; const dt=new Date(d); if(isNaN(dt)) return String(d).slice(0,10); const dd=String(dt.getDate()).padStart(2,"0"), mm=String(dt.getMonth()+1).padStart(2,"0"); return `${dd}/${mm}/${dt.getFullYear()}`;}
+function pctClass(p){return p>=75?"high":p>=35?"mid":"low";}
 
-// Reporte ejecucion: solo ejecutados y en progreso (con Días)
-const REPORTE = PLAN.filter(p=> p.pct>0).map(p=> ({
-  id: p.id, lote:p.lote, sector:p.sector, perimetro:p.perimetro, semana: `2026-S${37 + Math.floor(p.id/4)}`, km:p.kmEj, dias: p.diasReal || p.diasPlan
-}));
-
-// Bitacoras mock con Lote, Corredor/Sector, Perímetro para filtros
-const BITACORAS = [
-  {fecha:"2026-09-07", lote:"L1", sector:"Avenida Simón Bolivar", perimetro:"C/ Palo Hincando hasta Ave. Isabel Aguiar", puntos:"Av. Simón Bolivar - poste 12", notas:"Retiro de 8 vanos, nido inactivo reubicado con aval ambiental"},
-  {fecha:"2026-09-08", lote:"L2", sector:"Avenida Sarasota", perimetro:"Winston Churchill a Núñez de Cáceres", puntos:"Sarasota - tramo central", notas:"Poda autorizada completada, 12 árboles despejados"},
-  {fecha:"2026-09-09", lote:"L2", sector:"Sector Cristo Rey", perimetro:"Calles 42,38, Ovando", puntos:"Cristo Rey - Calle 42", notas:"Incidente menor: herramienta rozó MT, charla de seguridad reforzada"},
-  {fecha:"2026-09-10", lote:"L3", sector:"Sector Bella Vista", perimetro:"Sarasota, Independencia, Fantino Falco", puntos:"Bella Vista - Fantino Falco", notas:"Avance 60%, vegetación densa retrasa 1 día"},
-  {fecha:"2026-09-11", lote:"L1", sector:"Avenida Independencia", perimetro:"Av. 27 de Febrero a George Washington", puntos:"Independencia - poste 28", notas:"Nido activo balizado, tramo excluido hasta dictamen"},
-  {fecha:"2026-09-12", lote:"L3", sector:"Sector Naco", perimetro:"Tiradentes a Winston Churchill", puntos:"Naco - Tiradentes", notas:"Reorganización de 15 vanos, sin incidentes"},
-  {fecha:"2026-09-13", lote:"L2", sector:"Avenida Albert Thomas", perimetro:"Duarte a Nicolás de Ovando", puntos:"Albert Thomas", notas:"Lluvia intermitente, avance parcial 40%"},
-  {fecha:"2026-09-14", lote:"L1", sector:"Sector Zona Colonial", perimetro:"Calle El Conde y adyacentes", puntos:"Zona Colonial", notas:"Coordinación con Alcaldía para desvío peatonal"},
-  {fecha:"2026-09-15", lote:"L2", sector:"Avenida Máximo Gómez", perimetro:"Kennedy a 27 de Febrero", puntos:"Máximo Gómez", notas:"Tendido MT cercano señalizado, EPP verificado"},
-  {fecha:"2026-09-16", lote:"L3", sector:"Ave. Nuñez de Cáceres", perimetro:"Kennedy a 27 de Febrero", puntos:"Núñez de Cáceres", notas:"Inicio de zanja, interferencia con acera"},
-  {fecha:"2026-09-17", lote:"L3", sector:"Ave. Tiradentes", perimetro:"Kennedy a 27 de Febrero", puntos:"Tiradentes", notas:"Avance 75%, pendiente remate de 2 postes"},
-  {fecha:"2026-09-18", lote:"L1", sector:"Sector San Carlos", perimetro:"Barahona, 16 de Agosto, Abreu", puntos:"San Carlos", notas:"Entrega parcial, 1.1 km liberados"},
-];
-
-function pctClass(p){ return p>=75?"high": p>=35?"mid":"low"; }
-
-// KPIs por lote (1 registro/semana por lote) — avance y proyección por lote
-function computeKpisPorLote(){
-  const byLote = {};
-  PLAN.forEach(p=>{
-    if(!byLote[p.lote]) byLote[p.lote] = {plan:0, ejec:0, dias:0};
-    byLote[p.lote].plan += p.kmAprox;
-    byLote[p.lote].ejec += p.kmEj;
-    byLote[p.lote].dias += p.diasReal;
-  });
-  const res = {};
-  for(const lote of ["L1","L2","L3"]){
-    const v = byLote[lote] || {plan:0, ejec:0, dias:0};
-    const avance = v.plan ? Math.round(v.ejec / v.plan * 100) : 0;
-    const kmRest = +(v.plan - v.ejec).toFixed(1);
-    const rend = v.dias ? (v.ejec / v.dias) : 0;
-    const diasRest = rend ? Math.ceil(kmRest / rend) : 0;
-    const finProj = diasRest ? addDays(new Date(), diasRest) : null;
-    res[lote] = {plan: v.plan, ejec: v.ejec, dias: v.dias, avance, kmRest, rend, diasRest, finProj};
+async function loadData(){
+  const status=document.getElementById("apiStatus");
+  try{
+    if(status) status.innerHTML='<div>⏳ Cargando datos de la API…</div>';
+    const res = await fetch(API_URL+"?reporte=ejecucion",{cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const data = await res.json();
+    kpisData = data.kpis_por_lote || [];
+    PLAN = (data.plan||[]).map(r=>({...r, pct: Math.round((r.pct||0)*100)}));
+    REPORTE = data.reporte||[];
+    renderKpis(); renderPlan(); renderReporte();
+    if(status) status.style.display="none";
+  }catch(err){
+    console.error("API error:",err);
+    if(status) status.innerHTML=`<div style="color:#fca5a5">Error: ${err.message}</div><div style="margin-top:8px; font-size:12px">Si estás viendo esto con <code>file://</code>, abre con un servidor local (<code>python -m http.server</code>)</div><div style="margin-top:4px"><a href="${API_URL}?reporte=ejecucion" target="_blank" style="color:#9ec0ff; font-size:12px">Verificar API directamente ↗</a></div>`;
   }
-  return res;
-}
-
-function renderKpis(){
-  const byLote = computeKpisPorLote();
-  ["L1","L2","L3"].forEach(lote=>{
-    const k = byLote[lote];
-    const avEl = document.getElementById(`kpiAvance${lote}`);
-    if(avEl) avEl.textContent = k.avance + "%";
-    const kmEl = document.getElementById(`kpiKm${lote}`);
-    if(kmEl) kmEl.textContent = `${k.ejec.toFixed(1)} / ${k.plan.toFixed(1)} km`;
-    const finEl = document.getElementById(`kpiFin${lote}`);
-    if(finEl) finEl.textContent = k.finProj ? fmt(k.finProj) : "—";
-    const barEl = document.getElementById(`bar${lote}`);
-    if(barEl) barEl.style.width = k.avance + "%";
-    const ringEl = document.getElementById(`ring${lote}`);
-    if(ringEl){
-      ringEl.style.background = `conic-gradient(var(--brand) 0deg, var(--brand2) ${k.avance*3.6}deg, rgba(255,255,255,.08) ${k.avance*3.6}deg)`;
-      ringEl.innerHTML = `<div style="background:var(--bg); width:62px; height:62px; border-radius:50%; display:grid; place-items:center"><div style="text-align:center"><b style="font-size:16px">${k.avance}%</b></div></div>`;
-    }
-    const rendEl = document.getElementById(`kpiRend${lote}`);
-    if(rendEl) rendEl.textContent = k.rend ? k.rend.toFixed(2) + " km/d" : "— km/d";
-  });
-  // barras por lote (card derecha) - mantiene detalle por lote
-  const c = document.getElementById("loteBars");
-  if(c){
-    c.innerHTML = Object.entries(byLote).map(([lote,v])=>{
-      const pct = v.avance;
-      return `<div style="display:grid; grid-template-columns:70px 1fr 48px; gap:10px; align-items:center"><span class="lote l-${lote}">${lote}</span><div class="bar"><i style="width:${pct}%"></i></div><b class="pct ${pctClass(pct)}">${pct}%</b></div><small style="font-size:11px; color:var(--dim)">${v.ejec.toFixed(1)}/${v.plan.toFixed(1)} km • ${v.dias}d • ${v.rend ? v.rend.toFixed(2) : "—"} km/d → ${v.finProj ? fmt(v.finProj) : "—"}</small>`;
-    }).join("");
-  }
-}
-
-function renderPlan(filterLote="ALL", q=""){
-  const tb = document.getElementById("tbodyPlan");
-  let rows = PLAN.slice();
-  if(filterLote!=="ALL") rows = rows.filter(r=> r.lote===filterLote);
-  if(q) rows = rows.filter(r=> r.sector.toLowerCase().includes(q) || r.lote.toLowerCase().includes(q));
-  rows.sort((a,b)=> b.pct - a.pct);
-  tb.innerHTML = rows.map(r=>`
-    <tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')">
-      <td><span class="lote l-${r.lote}">${r.lote}</span></td>
-      <td class="wrap">${r.sector}</td>
-      <td class="wrap">${r.perimetro}</td>
-      <td>${fmt(r.iniReal)}</td>
-      <td>${fmt(r.finReal)}</td>
-      <td>${r.diasPlan}</td>
-      <td>${r.diasReal||"—"}</td>
-      <td>${r.kmAprox.toFixed(1)} km</td>
-      <td>${r.kmEj.toFixed(1)} km</td>
-      <td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td>
-    </tr>`).join("");
-  document.getElementById("planCount").textContent = rows.length+" corredores";
-}
-
-function renderReporte(filterLote="ALL", q=""){
-  const tb = document.getElementById("tbodyRep");
-  let rows = REPORTE.slice();
-  if(filterLote!=="ALL") rows = rows.filter(r=> r.lote===filterLote);
-  if(q) rows = rows.filter(r=> r.sector.toLowerCase().includes(q) || r.lote.toLowerCase().includes(q));
-  tb.innerHTML = rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')"><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace; font-size:11px; background:rgba(255,255,255,.06); border:1px solid var(--line); padding:3px 6px; border-radius:999px">${r.semana}</span></td><td>${r.dias} días</td><td>${r.km} km</td></tr>`).join("");
-  document.getElementById("repCount").textContent = rows.length+" registros";
-}
-
-function renderTimeline(filterSector=null){
-  const c = document.getElementById("timeline");
-  if(!c) return;
-  const loteF = document.querySelector('#bitLoteFilters .filter.active')?.dataset.lote || "ALL";
-  const fechaF = document.getElementById("filtroBitFecha")?.value || "";
-  let rows = BITACORAS.slice().sort((a,b)=> new Date(b.fecha)-new Date(a.fecha));
-  if(loteF!=="ALL") rows = rows.filter(r=> r.lote===loteF);
-  if(fechaF) rows = rows.filter(r=> r.fecha===fechaF);
-  if(filterSector) rows = rows.filter(r=> r.sector===filterSector);
-  c.innerHTML = rows.map(r=>`
-    <div style="position:relative">
-      <div class="t-dot">●</div>
-      <div class="t-card" onclick="this.classList.toggle('open'); this.querySelector('.t-toggle').textContent = this.classList.contains('open') ? 'Ocultar detalle ▴' : 'Ver detalle ▾'">
-        <small>${fmt(new Date(r.fecha))} • <span class="lote l-${r.lote}" style="font-size:10px">${r.lote}</span> • ${r.sector}</small>
-        <b>${r.puntos}</b>
-        <p style="font-size:12px; color:var(--dim); margin:2px 0 4px">${r.perimetro}</p>
-        <div class="t-notas"><p>${r.notas}</p></div>
-        <span class="t-toggle">Ver detalle ▾</span>
-      </div>
-    </div>`).join("") || `<p class="muted" style="text-align:center; padding:12px">Sin bitácoras para los filtros seleccionados</p>`;
-}
-function clearBitFilters(){
-  document.querySelectorAll('#bitLoteFilters .filter').forEach(b=> b.classList.toggle('active', b.dataset.lote==="ALL"));
-  const dat=document.getElementById("filtroBitFecha");
-  if(dat) dat.value="";
-  renderTimeline(document.getElementById("sectorDetail").style.display!=="none" ? PLAN.find(p=> document.getElementById("detSector").textContent.includes(p.sector))?.sector : null);
-  if(document.getElementById("sectorDetail").style.display==="none") renderTimeline();
-}
-
-function openSector(sector){
-  const plan = PLAN.find(p=> p.sector===sector);
-  if(!plan) return;
-  document.getElementById("sectorDetail").style.display="block";
-  document.getElementById("detSector").textContent = sector + ` — Lote ${plan.lote}`;
-  document.getElementById("detResumen").textContent = `${plan.perimetro} • Plan ${plan.diasPlan}d / ${plan.kmAprox}km • Ejecutado ${plan.pct}% (${plan.kmEj}km en ${plan.diasReal||0}d)`;
-  document.getElementById("detKpis").innerHTML = `
-    <div class="kpi"><small>Avance</small><b class="pct ${pctClass(plan.pct)}">${plan.pct}%</b><div class="bar"><i style="width:${plan.pct}%"></i></div></div>
-    <div class="kpi"><small>KM</small><b>${plan.kmEj}/${plan.kmAprox} km</b><p class="muted">${(plan.kmAprox - plan.kmEj).toFixed(1)} km restantes</p></div>
-    <div class="kpi"><small>Fechas</small><b style="font-size:14px">${fmt(plan.iniReal)} → ${fmt(plan.finReal)||"—"}</b><p class="muted">Est: ${fmt(plan.estIni)} → ${fmt(plan.estFin)}</p></div>`;
-  const bits = BITACORAS.filter(b=> b.sector===sector);
-  document.getElementById("detBit").innerHTML = bits.map(b=>`<tr><td>${fmt(new Date(b.fecha))}</td><td><span class="lote l-${b.lote}">${b.lote}</span></td><td class="wrap">${b.sector}</td><td class="wrap">${b.perimetro}</td><td class="wrap">${b.puntos}</td><td class="wrap">${b.notas}</td></tr>`).join("") || `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:12px">Sin bitácoras</td></tr>`;
-  document.getElementById("sectorDetail").scrollIntoView({behavior:"smooth", block:"start"});
-  renderTimeline(sector);
 }
 
 function closeModal(){ document.getElementById("modal").classList.remove("open"); }
 
-// filtros solo para Detalle de Ejecución (Ejecutado) - scoped a planFilters
-document.querySelectorAll('#planFilters .filter').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#planFilters .filter').forEach(b=> b.classList.remove('active'));
-    btn.classList.add('active');
-    const lote = btn.dataset.lote;
-    const q = document.getElementById("searchAv").value.trim().toLowerCase();
-    renderPlan(lote, q);
+function renderKpis(){
+  (kpisData||[]).forEach(k=>{
+    const lote=k.lote;
+    const av = k.avance_pct ?? 0;
+    const avEl=document.getElementById(`kpiAvance${lote}`);
+    if(avEl) avEl.textContent=av+"%";
+    const kmEl=document.getElementById(`kpiKm${lote}`);
+    if(kmEl){
+      const ejec=Number(k.ejec_km)||0, plan=Number(k.plan_km)||0;
+      kmEl.textContent=`${ejec.toFixed(1)} / ${plan.toFixed(1)} km`;
+    }
+    const finEl=document.getElementById(`kpiFin${lote}`);
+    if(finEl) finEl.textContent=fmt(k.fecha_fin_proyectada);
+    const barEl=document.getElementById(`bar${lote}`);
+    if(barEl) barEl.style.width=av+"%";
+    const ringEl=document.getElementById(`ring${lote}`);
+    if(ringEl){
+      ringEl.style.background=`conic-gradient(var(--brand) 0deg, var(--brand2) ${av*3.6}deg, rgba(255,255,255,.08) ${av*3.6}deg)`;
+      ringEl.innerHTML=`<div style="background:var(--bg);width:62px;height:62px;border-radius:50%;display:grid;place-items:center"><div style="text-align:center"><b style="font-size:16px">${av}%</b></div></div>`;
+    }
+    const rendEl=document.getElementById(`kpiRend${lote}`);
+    if(rendEl) rendEl.textContent=(k.rend_km_dia||0).toFixed(2)+" km/d";
   });
-});
-document.getElementById("searchAv").addEventListener('input', e=>{
-  const q = e.target.value.trim().toLowerCase();
-  const lote = document.querySelector('#planFilters .filter.active')?.dataset.lote || "ALL";
-  renderPlan(lote, q);
-});
-// filtros para Reporte de Ejecución (mismos que Ejecutado)
-document.querySelectorAll('#repFilters .filter').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#repFilters .filter').forEach(b=> b.classList.remove('active'));
-    btn.classList.add('active');
-    const lote = btn.dataset.lote;
-    const q = document.getElementById("searchRep").value.trim().toLowerCase();
-    renderReporte(lote, q);
-  });
-});
-document.getElementById("searchRep")?.addEventListener('input', e=>{
-  const q = e.target.value.trim().toLowerCase();
-  const lote = document.querySelector('#repFilters .filter.active')?.dataset.lote || "ALL";
-  renderReporte(lote, q);
-});
-// filtros bitácoras por lote (radio pills) y fecha
-document.querySelectorAll('#bitLoteFilters .filter').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#bitLoteFilters .filter').forEach(b=> b.classList.remove('active'));
-    btn.classList.add('active');
-    const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
-    renderTimeline(sector);
-  });
-});
-document.getElementById("filtroBitFecha")?.addEventListener("change", ()=>{
-  const sector = document.getElementById("sectorDetail").style.display!=="none" ? document.getElementById("detSector").textContent.split(" — ")[0] : null;
-  renderTimeline(sector);
-});
+  const c=document.getElementById("loteBars");
+  if(!c) return;
+  const byLote={};
+  PLAN.forEach(p=>{byLote[p.lote]=(byLote[p.lote]||0)+p.km_aprox;});
+  c.innerHTML=(kpisData||[]).map(k=>{
+    const pct=k.avance_pct||0;
+    const km=k.ejec_km||0; const tot=k.plan_km||0;
+    return `<div style="display:grid;grid-template-columns:70px 1fr 48px;gap:10px;align-items:center"><span class="lote l-${k.lote}">${k.lote}</span><div class="bar"><i style="width:${pct}%"></i></div><b class="pct ${pctClass(pct)}">${pct}%</b></div><small style="font-size:11px;color:var(--dim)">${km.toFixed(1)}/${tot.toFixed(1)} km • ${k.dias_real||0}d • ${(k.rend_km_dia||0).toFixed(2)} km/d → ${fmt(k.fecha_fin_proyectada)}</small>`;
+  }).join("");
+}
 
-// sort plan por % al click en th
+function renderPlan(f="ALL",q=""){
+  const tb=document.getElementById("tbodyPlan");
+  let rows=PLAN.slice();
+  if(f!=="ALL") rows=rows.filter(r=>r.lote===f);
+  if(q) rows=rows.filter(r=>(r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
+  rows.sort((a,b)=>b.pct-a.pct);
+  tb.innerHTML=rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer"><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector||""}</td><td class="wrap">${r.perimetro||""}</td><td>${fmt(r.fecha_inicio_real)}</td><td>${fmt(r.fecha_fin_real)}</td><td>${r.dias_plan||"—"}</td><td>${r.dias_real||"—"}</td><td>${(r.km_aprox||0).toFixed(1)} km</td><td>${(r.km_ejecutado||0).toFixed(1)} km</td><td><b class="pct ${pctClass(r.pct)}">${r.pct}%</b><div class="bar" style="height:6px"><i style="width:${r.pct}%"></i></div></td></tr>`).join("");
+  document.getElementById("planCount").textContent=rows.length+" corredores";
+}
+
+function renderReporte(f="ALL",q=""){
+  const tb=document.getElementById("tbodyRep");
+  let rows=REPORTE.slice();
+  if(f!=="ALL") rows=rows.filter(r=>r.lote===f);
+  if(q) rows=rows.filter(r=>(r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
+  tb.innerHTML=rows.map(r=>`<tr><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace;font-size:11px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:3px 6px;border-radius:999px">${r.semana}</span></td><td>${r.dias} días</td><td>${r.km} km</td></tr>`).join("");
+  document.getElementById("repCount").textContent=rows.length+" registros";
+}
+
+document.querySelectorAll('#planFilters .filter').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#planFilters .filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPlan(btn.dataset.lote,document.getElementById("searchAv").value.trim().toLowerCase());});});
+document.getElementById("searchAv").addEventListener('input',e=>{const l=document.querySelector('#planFilters .filter.active')?.dataset.lote||"ALL"; renderPlan(l,e.target.value.trim().toLowerCase());});
+document.querySelectorAll('#repFilters .filter').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#repFilters .filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderReporte(btn.dataset.lote,document.getElementById("searchRep").value.trim().toLowerCase());});});
+document.getElementById("searchRep")?.addEventListener('input',e=>{const l=document.querySelector('#repFilters .filter.active')?.dataset.lote||"ALL"; renderReporte(l,e.target.value.trim().toLowerCase());});
+
 document.querySelectorAll('#tblPlan thead th[data-sort]').forEach(th=>{
-  th.addEventListener('click', ()=>{
-    const k = th.dataset.sort;
-    if(k==="pct") PLAN.sort((a,b)=> b.pct - a.pct);
-    if(k==="id") PLAN.sort((a,b)=> a.id - b.id);
-    if(k==="lote") PLAN.sort((a,b)=> a.lote.localeCompare(b.lote));
-    if(k==="sector") PLAN.sort((a,b)=> a.sector.localeCompare(b.sector));
-    const lote = document.querySelector('.filter.active')?.dataset.lote || "ALL";
-    renderPlan(lote, document.getElementById("searchAv").value.trim().toLowerCase());
-  });
+  th.addEventListener('click',()=>{const k=th.dataset.sort;if(k==="pct") PLAN.sort((a,b)=>b.pct-a.pct);if(k==="lote") PLAN.sort((a,b)=>a.lote.localeCompare(b.lote));if(k==="sector") PLAN.sort((a,b)=>a.sector.localeCompare(b.sector));renderPlan(document.querySelector('#planFilters .filter.active')?.dataset.lote||"ALL",document.getElementById("searchAv").value.trim().toLowerCase());});
 });
 
-// progress
 const progress=document.getElementById('progress');
-window.addEventListener('scroll', ()=>{
-  const sc=window.scrollY, h=document.documentElement.scrollHeight - window.innerHeight;
-  progress.style.width = h? sc/h*100+"%" : "0";
-},{passive:true});
+window.addEventListener('scroll',()=>{const sc=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight; progress.style.width=h?sc/h*100+"%":"0";},{passive:true});
 
-renderKpis();
-renderPlan();
-renderReporte();
-renderTimeline();
+loadData();
 </script>
 </body>
 </html>
