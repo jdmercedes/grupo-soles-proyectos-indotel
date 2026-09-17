@@ -259,34 +259,6 @@ let PLAN=[], REPORTE=[], kpisData=[];
 // Totales conocidos por lote (levantamiento) — fallback cuando API no provee plan_km
 const TOTAL_KM={L1:56.42, L2:30.28, L3:74.61};
 
-// Lista base de corredores/sectores del proyecto (del levantamiento previo). Permite mostrar
-// los sectores aún no iniciados (0%) aunque la API no los liste.
-const BASELINE=[
-  {lote:"L1",sector:"Avenida Simón Bolivar",perimetro:"C/ Palo Hincando hasta Ave. Isabel Aguiar",dias_plan:8,km_aprox:10.3},
-  {lote:"L1",sector:"Avenida Independencia",perimetro:"Av. 27 de Febrero a George Washington",dias_plan:8,km_aprox:2.8},
-  {lote:"L1",sector:"Avenida George Washington",perimetro:"Malecón Alma Mater a Independencia",dias_plan:3,km_aprox:1.5},
-  {lote:"L1",sector:"Avenida México",perimetro:"Av. Duarte a 30 de Marzo",dias_plan:5,km_aprox:1.9},
-  {lote:"L1",sector:"Avenida John F. Kennedy",perimetro:"Postes 12-38 este-oeste",dias_plan:5,km_aprox:2.0},
-  {lote:"L1",sector:"Sector San Carlos",perimetro:"Barahona, 16 de Agosto, Abreu",dias_plan:6,km_aprox:1.8},
-  {lote:"L1",sector:"Sector Zona Colonial",perimetro:"Calle El Conde y adyacentes",dias_plan:4,km_aprox:1.2},
-  {lote:"L2",sector:"Avenida Sarasota",perimetro:"Winston Churchill a Núñez de Cáceres",dias_plan:5,km_aprox:2.0},
-  {lote:"L2",sector:"Avenida Albert Thomas",perimetro:"Duarte a Nicolás de Ovando",dias_plan:5,km_aprox:2.2},
-  {lote:"L2",sector:"Avenida Nicolás de Ovando",perimetro:"María Montez a Ortega y Gasset",dias_plan:4,km_aprox:1.4},
-  {lote:"L2",sector:"Avenida Pedro Livio Cedeño",perimetro:"Tramo completo L2",dias_plan:3,km_aprox:1.0},
-  {lote:"L2",sector:"Avenida Máximo Gómez",perimetro:"Kennedy a 27 de Febrero",dias_plan:5,km_aprox:1.9},
-  {lote:"L2",sector:"Sector Cristo Rey",perimetro:"Calles 42, 38, Ovando",dias_plan:8,km_aprox:4.2},
-  {lote:"L2",sector:"Sector 24 de Abril",perimetro:"C/10 a C/18 norte",dias_plan:4,km_aprox:1.5},
-  {lote:"L2",sector:"Ensanche Luperón",perimetro:"Duarte, Mella, C/13",dias_plan:4,km_aprox:1.6},
-  {lote:"L3",sector:"Ave. Nuñez de Cáceres",perimetro:"Kennedy a 27 de Febrero",dias_plan:4,km_aprox:1.7},
-  {lote:"L3",sector:"Sector Bella Vista",perimetro:"Sarasota, Independencia, Fantino Falco",dias_plan:7,km_aprox:2.6},
-  {lote:"L3",sector:"Ave. Winston Churchill",perimetro:"Postes 05-22",dias_plan:3,km_aprox:1.2},
-  {lote:"L3",sector:"Ave. Abraham Lincoln",perimetro:"27 de Febrero a Sarasota",dias_plan:3,km_aprox:1.0},
-  {lote:"L3",sector:"Ave. Tiradentes",perimetro:"Kennedy a 27 de Febrero",dias_plan:4,km_aprox:1.4},
-  {lote:"L3",sector:"Ave. Ortega y Gasset",perimetro:"Kennedy a C/27",dias_plan:3,km_aprox:1.1},
-  {lote:"L3",sector:"C/ Emma Balaguer",perimetro:"Gracita Álvarez a P. Henríquez Ureña",dias_plan:2,km_aprox:0.6},
-  {lote:"L3",sector:"Sector Naco",perimetro:"Tiradentes a Winston Churchill",dias_plan:5,km_aprox:2.4}
-];
-
 function addDays(d,n){const x=new Date(d); x.setDate(x.getDate()+n); return x;}
 function fmt(d){if(!d) return "—"; if(typeof d==="string"&&/^\d{4}-\d{2}-\d{2}/.test(d)){const[y,m,day]=d.slice(0,10).split("-"); return `${day}/${m}/${y}`;} const dt=new Date(d); if(isNaN(dt)) return String(d).slice(0,10); const dd=String(dt.getDate()).padStart(2,"0"), mm=String(dt.getMonth()+1).padStart(2,"0"); return `${dd}/${mm}/${dt.getFullYear()}`;}
 function pctClass(p){return p>=75?"high":p>=35?"mid":"low";}
@@ -329,55 +301,17 @@ function renderKpis(){
   }).join("");
 }
 
-// Construye la tabla "Ejecutado": lista base completa (incluye no iniciados) + datos de reporte/plan
-function buildEjecutado(){
-  // 1) Si la API trae plan con filas reales, usarlas tal cual
-  if(PLAN.length){
-    return PLAN.map(r=>{
-      const kmPlan=num(r.km_aprox), kmEj=num(r.km_ejecutado);
-      const pct=r.pct||(kmPlan>0?Math.round(kmEj/kmPlan*100):0);
-      return {lote:r.lote,sector:r.sector,perimetro:r.perimetro,dias_plan:num(r.dias_plan),
-        dias_real:num(r.dias_real),km_aprox:kmPlan,km_ejecutado:kmEj,
-        fecha_inicio_real:r.fecha_inicio_real,fecha_fin_real:r.fecha_fin_real,pct,iniciado:pct>0||kmEj>0};
-    });
-  }
-  // 2) Sin plan: agregar reporte por sector/lote
-  const rep={};
-  REPORTE.forEach(r=>{
-    const k=(r.lote+"|"+(r.sector||"")).toLowerCase();
-    if(!rep[k]) rep[k]={dias:0,km:0,semanas:0};
-    rep[k].dias+=num(r.dias); rep[k].km+=num(r.km); rep[k].semanas++;
-  });
-  const used=new Set();
-  const rows=BASELINE.map(b=>{
-    const k=(b.lote+"|"+b.sector).toLowerCase();
-    const e=rep[k]; if(e) used.add(k);
-    const kmEj=e?+e.km.toFixed(2):0, diasReal=e?e.dias:0;
-    const pct=b.km_aprox>0?Math.round(kmEj/b.km_aprox*100):0;
-    return {lote:b.lote,sector:b.sector,perimetro:b.perimetro,dias_plan:b.dias_plan,km_aprox:b.km_aprox,
-      km_ejecutado:kmEj,dias_real:diasReal,fecha_inicio_real:null,fecha_fin_real:null,pct,iniciado:!!e};
-  });
-  // 3) Sectores del reporte que no estén en la lista base
-  Object.entries(rep).forEach(([k,e])=>{
-    if(used.has(k)) return;
-    const r=REPORTE.find(x=>(x.lote+"|"+(x.sector||"")).toLowerCase()===k);
-    if(!r) return;
-    const pct=num(TOTAL_KM[r.lote])>0?Math.round(e.km/num(TOTAL_KM[r.lote])*100):0;
-    rows.push({lote:r.lote,sector:r.sector,perimetro:r.perimetro,dias_plan:0,km_aprox:0,
-      km_ejecutado:+e.km.toFixed(2),dias_real:e.dias,fecha_inicio_real:null,fecha_fin_real:null,pct,iniciado:true});
-  });
-  return rows;
-}
-
+// "Ejecutado" se construye 100% con lo que devuelve el fetch (plan[])
 function renderPlan(f="ALL",q=""){
   const tb=document.getElementById("tbodyPlan");
-  const rows=buildEjecutado();
+  const rows=PLAN.map(r=>{
+    const kmPlan=num(r.km_aprox), kmEj=num(r.km_ejecutado);
+    const pct=r.pct||(kmPlan>0?Math.round(kmEj/kmPlan*100):0);
+    return {...r,dias_plan:num(r.dias_plan),dias_real:num(r.dias_real),km_aprox:kmPlan,km_ejecutado:kmEj,pct};
+  });
   const filtered=rows.filter(r=> f==="ALL" || r.lote===f).filter(r=> !q || (r.sector||"").toLowerCase().includes(q)||(r.lote||"").toLowerCase().includes(q));
   filtered.sort((a,b)=>(b.pct||0)-(a.pct||0) || String(a.sector||"").localeCompare(String(b.sector||"")));
-  tb.innerHTML= filtered.length ? filtered.map(r=>{
-    const est= r.iniciado ? "" : `<span title="Aún no iniciado" style="display:inline-block;margin-left:6px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:2px 6px">No iniciado</span>`;
-    return `<tr data-lote="${r.lote||""}"><td><span class="lote l-${r.lote||""}">${r.lote||""}</span></td><td class="wrap">${r.sector||""}${est}</td><td class="wrap">${r.perimetro||""}</td><td>${fmt(r.fecha_inicio_real)}</td><td>${fmt(r.fecha_fin_real)}</td><td>${r.dias_plan||"—"}</td><td>${r.dias_real||"—"}</td><td>${r.km_aprox?r.km_aprox.toFixed(1)+" km":"—"}</td><td>${(r.km_ejecutado||0).toFixed(1)} km</td><td><b class="pct ${pctClass(r.pct||0)}">${r.pct||0}%</b><div class="bar" style="height:6px"><i style="width:${r.pct||0}%"></i></div></td></tr>`;
-  }).join("") : `<tr><td colspan="10" style="text-align:center; color:var(--muted); padding:22px">Sin datos de ejecución</td></tr>`;
+  tb.innerHTML= filtered.length ? filtered.map(r=>`<tr data-lote="${r.lote||""}"><td><span class="lote l-${r.lote||""}">${r.lote||""}</span></td><td class="wrap">${r.sector||""}</td><td class="wrap">${r.perimetro||""}</td><td>${fmt(r.fecha_inicio_real)}</td><td>${fmt(r.fecha_fin_real)}</td><td>${r.dias_plan||"—"}</td><td>${r.dias_real||"—"}</td><td>${r.km_aprox?r.km_aprox.toFixed(1)+" km":"—"}</td><td>${(r.km_ejecutado||0).toFixed(1)} km</td><td><b class="pct ${pctClass(r.pct||0)}">${r.pct||0}%</b><div class="bar" style="height:6px"><i style="width:${r.pct||0}%"></i></div></td></tr>`).join("") : `<tr><td colspan="10" style="text-align:center; color:var(--muted); padding:22px">Sin datos de ejecución</td></tr>`;
   document.getElementById("planCount").textContent=filtered.length+" corredores";
 }
 
