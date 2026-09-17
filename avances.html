@@ -159,7 +159,7 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
       <span style="font-size:12px; color:var(--dim)" id="planCount">23 corredores</span>
     </div>
     <div style="display:flex; gap:8px; flex-wrap:wrap; padding:10px 14px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.02); align-items:center">
-      <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <div style="display:flex; gap:8px; flex-wrap:wrap" id="planFilters">
         <button class="filter active" data-lote="ALL">Todos</button>
         <button class="filter" data-lote="L1">L1</button>
         <button class="filter" data-lote="L2">L2</button>
@@ -192,6 +192,15 @@ tbody tr.selected{background:rgba(30,122,255,.12)}
   <div style="display:grid; grid-template-columns:1fr; gap:16px; margin-top:16px">
     <div class="table-card">
       <div class="table-head"><h3>Reporte de Ejecución</h3><span style="font-size:12px; color:var(--dim)" id="repCount">—</span></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; padding:10px 14px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.02); align-items:center">
+        <div style="display:flex; gap:8px; flex-wrap:wrap" id="repFilters">
+          <button class="filter active" data-lote="ALL">Todos</button>
+          <button class="filter" data-lote="L1">L1</button>
+          <button class="filter" data-lote="L2">L2</button>
+          <button class="filter" data-lote="L3">L3</button>
+        </div>
+        <label class="search" style="flex:1; min-width:180px"><span style="color:var(--dim)">⌕</span><input id="searchRep" type="search" placeholder="Buscar sector…"></label>
+      </div>
       <div class="table-wrap" style="max-height:420px">
         <table id="tblRep">
           <thead><tr><th>ID</th><th>Lote</th><th>Corredor/Sector</th><th>Perímetro</th><th>Semana</th><th>KM</th></tr></thead>
@@ -347,10 +356,11 @@ function renderPlan(filterLote="ALL", q=""){
   document.getElementById("planCount").textContent = rows.length+" corredores";
 }
 
-function renderReporte(filterLote="ALL"){
+function renderReporte(filterLote="ALL", q=""){
   const tb = document.getElementById("tbodyRep");
   let rows = REPORTE.slice();
   if(filterLote!=="ALL") rows = rows.filter(r=> r.lote===filterLote);
+  if(q) rows = rows.filter(r=> r.sector.toLowerCase().includes(q) || r.lote.toLowerCase().includes(q));
   tb.innerHTML = rows.map(r=>`<tr data-sector="${r.sector}" style="cursor:pointer" onclick="openSector('${r.sector.replace(/'/g,"\\'")}')"><td><span class="id">${r.id}</span></td><td><span class="lote l-${r.lote}">${r.lote}</span></td><td class="wrap">${r.sector}</td><td class="wrap">${r.perimetro}</td><td><span style="font-family:JetBrains Mono,monospace; font-size:11px; background:rgba(255,255,255,.06); border:1px solid var(--line); padding:3px 6px; border-radius:999px">${r.semana}</span></td><td>${r.km} km</td></tr>`).join("");
   document.getElementById("repCount").textContent = rows.length+" registros";
 }
@@ -402,12 +412,10 @@ function openSector(sector){
 
 function closeModal(){ document.getElementById("modal").classList.remove("open"); }
 
-// filtros solo para Detalle de Ejecución
-document.querySelectorAll('#planCount').forEach(()=>{}); // placeholder para evitar linter
-document.querySelectorAll('.table-card .filter').forEach(btn=>{
+// filtros solo para Detalle de Ejecución (Ejecutado) - scoped a planFilters
+document.querySelectorAll('#planFilters .filter').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    const container = btn.closest('.table-card');
-    container.querySelectorAll('.filter').forEach(b=> b.classList.remove('active'));
+    document.querySelectorAll('#planFilters .filter').forEach(b=> b.classList.remove('active'));
     btn.classList.add('active');
     const lote = btn.dataset.lote;
     const q = document.getElementById("searchAv").value.trim().toLowerCase();
@@ -416,8 +424,23 @@ document.querySelectorAll('.table-card .filter').forEach(btn=>{
 });
 document.getElementById("searchAv").addEventListener('input', e=>{
   const q = e.target.value.trim().toLowerCase();
-  const lote = document.querySelector('.table-card .filter.active')?.dataset.lote || "ALL";
+  const lote = document.querySelector('#planFilters .filter.active')?.dataset.lote || "ALL";
   renderPlan(lote, q);
+});
+// filtros para Reporte de Ejecución (mismos que Ejecutado)
+document.querySelectorAll('#repFilters .filter').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#repFilters .filter').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    const lote = btn.dataset.lote;
+    const q = document.getElementById("searchRep").value.trim().toLowerCase();
+    renderReporte(lote, q);
+  });
+});
+document.getElementById("searchRep")?.addEventListener('input', e=>{
+  const q = e.target.value.trim().toLowerCase();
+  const lote = document.querySelector('#repFilters .filter.active')?.dataset.lote || "ALL";
+  renderReporte(lote, q);
 });
 // filtros bitácoras por lote (radio pills) y fecha
 document.querySelectorAll('#bitLoteFilters .filter').forEach(btn=>{
