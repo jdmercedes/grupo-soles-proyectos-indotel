@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Soporte para Cubicación de Tramos - INDOTEL</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        indotel: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            600: '#0056b3',
+                            700: '#00418a',
+                            800: '#003366',
+                            900: '#0a2342',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @media print {
+            @page {
+                size: auto;
+                margin: 8mm;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 9pt;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+            }
+            .page-break {
+                page-break-after: always;
+                break-after: page;
+            }
+            .avoid-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .border-print {
+                border: 1px solid #cbd5e1 !important;
+            }
+
+            /* Wide cubicación tables */
+            .cubi-table-wrap {
+                overflow: visible !important;
+            }
+            .cubi-table {
+                width: 100% !important;
+                table-layout: auto;
+                font-size: 7pt !important;
+            }
+            .cubi-table th,
+            .cubi-table td {
+                padding: 1px 2px !important;
+            }
+            .cubi-table th {
+                overflow-wrap: normal;
+                white-space: normal;
+            }
+            .cubi-table td {
+                overflow-wrap: break-word;
+                white-space: normal;
+            }
+            .cubi-table .font-mono {
+                font-size: 6.5pt !important;
+                overflow-wrap: anywhere;
+            }
+
+            /* Keep both signature blocks side by side on paper */
+            .signature-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            /* Route map: keep the iframe on paper with a compact height */
+            .ruta-iframe {
+                height: 70mm !important;
+                border: 0 !important;
+            }
+
+            /* Point cards */
+            .evidence-item {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .print-container .overflow-hidden {
+                overflow: visible !important;
+            }
+
+            img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+
+            img[alt*="Logo"] {
+                max-height: 36px !important;
+                height: 36px !important;
+                width: auto !important;
+                transform: scale(1) !important;
+            }
+        }
+
+        /* Lightbox transitions */
+        .modal-active {
+            display: flex !important;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
+
+    <!-- Main Container -->
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 print-container">
+
+        <!-- Missing numerocubicacion message -->
+        <div id="missing-cubicacion-msg" class="hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-red-200 p-12 text-center text-red-600">
+                <i class="fa-solid fa-triangle-exclamation text-4xl mb-3"></i>
+                <p class="text-lg font-semibold">No se ha especificado el número de cubicación</p>
+                <p class="text-sm text-slate-500 mt-2">Debe proporcionar el parámetro <code class="bg-slate-100 px-2 py-1 rounded">numerocubicacion</code> en la URL.</p>
+            </div>
+        </div>
+
+        <!-- Report Content (hidden if no numerocubicacion) -->
+        <div id="report-content" class="hidden">
+            <!-- Official Report Document Header -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-4 border-print avoid-break">
+                <div class="border-b-4 border-indotel-600 p-3 bg-gradient-to-r from-slate-50 via-white to-blue-50/30">
+                    <div class="flex flex-row justify-between items-center gap-3">
+                        <!-- Institutional Branding -->
+                        <div class="flex items-center gap-3">
+                            <img src="https://drive.google.com/thumbnail?id=1B9d7n3bERrrARfit47yW8ciHKPObJKSI&sz=w1000" 
+                                 alt="Logo Grupo Soluciones Energéticas Soles" 
+                                 class="h-10 w-auto object-contain rounded-lg"
+                                 style="transform:none; transform-origin:left center;"
+                                 onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/d/1B9d7n3bERrrARfit47yW8ciHKPObJKSI';">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                                        GRUPO SOLES
+                                    </span>
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-indotel-800">
+                                        PROYECTO: INDOTEL
+                                    </span>
+                                </div>
+                                <h2 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-tight">
+                                    Informe de Cubicación
+                                </h2>
+                                <p class="text-xs font-medium text-slate-500">
+                                    Proyecto de Ordenamiento, Regularización y Descontaminación de Infraestructura Aérea
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Process Badge Details -->
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200 text-right min-w-[200px] self-center">
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Proceso de Selección</div>
+                            <div class="text-sm font-bold text-indotel-800">INDOTEL-CCC-CP-2026-0010</div>
+                            <div class="text-xs text-slate-600 mt-1">
+                                <span class="font-medium">Formato:</span> Soporte de Cubicación
+                            </div>
+                            <div class="text-xs text-slate-600 mt-1">
+                                <span class="font-medium">Cubicación N°:</span> <span id="cubicacion-numero" class="font-bold text-indotel-800">BORRADOR</span>
+                            </div>
+                            <div class="text-xs text-slate-600 mt-1">
+                                <span class="font-medium">Fecha:</span> <span id="cubicacion-fecha" class="font-bold text-indotel-800">--/--/----</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cubicación por Calle / Avenida -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 border-print avoid-break">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-location-dot text-blue-600"></i> Cubicación por Calle / Avenida
+                </h3>
+                <div id="cubi-calles-grid" class="flex flex-col gap-4"></div>
+            </div>
+
+            <!-- Ruta y Ubicación del Tramo -->
+            <div id="ruta-section" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 border-print avoid-break">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-route text-blue-600"></i> Ruta y Ubicación del Tramo
+                </h3>
+                <div id="ruta-container">
+                    <div class="text-center text-slate-400 py-4">Sin datos de ruta disponibles</div>
+                </div>
+            </div>
+
+            <!-- Actividades -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4 border-print avoid-break">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <i class="fa-solid fa-diagram-project text-blue-600"></i> Actividades
+                </h3>
+                <div class="overflow-x-auto cubi-table-wrap">
+                    <table class="w-full text-left text-[12px] leading-tight cubi-table">
+                        <colgroup>
+                            <col style="width:16%">
+                            <col style="width:12%">
+                            <col style="width:20%">
+                            <col style="width:20%">
+                            <col style="width:9%">
+                            <col style="width:33%">
+                        </colgroup>
+                        <thead class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="py-2 px-2 text-center">Calle / Avenida</th>
+                                <th class="py-2 px-2 text-center">Sector</th>
+                                <th class="py-2 px-2 text-center">Coordenadas Inicio<br>(Formato Sexagesimal)</th>
+                                <th class="py-2 px-2 text-center">Coordenadas Fin<br>(Formato Sexagesimal)</th>
+                                <th class="py-2 px-2 text-center">Distancia<br>en KM</th>
+                                <th class="py-2 px-2 text-center">Tipo de Intervención / Partida</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-cubi-tramos" class="divide-y divide-slate-200 text-slate-700"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        <!-- Photo Evidence Section -->
+        <div id="evidence-section" class="mb-4 avoid-break">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-slate-200 pb-2">
+                <i class="fa-solid fa-camera text-blue-600"></i> Evidencias Fotográficas
+            </h3>
+        </div>
+
+        <!-- Points Container List -->
+        <div id="points-container" class="space-y-6" style="display:none;">
+            <!-- Dynamic Point Cards Render Here -->
+        </div>
+
+        <!-- Signature Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mt-4 border-print avoid-break">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-8 flex items-center gap-2 border-b border-slate-100 pb-2">
+                <i class="fa-solid fa-file-signature text-blue-600"></i> Firmas de Conformidad
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 signature-grid">
+                <!-- Prepared by (Contractor) -->
+                <div class="text-center">
+                    <div class="h-20 border-b-2 border-slate-400 w-4/5 mx-auto mb-3"></div>
+                    <div class="text-sm font-bold text-slate-800">Preparado Por</div>
+                    <div class="text-xs text-slate-500 mt-0.5">Encargado del Contratista — Grupo SOLES</div>
+                </div>
+
+                <!-- Approved by (INDOTEL) -->
+                <div class="text-center">
+                    <div class="h-20 border-b-2 border-slate-400 w-4/5 mx-auto mb-3"></div>
+                    <div class="text-sm font-bold text-slate-800">Aprobado Por</div>
+                    <div class="text-xs text-slate-500 mt-0.5">Encargado de INDOTEL</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+        </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox-modal" class="fixed inset-0 bg-slate-950/90 z-50 hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-4xl w-full flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white hover:text-slate-300 text-xl font-bold">
+                <i class="fa-solid fa-xmark"></i> Cerrar
+            </button>
+            <img id="lightbox-img" src="" alt="Evidencia Fotográfica" class="max-h-[80vh] w-auto rounded-lg shadow-2xl object-contain border border-slate-700">
+            <p id="lightbox-caption" class="text-xs text-slate-300 mt-3 text-center bg-slate-900/80 px-4 py-2 rounded-full border border-slate-800"></p>
+        </div>
+    </div>
+
+    <script>
+        // Apps Script API endpoint for live tramo reports
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbx_o28KluJn9iGeq1FRKt0rHvXrY4HX1yKw-sZ-lA5s3bfuVigZK-hcVsaSnEhgCgWl_Q/exec';
+
+        // API endpoint for cubicación by numerocubicacion
+        const CUBI_API = 'https://script.google.com/macros/s/AKfycbxwC7UUHK2f2Jz-F4p8OoyT7esVBbVulhldPjqItxoWympSf-qSJAmaxtT8VM9O_cgIhA/exec';
+
+        // Print readiness gate: the report must be fully loaded before printing
+        let markReportReady;
+        const reportReady = new Promise(resolve => { markReportReady = resolve; });
+
+        function enablePrintButton() {
+            const btn = document.getElementById('btn-print');
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = '<i class="fa-solid fa-print"></i> Imprimir';
+            }
+            markReportReady();
+        }
+
+        // Wait until the report is ready before opening the print dialog
+        async function printReport() {
+            await reportReady;
+            window.print();
+        }
+
+        // Route Ctrl/Cmd+P through the readiness gate
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+                e.preventDefault();
+                printReport();
+            }
+        });
+
+        // Read a query-string parameter from the current page URL
+        function getQueryParam(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
+
+        // Normalize Google Drive links so they render inline as images
+        function normalizeImage(url) {
+            if (!url) return url;
+            if (url.indexOf('drive.google.com') !== -1) {
+                const idMatch = url.match(/[?&]id=([^&]+)/);
+                if (idMatch) return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
+            }
+            return url;
+        }
+
+        // Fetch the report for a given tramo from the Apps Script API
+        async function loadTramoReport(tramoid) {
+            const url = `${API_BASE}?type=informe&tramoid=${encodeURIComponent(tramoid)}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            return (Array.isArray(data) ? data : []).map(point => ({
+                ...point,
+                Imagenes: Array.isArray(point.Imagenes) ? point.Imagenes.map(normalizeImage) : []
+            }));
+        }
+
+        // Dataset for evidence points
+        let dataset = [];
+
+        // Format Date to Latin America Standard
+        function formatDate(dateString) {
+            try {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) {
+                    return dateString;
+                }
+                return date.toLocaleString('es-DO', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                });
+            } catch (e) {
+                return dateString || '';
+            }
+        }
+
+        // --- Cubicación tables (calles + tramos) loaded from the API ---
+        let cubiCalles = [];
+        let cubiTramos = [];
+
+        async function loadCubicacion(numerocubicacion) {
+            if (!numerocubicacion) throw new Error('numerocubicacion requerido');
+            const url = `${CUBI_API}?numerocubicacion=${encodeURIComponent(numerocubicacion)}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const json = await response.json();
+            const data = json.data || json;
+            cubiCalles = Array.isArray(data.dataCalle) ? data.dataCalle : (Array.isArray(data.calles) ? data.calles : []);
+            cubiTramos = Array.isArray(data.dataActividades) ? data.dataActividades : (Array.isArray(data.tramos) ? data.tramos : []);
+
+            let appSheet = [];
+            if (Array.isArray(data.dataAppSheet)) {
+                appSheet = data.dataAppSheet;
+            } else if (Array.isArray(data.AppSheet)) {
+                appSheet = data.AppSheet;
+            } else if (Array.isArray(data.dataAppsheet)) {
+                appSheet = data.dataAppsheet;
+            }
+
+            if (appSheet.length > 0) {
+                dataset = appSheet
+                    .map(point => {
+                        const imgs = [];
+                        for (let i = 1; i <= 12; i++) {
+                            const key = `Foto ${i}`;
+                            if (point[key] && point[key].toString().trim() !== '') {
+                                imgs.push(point[key]);
+                            }
+                        }
+                        const coords = point.Coordenadas || '';
+                        let lat = '', lng = '';
+                        if (typeof coords === 'string' && coords.includes(',')) {
+                            const parts = coords.split(',');
+                            lat = parts[0].trim();
+                            lng = parts[1].trim();
+                        } else if (coords && typeof coords === 'object') {
+                            lat = coords.lat || coords.Lat || '';
+                            lng = coords.lng || coords.Lng || coords.Longitud || '';
+                        }
+
+                        return {
+                            ...point,
+                            Coordenadas: { lat, lng },
+                            ActividadesEjecutadas: typeof point['Actividades Ejecutadas'] === 'string'
+                                ? point['Actividades Ejecutadas'].split(',').map(a => a.trim()).filter(a => a !== '')
+                                : (Array.isArray(point.ActividadesEjecutadas) ? point.ActividadesEjecutadas : []),
+                            Imagenes: imgs.filter(img => img && img.toString().trim() !== '').map(normalizeImage)
+                        };
+                    })
+                    .filter(point => Array.isArray(point.Imagenes) && point.Imagenes.length > 0);
+            } else {
+                dataset = [];
+            }
+            return data;
+        }
+
+        function formatRD(amount) {
+            if (amount === null || amount === undefined || amount === '') return '';
+            return Number(amount).toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatKm(value) {
+            if (value === null || value === undefined || value === '') return '';
+            return Number(value).toFixed(2);
+        }
+
+        function formatInt(value) {
+            if (value === null || value === undefined || value === '') return '';
+            return Number(value).toLocaleString('es-DO', { maximumFractionDigits: 0 });
+        }
+
+        function setCubicacionState(message, isError) {
+            const cls = isError ? 'text-red-500 font-semibold' : 'text-slate-400';
+            const gridCalles = document.getElementById('cubi-calles-grid');
+            const tTramos = document.getElementById('tbody-cubi-tramos');
+            const rutaContainer = document.getElementById('ruta-container');
+            if (gridCalles) gridCalles.innerHTML = `<div class="text-center py-4 ${cls}">${message}</div>`;
+            if (tTramos) tTramos.innerHTML = `<tr><td colspan="6" class="py-4 px-3 text-center ${cls}">${message}</td></tr>`;
+            if (rutaContainer) rutaContainer.innerHTML = `<div class="text-center py-4 ${cls}">${message}</div>`;
+        }
+
+        function getField(r, candidates) {
+            for (let i = 0; i < candidates.length; i++) {
+                if (r.hasOwnProperty(candidates[i]) && r[candidates[i]] !== undefined && r[candidates[i]] !== null) {
+                    return r[candidates[i]];
+                }
+            }
+            // Try to find by partial key match
+            const keys = Object.keys(r);
+            for (let i = 0; i < candidates.length; i++) {
+                const cand = candidates[i].toLowerCase().replace(/\s+/g, '');
+                for (let j = 0; j < keys.length; j++) {
+                    const k = keys[j].toLowerCase().replace(/\s+/g, '').replace(/\n/g, '');
+                    if (k.includes(cand) || cand.includes(k)) {
+                        return r[keys[j]];
+                    }
+                }
+            }
+            return '';
+        }
+
+        function renderCubicacion() {
+            const gridCalles = document.getElementById('cubi-calles-grid');
+            if (gridCalles) {
+                if (!cubiCalles.length) {
+                    gridCalles.innerHTML = `<div class="text-center text-slate-400 py-4">Sin datos</div>`;
+                } else {
+                    gridCalles.innerHTML = cubiCalles.map(r => `
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-xs">
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Calle / Avenida</span>
+                                    <span class="font-bold text-slate-900 text-right">${getField(r, ["Calle / Avenida", "Calle_/_Avenida", "Calle"])}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Sector</span>
+                                    <span class="font-bold text-slate-900 text-right">${getField(r, ["Sector"])}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">No. de Lote</span>
+                                    <span class="font-bold text-slate-900 text-right">${getField(r, ["Numero de Lote", "Numero_de_Lote"])}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Distacia (Km)</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatKm(getField(r, ["Distacia \n(Km)", "Distacia_Km", "Distacia (Km)"]))}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2 sm:col-span-2">
+                                    <span class="font-semibold text-slate-500">Coordenadas Inicio - Fin (Formato Sexagesimal)</span>
+                                    <span class="font-mono font-semibold text-slate-900 text-right">${getField(r, ["Coordenadas\nInicio - Fin\n(Formato Sexagesimal)\n", "Coordenadas Inicio - Fin (Formato Sexagesimal)", "Coordenadas_Inicio_-_Fin_Formato_Sexagesimal"])}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Distancia Total Lote (Km)</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatKm(getField(r, ["Distancia Total Lote\n(Km)", "Distancia_Total_Lote_Km"]))}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Precio / Km</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Precio / Km", "Precio_/_Km"]))}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Monto Total Lote (RD$)</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Total Lote\n(RD$)", "Monto_Total_Lote_RD$"]))}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Monto Anticipo (RD$)</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Anticipo\n(RD$)", "Monto_Anticipo_RD$"]))}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Monto Restante (RD$)</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Restante\n(RD$)\n", "Monto_Restante_RD$"]))}</span>
+                                </div>
+                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                                    <span class="font-semibold text-slate-500">Monto Total Estimado (RD$)</span>
+                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Total Estimado \n(RD$)", "Monto_Total_Estimado_RD$"]))}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            const tTramos = document.getElementById('tbody-cubi-tramos');
+            if (tTramos) {
+                tTramos.innerHTML = cubiTramos.length ? cubiTramos.map(r => `
+                    <tr>
+                        <td class="py-2 px-2 font-medium text-slate-800 text-center">${getField(r, ["Calle / Avenida", "Calle_/_Avenida"])}</td>
+                        <td class="py-2 px-2 text-center">${getField(r, ["Sector"])}</td>
+                        <td class="py-2 px-2 font-mono text-[11px] text-center">${getField(r, ["Coordenadas\nInicio\n(Formato Sexagesimal)\n", "Coordenadas_Inicio_Formato_Sexagesimal"])}</td>
+                        <td class="py-2 px-2 font-mono text-[11px] text-center">${getField(r, ["Coordenadas\nFin\n(Formato Sexagesimal)\n", "Coordenadas_Fin_Formato_Sexagesimal"])}</td>
+                        <td class="py-2 px-2 text-center">${formatKm(getField(r, ["Distancia \nen KM", "Distancia_en_KM"]))}</td>
+                        <td class="py-2 px-2 text-center">${getField(r, ["Tipo de Intervención / Partida", "Tipo_de_Intervención_/_Partida", "Tipo de Intervenci\u00f3n / Partida"])}</td>
+                    </tr>
+                `).join('') : `<tr><td colspan="6" class="py-4 px-3 text-center text-slate-400">Sin datos</td></tr>`;
+            }
+
+            renderRuta();
+        }
+
+        // Only allow http(s) links coming from the API
+        function safeExternalUrl(url) {
+            if (!url) return '';
+            const value = String(url).trim();
+            return /^https?:\/\//i.test(value) ? value : '';
+        }
+
+        // Strip spaces so coordinates can be used in URLs (e.g. "18.4, -69.9" -> "18.4,-69.9")
+        function cleanCoords(value) {
+            if (!value) return '';
+            return String(value).replace(/\s+/g, '');
+        }
+
+        // Render the Google Maps route link + embedded map from dataCalle.Ruta
+        function renderRuta() {
+            const container = document.getElementById('ruta-container');
+            if (!container) return;
+
+            const calle = cubiCalles[0];
+            if (!calle) {
+                container.innerHTML = `<div class="text-center text-slate-400 py-4">Sin datos de ruta disponibles</div>`;
+                return;
+            }
+
+            const calleAvenida = getField(calle, ["Calle / Avenida", "Calle_/_Avenida", "Calle"]);
+            const sector = getField(calle, ["Sector"]);
+            const distancia = formatKm(getField(calle, ["Distacia \n(Km)", "Distacia_Km", "Distacia (Km)"]));
+
+            const origen = cleanCoords(getField(calle, ["Coordenadas Inicio Lat,Long", "Coordenadas Inicio Lat, Long", "Coordenadas_Inicio_Lat,Long"]));
+            const destino = cleanCoords(getField(calle, ["Coordenadas Fin Lat,Long", "Coordenadas Fin Lat, Long", "Coordenadas_Fin_Lat,Long"]));
+
+            let rutaUrl = safeExternalUrl(getField(calle, ["Ruta"]));
+            if (!rutaUrl && origen && destino) {
+                rutaUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origen)}&destination=${encodeURIComponent(destino)}&travelmode=driving`;
+            }
+
+            if (!rutaUrl) {
+                container.innerHTML = `<div class="text-center text-slate-400 py-4">Sin datos de ruta disponibles</div>`;
+                return;
+            }
+
+            const embedUrl = (origen && destino)
+                ? `https://maps.google.com/maps?saddr=${encodeURIComponent(origen)}&daddr=${encodeURIComponent(destino)}&output=embed`
+                : '';
+
+            container.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                        <p class="text-sm font-bold text-slate-900">${calleAvenida || 'Tramo'}${sector ? ` <span class="text-xs font-medium text-slate-500">— ${sector}</span>` : ''}</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Confirme la distancia y la ubicación de los puntos de inicio y fin.</p>
+                    </div>
+                    <a href="${rutaUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-indotel-600 hover:bg-indotel-700 transition no-print">
+                        <i class="fa-brands fa-google"></i> Abrir ruta en Google Maps
+                    </a>
+                </div>
+                ${embedUrl ? `
+                    <div class="rounded-xl overflow-hidden border border-slate-200">
+                        <iframe class="ruta-iframe w-full h-[400px]" src="${embedUrl}" loading="eager" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="Ruta del tramo"></iframe>
+                    </div>
+                ` : ''}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-xs mt-3">
+                    <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                        <span class="font-semibold text-slate-500">Coordenadas Inicio (Lat, Long)</span>
+                        <span class="font-mono font-semibold text-slate-900 text-right">${origen || '—'}</span>
+                    </div>
+                    <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                        <span class="font-semibold text-slate-500">Coordenadas Fin (Lat, Long)</span>
+                        <span class="font-mono font-semibold text-slate-900 text-right">${destino || '—'}</span>
+                    </div>
+                    <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                        <span class="font-semibold text-slate-500">Distancia</span>
+                        <span class="font-bold text-slate-900 text-right">${distancia ? distancia + ' km' : '—'}</span>
+                    </div>
+                    <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                        <span class="font-semibold text-slate-500">Enlace Google Maps</span>
+                        <a href="${rutaUrl}" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] text-indotel-600 hover:underline text-right break-all">${rutaUrl}</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Report Header Statistics
+        function updateSummary() {
+            if (dataset.length === 0) return;
+
+            // Activity Summary Calculation
+            const activityCounts = {};
+
+            dataset.forEach(point => {
+                point.ActividadesEjecutadas.forEach(act => {
+                    activityCounts[act] = (activityCounts[act] || 0) + 1;
+                });
+            });
+
+            // Populate Table
+            const tableBody = document.getElementById('summary-activities-table');
+            if (tableBody) {
+                tableBody.innerHTML = '';
+
+                const totalPoints = dataset.length;
+                const activityKeys = Object.keys(activityCounts).sort((a, b) => activityCounts[b] - activityCounts[a]);
+
+                if (activityKeys.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="3" class="py-3 px-3 text-center text-slate-400">Sin actividades registradas</td></tr>`;
+                } else {
+                    activityKeys.forEach(act => {
+                        const count = activityCounts[act];
+                        const pct = ((count / totalPoints) * 100).toFixed(0);
+                        tableBody.innerHTML += `
+                            <tr>
+                                <td class="py-2 px-3 font-medium text-slate-800">${act}</td>
+                                <td class="py-2 px-3 text-center font-bold text-blue-700">${count}</td>
+                                <td class="py-2 px-3 text-right font-medium">${pct}%</td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
+        }
+
+        // Render Points
+        function renderPoints(filteredDataset = dataset) {
+            const container = document.getElementById('points-container');
+            const evidenceSection = document.getElementById('evidence-section');
+            if (!container) return;
+            container.innerHTML = '';
+
+            filteredDataset = filteredDataset || [];
+            // Only show points that actually have photographic evidence
+            filteredDataset = filteredDataset.filter(item => Array.isArray(item.Imagenes) && item.Imagenes.length > 0);
+
+            if (filteredDataset.length === 0) {
+                container.style.display = 'none';
+                if (evidenceSection) evidenceSection.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            if (evidenceSection) evidenceSection.style.display = 'block';
+
+            filteredDataset.forEach((item, index) => {
+                // Image gallery HTML
+                let imagesHtml = '';
+                if (item.Imagenes && item.Imagenes.length > 0) {
+                    imagesHtml = item.Imagenes.map((imgUrl, imgIdx) => {
+                        return `
+                            <div class="relative group bg-slate-50 rounded-lg overflow-hidden border border-slate-200 shadow-sm cursor-pointer evidence-item" onclick="openLightbox('${imgUrl}', 'Punto ${item.PuntoID || ''} - Foto #${imgIdx + 1}')">
+                                <img src="${imgUrl}" alt="Foto ${imgIdx + 1}" class="w-full max-h-[520px] object-contain mx-auto transition duration-300 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/800x600/0f172a/ffffff?text=Evidencia+Foto+${imgIdx + 1}';">
+                                <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold no-print">
+                                    <i class="fa-solid fa-magnifying-glass-plus text-lg mb-1"></i>
+                                </div>
+                                <span class="absolute bottom-1 right-1 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
+                                    #${imgIdx + 1}
+                                </span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    imagesHtml = `<div class="col-span-full text-xs text-slate-400 italic p-4 text-center bg-slate-50 border border-slate-200 rounded-lg">Sin evidencias fotográficas adjuntas.</div>`;
+                }
+
+                // Activities badges
+                const actividades = Array.isArray(item.ActividadesEjecutadas) ? item.ActividadesEjecutadas : [];
+                const activitiesHtml = actividades.map(act => `
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <i class="fa-solid fa-check text-emerald-600 text-[10px]"></i> ${act}
+                    </span>
+                `).join('');
+
+                const coords = item.Coordenadas || {};
+                const coordLat = coords.lat || coords.Lat || '';
+                const coordLng = coords.lng || coords.Lng || coords.Longitud || '';
+
+                const pointCard = `
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden border-print">
+                        <!-- Card Header -->
+                        <div class="bg-slate-800 text-white p-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-700">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow-sm">
+                                    ${index + 1}
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="font-bold text-base tracking-wide">Punto ID: <span class="font-mono text-blue-300">${item.PuntoID || '-'}</span></h4>
+                                        ${item.TramoID ? `<span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300 font-medium">Tramo ${item.TramoID}</span>` : ''}
+                                    </div>
+                                    <p class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                                        <i class="fa-regular fa-clock text-blue-400"></i> ${formatDate(item.FechaHora)}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5 space-y-5">
+                            <!-- Technical Details Grid -->
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+                                <div>
+                                    <span class="block text-slate-400 font-semibold uppercase text-[10px] mb-1">Coordenadas Geográficas</span>
+                                    <div class="font-mono font-bold text-slate-800 flex items-center gap-2">
+                                        <i class="fa-solid fa-compass text-indotel-600"></i>
+                                        ${coordLat || coordLng ? `Lat: ${coordLat} | Lng: ${coordLng}` : 'Sin coordenadas'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Executed Activities -->
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-list-check text-emerald-600"></i> Actividades Ejecutadas en este Punto
+                                </h5>
+                                <div class="flex flex-wrap gap-2">
+                                    ${activitiesHtml || '<span class="text-xs text-slate-400 italic">Sin actividades registradas</span>'}
+                                </div>
+                            </div>
+
+                            <!-- Observations -->
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                    <i class="fa-regular fa-comment-dots text-blue-600"></i> Observaciones de Campo
+                                </h5>
+                                <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs text-slate-700 min-h-[42px]">
+                                    ${item.Observaciones ? item.Observaciones : '<span class="text-slate-400 italic">Sin observaciones o incidencias particulares reportadas para este punto.</span>'}
+                                </div>
+                            </div>
+
+                            <!-- Photo Evidence Gallery -->
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-camera text-slate-600"></i> Evidencia Fotográfica (${Array.isArray(item.Imagenes) ? item.Imagenes.length : 0} imágenes)
+                                </h5>
+                                <div class="grid grid-cols-1 gap-4">
+                                    ${imagesHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML += pointCard;
+            });
+        }
+
+        // Lightbox Functions
+        function openLightbox(url, caption) {
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-caption').innerText = caption;
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+            document.getElementById('lightbox-modal').classList.add('flex');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+            document.getElementById('lightbox-modal').classList.remove('flex');
+        }
+
+        // Initialize on Load
+        window.onload = async function() {
+            const tramoid = getQueryParam('tramoid');
+            const numerocubicacion = getQueryParam('numerocubicacion');
+            const container = document.getElementById('points-container');
+            const missingMsg = document.getElementById('missing-cubicacion-msg');
+            const reportContent = document.getElementById('report-content');
+            if (!numerocubicacion) {
+                if (missingMsg) missingMsg.classList.remove('hidden');
+                if (reportContent) reportContent.classList.add('hidden');
+                return;
+            }
+
+            if (missingMsg) missingMsg.classList.add('hidden');
+            if (reportContent) reportContent.classList.remove('hidden');
+
+            const numeroEl = document.getElementById('cubicacion-numero');
+            if (numeroEl) numeroEl.textContent = numerocubicacion;
+
+            setCubicacionState('Cargando cubicación...', false);
+
+            if (container && !tramoid) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-xl border border-slate-200 p-12 text-center text-slate-400 avoid-break">
+                        <i class="fa-solid fa-spinner fa-spin text-4xl mb-3 text-blue-400"></i>
+                        <p class="text-sm font-medium">Cargando evidencias fotográficas...</p>
+                    </div>
+                `;
+            } else if (tramoid && container) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-xl border border-slate-200 p-12 text-center text-slate-400 avoid-break">
+                        <i class="fa-solid fa-spinner fa-spin text-4xl mb-3 text-blue-400"></i>
+                        <p class="text-sm font-medium">Cargando informe del tramo ${tramoid}...</p>
+                    </div>
+                `;
+            }
+
+            const [reportRes, cubiRes] = await Promise.allSettled([
+                tramoid ? loadTramoReport(tramoid) : Promise.resolve([]),
+                loadCubicacion(numerocubicacion)
+            ]);
+
+            if (reportRes.status === 'fulfilled') {
+                if (tramoid) {
+                    dataset = (reportRes.value || []).map(point => ({
+                        ...point,
+                        Imagenes: Array.isArray(point.Imagenes) ? point.Imagenes.filter(img => img && img.toString().trim() !== '').map(normalizeImage) : []
+                    })).filter(point => Array.isArray(point.Imagenes) && point.Imagenes.length > 0);
+                    renderPoints(dataset);
+                } else {
+                    renderPoints(dataset);
+                }
+            } else {
+                console.error('Error al cargar el informe del tramo:', reportRes.reason);
+                if (container) {
+                    container.innerHTML = `
+                        <div class="bg-white rounded-xl border border-red-200 p-12 text-center text-red-500 avoid-break">
+                            <i class="fa-solid fa-triangle-exclamation text-4xl mb-3"></i>
+                            <p class="text-sm font-semibold">No se pudo cargar el informe del tramo ${tramoid}.</p>
+                            <p class="text-xs text-slate-400 mt-1">Verifique el identificador del tramo o intente nuevamente.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            if (cubiRes.status === 'fulfilled') {
+                renderCubicacion();
+                const cubiData = cubiRes.value || {};
+                const fechaEl = document.getElementById('cubicacion-fecha');
+                if (fechaEl) {
+                    const fechaVal = cubiData.fecha || cubiData.Fecha;
+                    if (fechaVal) {
+                        try {
+                            fechaEl.textContent = new Date(fechaVal).toLocaleDateString('es-DO');
+                        } catch (e) {
+                            fechaEl.textContent = fechaVal;
+                        }
+                    } else {
+                        fechaEl.textContent = new Date().toLocaleDateString('es-DO');
+                    }
+                }
+                renderPoints(dataset);
+            } else {
+                console.error('Error al cargar la cubicación:', cubiRes.reason);
+                setCubicacionState('No se pudo cargar la cubicación.', true);
+            }
+        }
+    </script>
+</body>
+</html>

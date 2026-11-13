@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Justificación para Pago Parcial - INDOTEL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        indotel: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            600: '#0056b3',
+                            700: '#00418a',
+                            800: '#003366',
+                            900: '#0a2342',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @page {
+            size: A4;
+            margin: 12mm 12mm 14mm 12mm;
+        }
+
+        html {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 10pt;
+            }
+
+            .print-container {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .avoid-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .page-break {
+                page-break-before: always;
+                break-before: page;
+            }
+
+            .print-card {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+
+            .print-table {
+                width: 100% !important;
+                font-size: 8.2pt !important;
+            }
+
+            .print-table th,
+            .print-table td {
+                padding: 4px 5px !important;
+            }
+
+            .signature-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+
+            .hero-gradient {
+                background: #f8fafc !important;
+            }
+        }
+
+        body {
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+
+        .section-title {
+            letter-spacing: 0.04em;
+        }
+
+        .doc-table th {
+            background-color: #f1f5f9;
+        }
+
+        .doc-table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 print-container">
+
+        <header class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6 print-card">
+            <div class="border-b-4 border-indotel-600 p-6 hero-gradient bg-gradient-to-r from-slate-50 via-white to-blue-50/30">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div class="flex items-center gap-4">
+                        <img src="logo_soles.png"
+                             alt="Logo Grupo Soluciones Energéticas Soles"
+                             class="h-16 w-auto object-contain rounded-lg"
+                             style="transform:scale(1.6); transform-origin:center;"
+                             onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1B9d7n3bERrrARfit47yW8ciHKPObJKSI&sz=w1000';">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                                    GRUPO SOLES
+                                </span>
+                                <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-indotel-800">
+                                    PROYECTO: INDOTEL
+                                </span>
+                                <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-slate-200 text-slate-700">
+                                    <span data-field="estadoDocumento">BORRADOR</span>
+                                </span>
+                            </div>
+                            <h1 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-tight">
+                                Informe de Justificación para Pago Parcial
+                            </h1>
+                            <p class="text-xs font-medium text-slate-500 max-w-2xl">
+                                Solicitud excepcional de reconocimiento y pago de trabajos ejecutados en calle o avenida no concluida por causa no imputable al contratista
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-right min-w-[250px]">
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Proceso de Selección</div>
+                        <div class="text-sm font-bold text-indotel-800">INDOTEL-CCC-CP-2026-0010</div>
+                        <div class="text-xs text-slate-600 mt-2">
+                            <span class="font-medium">Formato:</span> Justificación de Pago Parcial
+                        </div>
+                        <div class="text-xs text-slate-600 mt-1">
+                            <span class="font-medium">Informe N°:</span>
+                            <span class="font-bold text-indotel-800" data-field="informeNumero">—</span>
+                        </div>
+                        <div class="text-xs text-slate-600 mt-1">
+                            <span class="font-medium">Cubicación N°:</span>
+                            <span class="font-bold text-indotel-800" data-field="cubicacionNumero">—</span>
+                        </div>
+                        <div class="text-xs text-slate-600 mt-1">
+                            <span class="font-medium">Fecha de corte:</span>
+                            <span data-field="fechaCorte">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card avoid-break">
+            <div class="flex items-center justify-between gap-4 border-b border-slate-100 pb-3 mb-4">
+                <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-file-circle-check text-blue-600"></i>
+                    Resumen ejecutivo
+                </h2>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                    Documento sujeto a verificación de INDOTEL
+                </span>
+            </div>
+
+            <p class="text-sm text-slate-700 leading-relaxed">
+                El presente informe sustenta la solicitud de un <strong>pago parcial excepcional</strong> por los trabajos
+                efectivamente ejecutados y verificados en la calle o avenida identificada en la sección 2, cuyo cierre no ha
+                sido posible por una causa externa no imputable al contratista. La solicitud no constituye una
+                cubicación parcial en los términos de la Nota 1 del numeral 6.2 del pliego de condiciones, ni sustituye la
+                medición y cubicación final del tramo; se formula para evitar que la espera derivada de la causa ajena
+                prolongue la inmovilización de los costos operativos ya erogados por el contratista.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tramo</div>
+                    <div class="mt-1 text-sm font-bold text-slate-900" data-field="tramo.calleAvenida">—</div>
+                    <div class="text-[11px] text-slate-500">
+                        Lote <span class="font-semibold" data-field="tramo.lote">—</span> ·
+                        <span data-field="tramo.sector">—</span>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avance físico verificado</div>
+                    <div class="mt-1 text-2xl font-extrabold text-indotel-800" data-calc="avancePct">—</div>
+                    <div class="mt-2 h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+                        <div id="barra-avance" class="h-2 rounded-full bg-indotel-600" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Longitud ejecutada / total</div>
+                    <div class="mt-1 text-sm font-bold text-slate-900">
+                        <span data-calc="ejecKm">—</span> / <span data-calc="totalKm">—</span> km
+                    </div>
+                    <div class="text-[11px] text-slate-500">
+                        Pendiente: <span class="font-semibold" data-calc="pendKm">—</span> km
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-blue-200 bg-blue-50 p-3">
+                    <div class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">Monto neto solicitado</div>
+                    <div class="mt-1 text-lg font-extrabold text-indotel-800">RD$ <span data-calc="montoNeto">—</span></div>
+                    <div class="text-[11px] text-blue-700">Sujeto a retenciones y cubicación final</div>
+                </div>
+            </div>
+
+            <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+                <span class="font-bold">Causa principal:</span>
+                <span data-field="causa.tipo">—</span>.
+                <span class="font-bold">Entidad o tercero involucrado:</span>
+                <span data-field="causa.entidad">—</span>.
+                <span class="font-bold">Días de afectación:</span>
+                <span data-field="causa.diasAfectacion">—</span>.
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card avoid-break">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-location-dot text-blue-600"></i>
+                1. Datos generales del tramo
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-xs">
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Lote</span>
+                    <span class="font-bold text-slate-900 text-right" data-field="tramo.lote">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Calle / Avenida</span>
+                    <span class="font-bold text-slate-900 text-right" data-field="tramo.calleAvenida">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Sector</span>
+                    <span class="font-bold text-slate-900 text-right" data-field="tramo.sector">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Tramo(s)</span>
+                    <span class="font-bold text-slate-900 text-right" data-field="tramo.tramoNo">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Coordenadas de inicio</span>
+                    <span class="font-mono font-semibold text-slate-900 text-right" data-field="tramo.coordsInicio">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Coordenadas de fin</span>
+                    <span class="font-mono font-semibold text-slate-900 text-right" data-field="tramo.coordsFin">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Longitud total del tramo</span>
+                    <span class="font-bold text-slate-900 text-right"><span data-calc="totalKm">—</span> km</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Longitud ejecutada y verificada</span>
+                    <span class="font-bold text-slate-900 text-right"><span data-calc="ejecKm">—</span> km</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Longitud pendiente</span>
+                    <span class="font-bold text-slate-900 text-right"><span data-calc="pendKm">—</span> km</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Precio unitario por km</span>
+                    <span class="font-bold text-slate-900 text-right">RD$ <span data-calc="precioKm">—</span></span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Monto total del tramo</span>
+                    <span class="font-bold text-slate-900 text-right">RD$ <span data-calc="valorTotal">—</span></span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Monto total del lote (ref.)</span>
+                    <span class="font-bold text-slate-900 text-right whitespace-nowrap">RD$ <span data-calc="montoTotalLote">—</span></span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Periodo de ejecución</span>
+                    <span class="font-bold text-slate-900 text-right" data-field="tramo.periodoEjecucion">—</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
+                    <span class="font-semibold text-slate-500">Fecha de corte del informe</span>
+                    <span class="font-bold text-slate-900 text-right" data-field="fechaCorte">—</span>
+                </div>
+            </div>
+
+            <p class="mt-4 text-[11px] text-slate-500">
+                La información del tramo se corresponde con el Informe de Cubicación N°
+                <span class="font-semibold" data-field="cubicacionNumero">—</span> y con el levantamiento aprobado por INDOTEL.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-scale-balanced text-blue-600"></i>
+                2. Base contractual y alcance de la solicitud
+            </h2>
+
+            <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+                <p>
+                    El numeral 6.2 del pliego de condiciones, relativo a la medición, cubicación y control de ejecución,
+                    establece que la ejecución de la obra será objeto de medición y cubicación con base en los tramos
+                    efectivamente intervenidos y las actividades ejecutadas, conforme a los criterios técnicos definidos por
+                    la entidad contratante. La <strong>Nota 1</strong> de dicho numeral dispone que la cubicación deberá
+                    contemplar la totalidad de los kilómetros por tramo y que <strong>no se aceptarán cubicaciones
+                    parciales</strong>. Asimismo, la sección de condiciones y forma de pago prevé un anticipo del 20% y que el
+                    monto restante sea pagado mediante cubicaciones que indiquen el avance de la obra, dentro de un plazo de
+                    treinta (30) días hábiles.
+                </p>
+
+                <p>
+                    El pliego también establece que las cubicaciones presentadas tienen carácter provisorio y quedan sometidas
+                    a los resultados de la medición y cubicación final, en la que podrán efectuarse los reajustes y retenciones
+                    que correspondan.
+                </p>
+            </div>
+
+            <div class="mt-4 rounded-lg border-l-4 border-indotel-600 bg-blue-50/70 p-4 avoid-break">
+                <p class="text-xs font-bold text-indotel-900 uppercase tracking-wide mb-1">Naturaleza y alcance de esta solicitud</p>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                    El contratista <strong>no presenta una cubicación parcial</strong> ni pretende sustituir la cubicación
+                    del tramo. Solicita, de manera excepcional y motivada, la autorización de un pago parcial contra los
+                    trabajos ya ejecutados y verificados, con cargo a la cubicación final del tramo, porque la conclusión de
+                    este ha sido impedida por una causa externa no imputable al contratista. La solicitud se
+                    formula sin perjuicio de: (i) la obligación de concluir el tramo cuando cese la causa; (ii) la medición y
+                    cubicación final; (iii) los ajustes, retenciones y descuentos que correspondan; y (iv) la recepción
+                    definitiva de las obras.
+                </p>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-handshake-slash text-blue-600"></i>
+                3. Situación que impide la conclusión del tramo
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <div class="rounded-lg border border-amber-200 bg-amber-50 p-3">
+                    <div class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Causa principal</div>
+                    <div class="mt-1 text-xs font-bold text-amber-900" data-field="causa.tipo">—</div>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Entidad / tercero</div>
+                    <div class="mt-1 text-xs font-bold text-slate-800" data-field="causa.entidad">—</div>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Días de afectación</div>
+                    <div class="mt-1 text-sm font-extrabold text-slate-900" data-field="causa.diasAfectacion">—</div>
+                </div>
+            </div>
+
+            <div class="text-sm text-slate-700 leading-relaxed">
+                <p class="mb-3" data-field="causa.descripcion">
+                    —
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 text-xs">
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Inicio de la afectación</div>
+                    <div class="mt-1 font-bold text-slate-800" data-field="causa.fechaInicio">—</div>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Reanudación estimada</div>
+                    <div class="mt-1 font-bold text-slate-800" data-field="causa.fechaEstimadaReanudacion">—</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card page-break">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-list-check text-blue-600"></i>
+                4. Trabajos ejecutados y metrado
+            </h2>
+
+            <p class="text-sm text-slate-700 leading-relaxed mb-4">
+                Los trabajos que se someten a consideración fueron ejecutados conforme a las especificaciones técnicas del
+                pliego y se encuentran registrados en el Informe de Cubicación N°
+                <span class="font-semibold" data-field="cubicacionNumero">—</span>, con evidencia fotográfica
+                georreferenciada. El metrado se limita a las actividades efectivamente ejecutadas y verificadas; no incluye
+                actividades pendientes ni trabajos no realizados.
+            </p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs print-table doc-table">
+                    <thead class="border-b border-slate-200 text-slate-600 font-semibold">
+                        <tr>
+                            <th class="py-2 px-3 w-[38%]">Actividad / partida ejecutada</th>
+                            <th class="py-2 px-3 w-[14%] text-center">Unidad</th>
+                            <th class="py-2 px-3 w-[14%] text-right">Cantidad ejecutada</th>
+                            <th class="py-2 px-3 w-[12%] text-right">% del tramo</th>
+                            <th class="py-2 px-3 w-[22%]">Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-metrado" class="divide-y divide-slate-200 text-slate-700"></tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Puntos con evidencia</div>
+                    <div class="mt-1 text-lg font-extrabold text-slate-900" data-field="metrado.puntosEvidencia">—</div>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Actividades registradas</div>
+                    <div class="mt-1 text-lg font-extrabold text-slate-900" data-field="metrado.actividadesRegistradas">—</div>
+                </div>
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Referencia de evidencia</div>
+                    <div class="mt-1 font-bold text-slate-800" data-field="metrado.referenciaEvidencia">—</div>
+                </div>
+            </div>
+
+            <p class="mt-3 text-[11px] text-slate-500">
+                La evidencia fotográfica completa, las coordenadas y el detalle por punto reposan en el Informe de Cubicación
+                N° <span class="font-semibold" data-field="cubicacionNumero">—</span>. Este informe no duplica dicha
+                evidencia; la invoca como soporte.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-truck-fast text-blue-600"></i>
+                5. Costos operativos incurridos y afectación financiera
+            </h2>
+
+            <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+                <p>
+                    Para la ejecución de los trabajos, el contratista movilizó equipos y personal, incurrió en consumo de
+                    combustible, pago de personal operativo, deterioro de herramientas y consumo de materiales gastables,
+                    además de los costos de señalización, seguridad y supervisión necesarios. Estos costos se encuentran
+                    incorporados en el precio ofertado, conforme al numeral 15 del pliego, y <strong>no se reclaman como
+                    valores adicionales</strong>.
+                </p>
+                <p>
+                    Sin embargo, al no haberse concluido el tramo, tales costos no pueden ser recuperados mediante la
+                    cubicación ordinaria. La causa ajena al contratista prolonga la inmovilización de recursos ya erogados y
+                    afecta la continuidad operativa de las brigadas, la disponibilidad de equipos y la programación de los
+                    demás tramos.
+                </p>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-route text-blue-600"></i>
+                6. Actividades pendientes y ruta de conclusión
+            </h2>
+
+            <p class="text-sm text-slate-700 leading-relaxed mb-4">
+                Las actividades pendientes se ejecutarán tan pronto cese la causa que impide la conclusión del tramo. El
+                contratista mantiene disponibles brigadas, equipos, herramientas y materiales para reanudar los trabajos
+                conforme al cronograma actualizado. La conclusión del tramo será sometida a la medición, cubicación final y
+                acta de supervisión correspondiente.
+            </p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs print-table doc-table">
+                    <thead class="border-b border-slate-200 text-slate-600 font-semibold">
+                        <tr>
+                            <th class="py-2 px-3 w-[26%]">Actividad pendiente</th>
+                            <th class="py-2 px-3 w-[28%]">Razón específica de la pendencia</th>
+                            <th class="py-2 px-3 w-[14%]">Responsable / tercero</th>
+                            <th class="py-2 px-3 w-[14%]">Fecha estimada</th>
+                            <th class="py-2 px-3 w-[18%]">Medida de mitigación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pendientes" class="divide-y divide-slate-200 text-slate-700"></tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 leading-relaxed">
+                <span class="font-bold text-slate-800">Nota de continuidad:</span>
+                la demora en la conclusión no afecta la calidad, estabilidad ni seguridad de los trabajos ya ejecutados. El
+                contratista adoptará las medidas necesarias para mantener el área intervenida en condiciones seguras y
+                ordenadas mientras se obtiene el acceso o la autorización requerida.
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card avoid-break">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-calculator text-blue-600"></i>
+                7. Valoración y liquidación propuesta
+            </h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs print-table doc-table">
+                    <thead class="border-b border-slate-200 text-slate-600 font-semibold">
+                        <tr>
+                            <th class="py-2 px-3 w-[68%]">Concepto</th>
+                            <th class="py-2 px-3 w-[32%] text-right">Valor / monto</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                        <tr>
+                            <td class="py-2 px-3">Longitud total del tramo</td>
+                            <td class="py-2 px-3 text-right"><span data-calc="totalKm">—</span> km</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">Longitud ejecutada y verificada</td>
+                            <td class="py-2 px-3 text-right"><span data-calc="ejecKm">—</span> km</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">Longitud pendiente</td>
+                            <td class="py-2 px-3 text-right"><span data-calc="pendKm">—</span> km</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">Avance físico verificado</td>
+                            <td class="py-2 px-3 text-right"><span data-calc="avancePct">—</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">Precio unitario por km</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="precioKm">—</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">Valor total del tramo</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="valorTotal">—</span></td>
+                        </tr>
+                        <tr class="bg-blue-50/60 font-semibold text-slate-900">
+                            <td class="py-2 px-3">Valor de los trabajos ejecutados (A)</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="valorEjecutado">—</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">(−) Amortización del anticipo (<span data-calc="anticipoPct">—</span>%) (B)</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="amortizacion">—</span></td>
+                        </tr>
+                        <tr class="bg-slate-50 font-semibold text-slate-900">
+                            <td class="py-2 px-3">Subtotal (A − B)</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="subtotal">—</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3">(−) Retenciones aplicables (C)</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="retenciones">—</span></td>
+                        </tr>
+                        <tr class="bg-indotel-50 font-bold text-indotel-900">
+                            <td class="py-2 px-3">Monto neto solicitado (A − B − C)</td>
+                            <td class="py-2 px-3 text-right">RD$ <span data-calc="montoNeto">—</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 leading-relaxed">
+                <p>
+                    <span class="font-bold text-slate-800">Base de cálculo:</span>
+                    valor ejecutado = longitud ejecutada y verificada × precio unitario por km. La amortización del anticipo
+                    se aplica en la misma proporción del avance. Las retenciones definitivas (CODIA 0.1%, ISR 5% e ITBIS,
+                    según corresponda) serán calculadas por INDOTEL al momento del pago, conforme al pliego de condiciones y
+                    a la normativa aplicable.
+                </p>
+                <p class="mt-2">
+                    <span class="font-bold text-slate-800">Monto solicitado en letras:</span>
+                    <span data-field="liquidacion.montoLetras">—</span>
+                </p>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-shield-halved text-blue-600"></i>
+                8. Compromisos y salvaguardas
+            </h2>
+
+            <ol class="list-decimal list-inside space-y-2 text-sm text-slate-700 leading-relaxed">
+                <li>
+                    El contratista se compromete a concluir el tramo tan pronto cese la causa que impide su cierre, utilizando
+                    los recursos disponibles y el cronograma actualizado.
+                </li>
+                <li>
+                    El tramo será sometido a la medición y cubicación final, así como al acta de supervisión y a la recepción
+                    que corresponda, sin que el pago parcial sustituya dichos actos.
+                </li>
+                <li>
+                    El contratista acepta los ajustes, retenciones, descuentos y reembolsos que resulten de la verificación
+                    de INDOTEL y de la cubicación final.
+                </li>
+                <li>
+                    El pago parcial se imputará a la cubicación final del tramo y no generará duplicidad de pagos. El
+                    contratista declara que los trabajos descritos no han sido cubicados ni pagados con anterioridad.
+                </li>
+                <li>
+                    El contratista mantendrá la trazabilidad documental, la evidencia fotográfica y los soportes de costos a
+                    disposición de INDOTEL y de la supervisión designada.
+                </li>
+                <li>
+                    El pago parcial no constituye recepción definitiva, no implica aprobación del tramo, no libera al
+                    contratista de sus obligaciones contractuales y no afecta las garantías vigentes.
+                </li>
+                <li>
+                    El contratista informará periódicamente el estado de la causa, las gestiones realizadas y la fecha
+                    estimada de reanudación, hasta la conclusión del tramo.
+                </li>
+            </ol>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 print-card avoid-break">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <i class="fa-solid fa-paper-plane text-blue-600"></i>
+                9. Solicitud formal
+            </h2>
+
+            <p class="text-sm text-slate-700 leading-relaxed">
+                Por las razones expuestas, el contratista solicita respetuosamente a INDOTEL:
+            </p>
+
+            <ol class="list-decimal list-inside space-y-2 text-sm text-slate-700 leading-relaxed mt-3">
+                <li>
+                    Autorizar el pago parcial por la suma de <strong>RD$ <span data-calc="montoNeto">—</span></strong>
+                    (<span data-field="liquidacion.montoLetras">—</span>), correspondiente a los trabajos ejecutados y
+                    verificados en el tramo identificado.
+                </li>
+                <li>
+                    Disponer la verificación técnica y la suscripción del acta de supervisión que corresponda, sin que ello
+                    implique recepción definitiva del tramo.
+                </li>
+                <li>
+                    Imputar el pago parcial a la cubicación final del tramo, con los ajustes y retenciones que resulten de la
+                    medición definitiva.
+                </li>
+                <li>
+                    Notificar al contratista la decisión adoptada y las instrucciones para la conclusión del tramo una vez
+                    superada la causa.
+                </li>
+            </ol>
+
+            <p class="mt-4 text-xs text-slate-500 leading-relaxed">
+                La presente solicitud se formula sin perjuicio de la facultad de INDOTEL de requerir documentación adicional,
+                realizar las verificaciones que estime pertinentes y adoptar la decisión que corresponda conforme al pliego
+                de condiciones y a la normativa aplicable.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mt-6 print-card avoid-break">
+            <h2 class="section-title text-sm font-bold text-slate-800 uppercase flex items-center gap-2 border-b border-slate-100 pb-3 mb-8">
+                <i class="fa-solid fa-file-signature text-blue-600"></i>
+                Firmas de conformidad
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 signature-grid">
+                <div class="text-center">
+                    <div class="h-20 border-b-2 border-slate-400 w-4/5 mx-auto mb-3"></div>
+                    <div class="text-sm font-bold text-slate-800">Elaborado por</div>
+                    <div class="text-xs text-slate-600 mt-1">Nombre: <span data-field="firmas.contratista.nombre">—</span></div>
+                    <div class="text-[11px] text-slate-500 mt-0.5" data-field="firmas.contratista.cargo">Encargado del Contratista (SOLES)</div>
+                    <div class="text-[11px] text-slate-400 mt-1">Fecha: <span data-field="firmas.contratista.fecha">—</span></div>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-20 border-b-2 border-slate-400 w-4/5 mx-auto mb-3"></div>
+                    <div class="text-sm font-bold text-slate-800">Revisado por</div>
+                    <div class="text-xs text-slate-600 mt-1">Nombre: <span data-field="firmas.supervision.nombre">—</span></div>
+                    <div class="text-[11px] text-slate-500 mt-0.5" data-field="firmas.supervision.cargo">Supervisor designado por INDOTEL</div>
+                    <div class="text-[11px] text-slate-400 mt-1">Fecha: <span data-field="firmas.supervision.fecha">—</span></div>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-20 border-b-2 border-slate-400 w-4/5 mx-auto mb-3"></div>
+                    <div class="text-sm font-bold text-slate-800">Autorizado por</div>
+                    <div class="text-xs text-slate-600 mt-1">Nombre: <span data-field="firmas.indotel.nombre">—</span></div>
+                    <div class="text-[11px] text-slate-500 mt-0.5" data-field="firmas.indotel.cargo">Encargado de INDOTEL</div>
+                    <div class="text-[11px] text-slate-400 mt-1">Fecha: <span data-field="firmas.indotel.fecha">—</span></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-6 mb-2 text-center text-[10px] text-slate-400">
+            Grupo SOLES — Proceso INDOTEL-CCC-CP-2026-0010 — Informe de Justificación para Pago Parcial
+            <span class="mx-1">·</span>
+            Informe N° <span data-field="informeNumero">—</span>
+            <span class="mx-1">·</span>
+            Emitido el <span data-field="fechaEmision">—</span>
+        </footer>
+
+    </main>
+
+    <button id="btn-print" type="button" onclick="window.print()"
+            class="no-print fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-indotel-600 text-white text-sm font-semibold shadow-lg transition">
+        <i class="fa-solid fa-print"></i> Imprimir / Guardar PDF
+    </button>
+
+    <script>
+        const DATOS = {
+            estadoDocumento: "BORRADOR — DATOS DE EJEMPLO",
+            informeNumero: "JPP-0001",
+            cubicacionNumero: "0001",
+            fechaCorte: "30 de septiembre de 2026",
+            fechaEmision: "30 de septiembre de 2026",
+
+            tramo: {
+                lote: "L1",
+                calleAvenida: "Av. Enrique Jiménez Moya",
+                sector: "Corredores",
+                tramoNo: "16",
+                coordsInicio: "18°27'30.8\"N 69°55'56.7\"W",
+                coordsFin: "18°27'04.1\"N 69°55'39.5\"W",
+                longitudTotalKm: 2.00,
+                longitudEjecutadaKm: 1.55,
+                longitudPendienteKm: 0.45,
+                precioKm: 247445.87,
+                montoTotalTramo: 494891.74,
+                valorEjecutado: 383541.10,
+                avancePct: 77.5,
+                montoTotalLote: 30206954.32,
+                periodoEjecucion: "Del 09 al 30 de septiembre de 2026"
+            },
+
+            causa: {
+                tipo: "Interferencia de un tercero por ventana operativa y autorización de acceso",
+                entidad: "Empresa distribuidora de energía eléctrica (EDE) y coordinación municipal",
+                fechaInicio: "10 de septiembre de 2026",
+                fechaUltimaGestion: "28 de septiembre de 2026",
+                diasAfectacion: "19 días",
+                estadoActual: "Pendiente de ventana operativa autorizada",
+                fechaEstimadaReanudacion: "05 de octubre de 2026",
+                descripcion: "La conclusión del tramo requiere la coordinación previa con la empresa distribuidora de energía eléctrica para la verificación y el retiro seguro de cableado en postes, así como la autorización de acceso y la ventana operativa correspondiente. Aunque el contratista ha solicitado formalmente la coordinación y ha reiterado la solicitud en varias ocasiones, el tercero no ha otorgado la ventana requerida dentro del plazo previsto. Como consecuencia, las actividades de retiro de cable obsoleto, tensado final y limpieza no han podido ejecutarse, pese a que el contratista mantiene disponibles las brigadas, equipos y materiales. La situación es ajena a la voluntad y al control del contratista."
+            },
+
+            cronologia: [
+                {
+                    fecha: "10/09/2026",
+                    actuacion: "Solicitud formal de coordinación y acceso a la empresa distribuidora de energía eléctrica.",
+                    soporte: "Oficio GS-IND-2026-0142 (Anexo 1)"
+                },
+                {
+                    fecha: "15/09/2026",
+                    actuacion: "Reunión de coordinación con el tercero; se informa que la ventana operativa debe ser confirmada por la programación interna.",
+                    soporte: "Acta de reunión (Anexo 2)"
+                },
+                {
+                    fecha: "22/09/2026",
+                    actuacion: "Reiteración de la solicitud y remisión del cronograma actualizado del tramo.",
+                    soporte: "Correo electrónico y cronograma (Anexo 3)"
+                },
+                {
+                    fecha: "28/09/2026",
+                    actuacion: "Respuesta parcial del tercero, sin confirmación de fecha definitiva de acceso.",
+                    soporte: "Comunicación recibida (Anexo 4)"
+                },
+                {
+                    fecha: "30/09/2026",
+                    actuacion: "Verificación del avance ejecutado y elaboración del presente informe de justificación.",
+                    soporte: "Informe de Cubicación N° 0001 y reporte fotográfico (Anexo 5)"
+                }
+            ],
+
+            metrado: {
+                puntosEvidencia: "10 puntos documentados",
+                actividadesRegistradas: "9 actividades",
+                referenciaEvidencia: "Informe de Cubicación N° 0001",
+                actividades: [
+                    { actividad: "Adecuación de amarres", unidad: "Punto / amarre", cantidad: "39", avance: "98%", observacion: "Actividad concluida en los frentes intervenidos." },
+                    { actividad: "Retiro de cable en punta o colgando", unidad: "Punto", cantidad: "25", avance: "63%", observacion: "Se mantiene retiro puntual en el frente autorizado." },
+                    { actividad: "Etiquetado de redes", unidad: "Punto", cantidad: "24", avance: "60%", observacion: "Etiquetado ejecutado en los puntos verificados." },
+                    { actividad: "Intervención vegetal / Poda", unidad: "Árbol / punto", cantidad: "21", avance: "53%", observacion: "Poda ejecutada sin afectar la continuidad del servicio." },
+                    { actividad: "Retiro de cable obsoleto", unidad: "Punto", cantidad: "8", avance: "20%", observacion: "Pendiente de ventana operativa para el retiro seguro." },
+                    { actividad: "Tensado de cableado", unidad: "Tramo", cantidad: "6", avance: "15%", observacion: "Tensado parcial; falta el cierre del tramo." },
+                    { actividad: "Reposición de puntos de fijación", unidad: "Punto", cantidad: "4", avance: "10%", observacion: "Reposiciones ejecutadas en los puntos intervenidos." },
+                    { actividad: "Remoción de nido", unidad: "Nido", cantidad: "3", avance: "8%", observacion: "Retiro ejecutado con las medidas de seguridad." },
+                    { actividad: "Retiro de objetos", unidad: "Objeto", cantidad: "3", avance: "8%", observacion: "Retiro de objetos extraños en el área intervenida." }
+                ]
+            },
+
+            costos: {
+                referenciaSoporte: "6 (soportes de costos operativos)",
+                detalle: [
+                    { concepto: "Movilización y transporte de equipos y personal", base: "Camión canasta y vehículo de apoyo por jornada", monto: 185000.00 },
+                    { concepto: "Combustible", base: "Consumo de camión canasta y vehículo de apoyo", monto: 72500.00 },
+                    { concepto: "Pago de personal operativo", base: "Brigada por jornadas efectivamente trabajadas", monto: 240000.00 },
+                    { concepto: "Deterioro de herramientas", base: "Depreciación y mantenimiento de herramientas y EPP", monto: 28000.00 },
+                    { concepto: "Materiales gastables", base: "Cintas, etiquetas, amarres, precintos y similares", monto: 34500.00 },
+                    { concepto: "Señalización y seguridad", base: "Conos, cintas reflectoras y barreras", monto: 12000.00 }
+                ]
+            },
+
+            pendientes: [
+                {
+                    actividad: "Retiro de cable obsoleto en el tramo restante",
+                    razon: "Requiere ventana operativa y verificación de red por parte del tercero.",
+                    responsable: "EDE / Contratista",
+                    fecha: "05/10/2026",
+                    mitigacion: "Coordinación previa y ejecución en horario autorizado."
+                },
+                {
+                    actividad: "Tensado y alineación final del cableado",
+                    razon: "Depende del retiro seguro del cableado obsoleto.",
+                    responsable: "Contratista",
+                    fecha: "07/10/2026",
+                    mitigacion: "Brigada y equipos disponibles en el frente."
+                },
+                {
+                    actividad: "Limpieza final y liberación del área",
+                    razon: "Se ejecuta al concluir las actividades anteriores.",
+                    responsable: "Contratista",
+                    fecha: "08/10/2026",
+                    mitigacion: "Retiro y disposición de residuos conforme a la norma."
+                },
+                {
+                    actividad: "Verificación y cubicación del tramo",
+                    razon: "Requiere el cierre físico del tramo.",
+                    responsable: "INDOTEL / Supervisión",
+                    fecha: "09/10/2026",
+                    mitigacion: "Acta de supervisión y medición final."
+                }
+            ],
+
+            liquidacion: {
+                anticipoPct: 20,
+                amortizacionAnticipo: 76708.22,
+                retenciones: 0,
+                montoLetras: "trescientos seis mil ochocientos treinta y dos pesos con 88/100 (RD$ 306,832.88)"
+            },
+
+            anexos: [
+                { numero: "1", documento: "Oficio de solicitud de coordinación a la empresa distribuidora de energía eléctrica", fecha: "10/09/2026", referencia: "GS-IND-2026-0142" },
+                { numero: "2", documento: "Acta de reunión de coordinación con el tercero", fecha: "15/09/2026", referencia: "Acta N° 03-2026" },
+                { numero: "3", documento: "Correo de reiteración y cronograma actualizado del tramo", fecha: "22/09/2026", referencia: "Correo y cronograma" },
+                { numero: "4", documento: "Comunicación recibida del tercero", fecha: "28/09/2026", referencia: "Respuesta parcial" },
+                { numero: "5", documento: "Informe de Cubicación N° 0001 y reporte fotográfico georreferenciado", fecha: "30/09/2026", referencia: "Cubicación 0001" },
+                { numero: "6", documento: "Soportes de costos operativos y nómina de personal", fecha: "30/09/2026", referencia: "Anexo de costos" },
+                { numero: "7", documento: "Cronograma de conclusión del tramo", fecha: "30/09/2026", referencia: "Cronograma actualizado" },
+                { numero: "8", documento: "Certificaciones de DGII y TSS vigentes", fecha: "30/09/2026", referencia: "Documentación legal" }
+            ],
+
+            firmas: {
+                contratista: {
+                    nombre: "Por completar",
+                    cargo: "Encargado del Contratista (SOLES)",
+                    fecha: "____ / ____ / ______"
+                },
+                supervision: {
+                    nombre: "Por completar",
+                    cargo: "Supervisor designado por INDOTEL",
+                    fecha: "____ / ____ / ______"
+                },
+                indotel: {
+                    nombre: "Por completar",
+                    cargo: "Encargado de INDOTEL",
+                    fecha: "____ / ____ / ______"
+                }
+            }
+        };
+
+        const fmtRD = (value) => Number(value || 0).toLocaleString("es-DO", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        const fmtKm = (value) => Number(value || 0).toFixed(2);
+
+        const fmtPct = (value) => `${Number(value || 0).toFixed(1)}%`;
+
+        const num = (value) => {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : 0;
+        };
+
+        const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&#39;"
+        }[char]));
+
+        const getPath = (path) => path.split(".").reduce((obj, key) => {
+            if (obj === null || obj === undefined) return undefined;
+            return obj[key];
+        }, DATOS);
+
+        const setCalc = (name, value) => {
+            document.querySelectorAll(`[data-calc="${name}"]`).forEach((element) => {
+                element.textContent = value;
+            });
+        };
+
+        function fillFields() {
+            document.querySelectorAll("[data-field]").forEach((element) => {
+                const value = getPath(element.dataset.field);
+                element.textContent = value === undefined || value === null || value === "" ? "—" : value;
+            });
+        }
+
+        function renderCronologia() {
+            const tbody = document.getElementById("tbody-cronologia");
+            if (!tbody) return;
+
+            if (!Array.isArray(DATOS.cronologia) || DATOS.cronologia.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="py-4 px-3 text-center text-slate-400">Sin gestiones registradas.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = DATOS.cronologia.map((item) => `
+                <tr>
+                    <td class="py-2 px-3 font-semibold text-slate-800 whitespace-nowrap">${esc(item.fecha)}</td>
+                    <td class="py-2 px-3">${esc(item.actuacion)}</td>
+                    <td class="py-2 px-3 text-slate-600">${esc(item.soporte)}</td>
+                </tr>
+            `).join("");
+        }
+
+        function renderMetrado() {
+            const tbody = document.getElementById("tbody-metrado");
+            if (!tbody) return;
+
+            const actividades = DATOS.metrado && Array.isArray(DATOS.metrado.actividades)
+                ? DATOS.metrado.actividades
+                : [];
+
+            if (actividades.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-4 px-3 text-center text-slate-400">Sin actividades registradas.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = actividades.map((item) => `
+                <tr>
+                    <td class="py-2 px-3 font-medium text-slate-800">${esc(item.actividad)}</td>
+                    <td class="py-2 px-3 text-center">${esc(item.unidad)}</td>
+                    <td class="py-2 px-3 text-right font-semibold">${esc(item.cantidad)}</td>
+                    <td class="py-2 px-3 text-right">${esc(item.avance)}</td>
+                    <td class="py-2 px-3 text-slate-600">${esc(item.observacion)}</td>
+                </tr>
+            `).join("");
+        }
+
+        function renderCostos() {
+            const tbody = document.getElementById("tbody-costos");
+            if (!tbody) return;
+
+            const detalle = DATOS.costos && Array.isArray(DATOS.costos.detalle)
+                ? DATOS.costos.detalle
+                : [];
+
+            if (detalle.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="py-4 px-3 text-center text-slate-400">Sin costos registrados.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = detalle.map((item) => `
+                <tr>
+                    <td class="py-2 px-3 font-medium text-slate-800">${esc(item.concepto)}</td>
+                    <td class="py-2 px-3 text-slate-600">${esc(item.base)}</td>
+                    <td class="py-2 px-3 text-right font-semibold">${fmtRD(item.monto)}</td>
+                </tr>
+            `).join("");
+        }
+
+        function renderPendientes() {
+            const tbody = document.getElementById("tbody-pendientes");
+            if (!tbody) return;
+
+            if (!Array.isArray(DATOS.pendientes) || DATOS.pendientes.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-4 px-3 text-center text-slate-400">Sin actividades pendientes registradas.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = DATOS.pendientes.map((item) => `
+                <tr>
+                    <td class="py-2 px-3 font-medium text-slate-800">${esc(item.actividad)}</td>
+                    <td class="py-2 px-3 text-slate-600">${esc(item.razon)}</td>
+                    <td class="py-2 px-3">${esc(item.responsable)}</td>
+                    <td class="py-2 px-3 whitespace-nowrap">${esc(item.fecha)}</td>
+                    <td class="py-2 px-3 text-slate-600">${esc(item.mitigacion)}</td>
+                </tr>
+            `).join("");
+        }
+
+        function renderAnexos() {
+            const tbody = document.getElementById("tbody-anexos");
+            if (!tbody) return;
+
+            if (!Array.isArray(DATOS.anexos) || DATOS.anexos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 px-3 text-center text-slate-400">Sin anexos registrados.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = DATOS.anexos.map((item) => `
+                <tr>
+                    <td class="py-2 px-3 text-center font-bold text-slate-800">${esc(item.numero)}</td>
+                    <td class="py-2 px-3 text-slate-700">${esc(item.documento)}</td>
+                    <td class="py-2 px-3 whitespace-nowrap">${esc(item.fecha)}</td>
+                    <td class="py-2 px-3 text-slate-600">${esc(item.referencia)}</td>
+                </tr>
+            `).join("");
+        }
+
+        function calcular() {
+            const tramo = DATOS.tramo || {};
+            const totalKm = num(tramo.longitudTotalKm);
+            const ejecKm = num(tramo.longitudEjecutadaKm);
+            const pendKm = tramo.longitudPendienteKm !== undefined && tramo.longitudPendienteKm !== null
+                ? num(tramo.longitudPendienteKm)
+                : Math.max(totalKm - ejecKm, 0);
+            const precioKm = num(tramo.precioKm);
+            const montoTotalLote = num(tramo.montoTotalLote);
+            const valorTotal = tramo.montoTotalTramo !== undefined && tramo.montoTotalTramo !== null
+                ? num(tramo.montoTotalTramo)
+                : totalKm * precioKm;
+            const valorEjecutado = tramo.valorEjecutado !== undefined && tramo.valorEjecutado !== null
+                ? num(tramo.valorEjecutado)
+                : ejecKm * precioKm;
+            const avancePct = tramo.avancePct !== undefined && tramo.avancePct !== null
+                ? num(tramo.avancePct)
+                : (totalKm > 0 ? (ejecKm / totalKm) * 100 : 0);
+            const anticipoPct = num(DATOS.liquidacion && DATOS.liquidacion.anticipoPct);
+            const amortizacion = DATOS.liquidacion && DATOS.liquidacion.amortizacionAnticipo !== undefined && DATOS.liquidacion.amortizacionAnticipo !== null
+                ? num(DATOS.liquidacion.amortizacionAnticipo)
+                : valorEjecutado * (anticipoPct / 100);
+            const retenciones = num(DATOS.liquidacion && DATOS.liquidacion.retenciones);
+            const subtotal = valorEjecutado - amortizacion;
+            const montoNeto = subtotal - retenciones;
+            const costosTotal = (DATOS.costos && Array.isArray(DATOS.costos.detalle) ? DATOS.costos.detalle : [])
+                .reduce((sum, item) => sum + num(item.monto), 0);
+
+            return {
+                totalKm,
+                ejecKm,
+                pendKm,
+                precioKm,
+                montoTotalLote,
+                valorTotal,
+                valorEjecutado,
+                avancePct,
+                anticipoPct,
+                amortizacion,
+                retenciones,
+                subtotal,
+                montoNeto,
+                costosTotal
+            };
+        }
+
+        function renderCalculos() {
+            const calc = calcular();
+
+            setCalc("totalKm", fmtKm(calc.totalKm));
+            setCalc("ejecKm", fmtKm(calc.ejecKm));
+            setCalc("pendKm", fmtKm(calc.pendKm));
+            setCalc("precioKm", fmtRD(calc.precioKm));
+            setCalc("montoTotalLote", fmtRD(calc.montoTotalLote));
+            setCalc("valorTotal", fmtRD(calc.valorTotal));
+            setCalc("valorEjecutado", fmtRD(calc.valorEjecutado));
+            setCalc("avancePct", fmtPct(calc.avancePct));
+            setCalc("anticipoPct", `${calc.anticipoPct.toFixed(0)}`);
+            setCalc("amortizacion", fmtRD(calc.amortizacion));
+            setCalc("subtotal", fmtRD(calc.subtotal));
+            setCalc("retenciones", fmtRD(calc.retenciones));
+            setCalc("montoNeto", fmtRD(calc.montoNeto));
+            setCalc("costosTotal", fmtRD(calc.costosTotal));
+
+            const barra = document.getElementById("barra-avance");
+            if (barra) {
+                const width = Math.max(0, Math.min(100, calc.avancePct));
+                barra.style.width = `${width}%`;
+            }
+        }
+
+        function init() {
+            fillFields();
+            renderCronologia();
+            renderMetrado();
+            renderCostos();
+            renderPendientes();
+            renderAnexos();
+            renderCalculos();
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+</html>
