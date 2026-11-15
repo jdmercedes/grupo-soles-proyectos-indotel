@@ -404,7 +404,10 @@
 
         async function loadCubicacion(numerocubicacion) {
             if (!numerocubicacion) throw new Error('numerocubicacion requerido');
-            const url = `${CUBI_API}?numerocubicacion=${encodeURIComponent(numerocubicacion)}`;
+            const params = new URLSearchParams({ numerocubicacion });
+            const at = getQueryParam('at');
+            if (at) params.set('at', at);
+            const url = `${CUBI_API}?${params.toString()}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const json = await response.json();
