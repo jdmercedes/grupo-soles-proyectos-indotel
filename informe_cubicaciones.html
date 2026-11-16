@@ -221,6 +221,16 @@
                 <div id="cubi-calles-grid" class="flex flex-col gap-4"></div>
             </div>
 
+            <!-- Notas -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 border-print avoid-break">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <i class="fa-regular fa-note-sticky text-blue-600"></i> Notas
+                </h3>
+                <div id="notas-container" class="text-xs text-slate-700 space-y-2">
+                    <div class="text-center text-slate-400 py-4">Sin notas registradas.</div>
+                </div>
+            </div>
+
             <!-- Ruta y Ubicación del Tramo -->
             <div id="ruta-section" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 border-print avoid-break">
                 <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
@@ -271,16 +281,6 @@
         <!-- Points Container List -->
         <div id="points-container" class="space-y-6" style="display:none;">
             <!-- Dynamic Point Cards Render Here -->
-        </div>
-
-        <!-- Notas -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-4 mt-4 border-print avoid-break">
-            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <i class="fa-regular fa-note-sticky text-blue-600"></i> Notas
-            </h3>
-            <div id="notas-container" class="text-xs text-slate-700 space-y-2">
-                <div class="text-center text-slate-400 py-4">Sin notas registradas.</div>
-            </div>
         </div>
 
         <!-- Signature Section -->
@@ -601,8 +601,8 @@
                 `).join('') : `<tr><td colspan="6" class="py-4 px-3 text-center text-slate-400">Sin datos</td></tr>`;
             }
 
-            renderRuta();
             renderNotas();
+            renderRuta();
         }
 
         // Render the notes received from the API in dataCalle.Notas
