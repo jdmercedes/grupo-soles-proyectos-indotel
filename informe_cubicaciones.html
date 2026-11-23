@@ -564,22 +564,6 @@
             return '';
         }
 
-        // Valores de ejemplo para previsualizar el formato de la sección por calle/avenida.
-        // TODO: reemplazar por los datos reales de dataCalle al conectar la API.
-        const MOCK_CALLE = {
-            noLote: 'L-001',
-            coordenadas: `18°28'59.2"N 69°55'12.4"O — 18°28'45.8"N 69°55'30.1"O`,
-            sector: 'Los Prados',
-            calleAvenida: 'Av. Núñez de Cáceres',
-            montoTotalLote: 125000,
-            distanciaTotalLote: 1.25,
-            precioKm: 100000,
-            distanciaKm: 1.25,
-            montoTotalEstimado: 125000,
-            descuentoAnticipo: 25000,
-            montoTotalAPagar: 100000
-        };
-
         function matrixCell(label, value, valueClass, cellClass) {
             return `
                 <div class="matrix-cell ${cellClass || ''}">
@@ -589,24 +573,41 @@
             `;
         }
 
-        // New "matrix" layout for the cubicación by street (mock data for now)
+        function matrixText(value) {
+            const text = value === null || value === undefined ? '' : String(value).trim();
+            return text ? escapeHtml(text) : '—';
+        }
+
+        function matrixRD(value) {
+            const formatted = formatRD(value);
+            return formatted ? 'RD$ ' + formatted : '—';
+        }
+
+        function matrixKm(value) {
+            const formatted = formatKm(value);
+            return formatted ? formatted + ' km' : '—';
+        }
+
+        // "Matrix" layout for the cubicación by street, fed from dataCalle
         function renderCallesMatrix() {
-            const calle = MOCK_CALLE;
-            return `
+            if (!cubiCalles.length) {
+                return `<div class="text-center text-slate-400 py-4">Sin datos</div>`;
+            }
+            return cubiCalles.map(calle => `
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    ${matrixCell('No. de Lote', calle.noLote)}
-                    ${matrixCell('Coordenadas Inicio - Fin (Formato Sexagesimal)', calle.coordenadas, 'font-mono !text-[11px]')}
-                    ${matrixCell('Sector', calle.sector)}
-                    ${matrixCell('Calle / Avenida', calle.calleAvenida)}
-                    ${matrixCell('Monto Total Lote', 'RD$ ' + formatRD(calle.montoTotalLote))}
-                    ${matrixCell('Distancia Total Lote', formatKm(calle.distanciaTotalLote) + ' km')}
-                    ${matrixCell('Precio / KM', 'RD$ ' + formatRD(calle.precioKm))}
-                    ${matrixCell('Distancia (KM)', formatKm(calle.distanciaKm))}
-                    ${matrixCell('Monto Total Estimado', 'RD$ ' + formatRD(calle.montoTotalEstimado))}
-                    ${matrixCell('Descuento Anticipo', 'RD$ ' + formatRD(calle.descuentoAnticipo))}
-                    ${matrixCell('Monto Total a Pagar', 'RD$ ' + formatRD(calle.montoTotalAPagar), '', 'sm:col-span-2')}
+                    ${matrixCell('No. de Lote', matrixText(getField(calle, ["Numero de Lote", "Numero_de_Lote"])))}
+                    ${matrixCell('Coordenadas Inicio - Fin (Formato Sexagesimal)', matrixText(getField(calle, ["Coordenadas\nInicio - Fin\n(Formato Sexagesimal)\n", "Coordenadas Inicio - Fin (Formato Sexagesimal)", "Coordenadas_Inicio_-_Fin_Formato_Sexagesimal"])), 'font-mono !text-[11px]')}
+                    ${matrixCell('Sector', matrixText(getField(calle, ["Sector"])))}
+                    ${matrixCell('Calle / Avenida', matrixText(getField(calle, ["Calle / Avenida", "Calle_/_Avenida", "Calle"])))}
+                    ${matrixCell('Monto Total Lote', matrixRD(getField(calle, ["Monto Total Lote\n(RD$)", "Monto_Total_Lote_RD$"])))}
+                    ${matrixCell('Distancia Total Lote', matrixKm(getField(calle, ["Distancia Total Lote\n(Km)", "Distancia_Total_Lote_Km"])))}
+                    ${matrixCell('Precio / KM', matrixRD(getField(calle, ["Precio / Km", "Precio_/_Km"])))}
+                    ${matrixCell('Distancia Tramo (KM)', matrixKm(getField(calle, ["Distacia \n(Km)", "Distacia_Km", "Distacia (Km)", "Distancia Tramo (Km)", "Distancia_Tramo_Km"])))}
+                    ${matrixCell('Monto Total', matrixRD(getField(calle, ["Monto Total Estimado \n(RD$)", "Monto_Total_Estimado_RD$"])))}
+                    ${matrixCell('Descuento Anticipo', matrixRD(getField(calle, ["Descuento Anticipo", "Descuento_Anticipo"])))}
+                    ${matrixCell('Monto Total a Pagar', matrixRD(getField(calle, ["Monto Total a Pagar", "Monto_Total_a_Pagar"])), '', 'sm:col-span-2')}
                 </div>
-            `;
+            `).join('');
         }
 
         function renderCubicacion() {
