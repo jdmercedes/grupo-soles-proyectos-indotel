@@ -100,6 +100,19 @@
                 grid-template-columns: 1fr 1fr !important;
             }
 
+            /* Matrix layout for the cubicación by street */
+            .matrix-cell {
+                padding: 2px 4px !important;
+                background: white !important;
+                border-color: #cbd5e1 !important;
+            }
+            .matrix-label {
+                font-size: 6.5pt !important;
+            }
+            .matrix-value {
+                font-size: 8pt !important;
+            }
+
             /* Route map: keep the iframe on paper with a compact height */
             .ruta-iframe {
                 height: 70mm !important;
@@ -133,6 +146,29 @@
             display: flex !important;
         }
 
+        /* Matrix layout (Cubicación por Calle / Avenida) */
+        .matrix-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 6px 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .matrix-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+        .matrix-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            overflow-wrap: anywhere;
+        }
         /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
@@ -528,63 +564,55 @@
             return '';
         }
 
+        // Valores de ejemplo para previsualizar el formato de la sección por calle/avenida.
+        // TODO: reemplazar por los datos reales de dataCalle al conectar la API.
+        const MOCK_CALLE = {
+            noLote: 'L-001',
+            coordenadas: `18°28'59.2"N 69°55'12.4"O — 18°28'45.8"N 69°55'30.1"O`,
+            sector: 'Los Prados',
+            calleAvenida: 'Av. Núñez de Cáceres',
+            montoTotalLote: 125000,
+            distanciaTotalLote: 1.25,
+            precioKm: 100000,
+            distanciaKm: 1.25,
+            montoTotalEstimado: 125000,
+            descuentoAnticipo: 25000,
+            montoTotalAPagar: 100000
+        };
+
+        function matrixCell(label, value, valueClass, cellClass) {
+            return `
+                <div class="matrix-cell ${cellClass || ''}">
+                    <span class="matrix-label">${label}</span>
+                    <span class="matrix-value ${valueClass || ''}">${value}</span>
+                </div>
+            `;
+        }
+
+        // New "matrix" layout for the cubicación by street (mock data for now)
+        function renderCallesMatrix() {
+            const calle = MOCK_CALLE;
+            return `
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    ${matrixCell('No. de Lote', calle.noLote)}
+                    ${matrixCell('Coordenadas Inicio - Fin (Formato Sexagesimal)', calle.coordenadas, 'font-mono !text-[11px]')}
+                    ${matrixCell('Sector', calle.sector)}
+                    ${matrixCell('Calle / Avenida', calle.calleAvenida)}
+                    ${matrixCell('Monto Total Lote', 'RD$ ' + formatRD(calle.montoTotalLote))}
+                    ${matrixCell('Distancia Total Lote', formatKm(calle.distanciaTotalLote) + ' km')}
+                    ${matrixCell('Precio / KM', 'RD$ ' + formatRD(calle.precioKm))}
+                    ${matrixCell('Distancia (KM)', formatKm(calle.distanciaKm))}
+                    ${matrixCell('Monto Total Estimado', 'RD$ ' + formatRD(calle.montoTotalEstimado))}
+                    ${matrixCell('Descuento Anticipo', 'RD$ ' + formatRD(calle.descuentoAnticipo))}
+                    ${matrixCell('Monto Total a Pagar', 'RD$ ' + formatRD(calle.montoTotalAPagar), '', 'sm:col-span-2')}
+                </div>
+            `;
+        }
+
         function renderCubicacion() {
             const gridCalles = document.getElementById('cubi-calles-grid');
             if (gridCalles) {
-                if (!cubiCalles.length) {
-                    gridCalles.innerHTML = `<div class="text-center text-slate-400 py-4">Sin datos</div>`;
-                } else {
-                    gridCalles.innerHTML = cubiCalles.map(r => `
-                        <div class="col-span-full">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-xs">
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Calle / Avenida</span>
-                                    <span class="font-bold text-slate-900 text-right">${getField(r, ["Calle / Avenida", "Calle_/_Avenida", "Calle"])}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Sector</span>
-                                    <span class="font-bold text-slate-900 text-right">${getField(r, ["Sector"])}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">No. de Lote</span>
-                                    <span class="font-bold text-slate-900 text-right">${getField(r, ["Numero de Lote", "Numero_de_Lote"])}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Distacia (Km)</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatKm(getField(r, ["Distacia \n(Km)", "Distacia_Km", "Distacia (Km)"]))}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2 sm:col-span-2">
-                                    <span class="font-semibold text-slate-500">Coordenadas Inicio - Fin (Formato Sexagesimal)</span>
-                                    <span class="font-mono font-semibold text-slate-900 text-right">${getField(r, ["Coordenadas\nInicio - Fin\n(Formato Sexagesimal)\n", "Coordenadas Inicio - Fin (Formato Sexagesimal)", "Coordenadas_Inicio_-_Fin_Formato_Sexagesimal"])}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Distancia Total Lote (Km)</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatKm(getField(r, ["Distancia Total Lote\n(Km)", "Distancia_Total_Lote_Km"]))}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Precio / Km</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Precio / Km", "Precio_/_Km"]))}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Monto Total Lote (RD$)</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Total Lote\n(RD$)", "Monto_Total_Lote_RD$"]))}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Monto Anticipo (RD$)</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Anticipo\n(RD$)", "Monto_Anticipo_RD$"]))}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Monto Restante (RD$)</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Restante\n(RD$)\n", "Monto_Restante_RD$"]))}</span>
-                                </div>
-                                <div class="flex justify-between gap-4 border-b border-slate-100 pb-2">
-                                    <span class="font-semibold text-slate-500">Monto Total Estimado (RD$)</span>
-                                    <span class="font-bold text-slate-900 text-right">${formatRD(getField(r, ["Monto Total Estimado \n(RD$)", "Monto_Total_Estimado_RD$"]))}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
+                gridCalles.innerHTML = renderCallesMatrix();
             }
 
             const tTramos = document.getElementById('tbody-cubi-tramos');
