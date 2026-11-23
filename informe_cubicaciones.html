@@ -453,6 +453,8 @@
             const params = new URLSearchParams({ numerocubicacion });
             const at = getQueryParam('at');
             if (at) params.set('at', at);
+            const req = getQueryParam('req');
+            if (req) params.set('req', req);
             const url = `${CUBI_API}?${params.toString()}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
