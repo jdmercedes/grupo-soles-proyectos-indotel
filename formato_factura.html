@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factura - Grupo Soluciones Energéticas Soles</title>
+<style>
+  @page { size: letter; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e8e8e8; font-family: Arial, Helvetica, sans-serif; color: #111; }
+  .page {
+    width: 8.5in; min-height: 11in; margin: 18px auto; padding: .28in .45in .35in;
+    background: #fff; position: relative; box-shadow: 0 2px 12px #0002; font-size: 10pt;
+  }
+  .top { display: grid; grid-template-columns: 1fr 1.9in; gap: 6px; min-height: 1.55in; align-items: center; }
+  .company { display:flex; align-items:center; gap: 0; margin-left: -25px; }
+  .logo { width: 1.55in; height: 1.55in; object-fit: contain; object-position: left center; margin-right: -21px; }
+  .company-info { font-size: 8.8pt; line-height: 1.24; }
+  .company-info strong { font-size: 10pt; }
+  .invoice-title { font-size: 9pt; line-height: 1.32; white-space: nowrap; align-self: center; }
+  .invoice-title .number { color: #c00; font-weight: bold; font-size: 12.5pt; }
+  .date { margin: 7px 0 5px; }
+  .client {
+    border: 1px solid #333; min-height: .98in; padding: 5px 4px; font-size: 9.5pt; line-height: 1.22;
+  }
+  .details { display:grid; grid-template-columns: 2fr 1.15fr; margin-top: 1px; }
+  .left-details { border:1px solid #333; height:1.12in; padding:5px 8px; font-family: Arial, Helvetica, sans-serif; font-size:9pt; }
+  .left-details .contract { margin-left: 6px; }
+  .right-details { display:grid; grid-template-rows: .48in .64in; }
+  .project { border:1px solid #333; padding:5px; font-size:9pt; overflow:hidden; }
+  .terms { border:1px solid #333; padding:4px 7px; font-family:Arial,Helvetica,sans-serif; font-size:9pt; }
+  .terms .lbl { display:inline-block; width: 70px; }
+  .items { width:100%; border-collapse:collapse; table-layout:fixed; font-size:9pt; }
+  .items th { border:1px solid #333; padding:4px 3px; font-weight:normal; text-align:center; }
+  .items td { padding:4px 3px; vertical-align:top; overflow-wrap:anywhere; }
+  .items th:nth-child(1){width:7.5%} .items th:nth-child(2){width:13%}
+  .items th:nth-child(3){width:36%} .items th:nth-child(4){width:10%}
+  .items th:nth-child(5){width:10%} .items th:nth-child(6){width:10%}
+  .items th:nth-child(7){width:13.5%}
+  .items td:nth-child(1),.items td:nth-child(2){text-align:left}
+  .items td:nth-child(n+4){text-align:right}
+  .items .description { text-align:left !important; }
+  .middle-space { height: .93in; border-bottom:1px solid #555; margin-top:2px; }
+  .bottom-row { display:flex; justify-content:space-between; align-items:flex-start; }
+  .qr-area { padding-top: .1in; width: 2.7in; font-family:Arial,Helvetica,sans-serif; font-size:8.5pt; }
+  .qr { width:.82in; height:.82in; object-fit:contain; display:block; margin-bottom:8px; }
+  .totals { width:2.58in; border-collapse:collapse; margin-top:0; font-family:Arial,Helvetica,sans-serif; font-size:9pt; }
+  .totals td { border:1px solid #aaa; background:#e9eadf; padding:2px 5px; }
+  .totals td:first-child { text-align:right; font-weight:bold; width:48%; }
+  .totals td:last-child { text-align:right; white-space:nowrap; }
+  .footer { position:absolute; bottom:.42in; left:.5in; right:.5in; display:grid; grid-template-columns:1fr 1fr; gap:1.4in; text-align:center; font-family:Arial,Helvetica,sans-serif; font-size:9pt; }
+  .signature-line { border-top:1px solid #555; padding-top:2px; }
+  .received-meta { position:absolute; bottom:.25in; right:.5in; text-align:center; font-family:Arial,Helvetica,sans-serif; font-size:8pt; }
+  .received-meta .page-no { font-size:9pt; margin:8px 0 15px; }
+  .copy { position:absolute; bottom:.13in; left:0; right:0; text-align:center; font-size:8pt; }
+  /* Aviso de parámetros faltantes en la URL */
+  .params-error { display:none; width:8.5in; margin:18px auto; padding:.45in .5in; background:#fff;
+    box-shadow:0 2px 12px #0002; border:1px solid #e6b3b3; border-top:4px solid #c00; color:#111; }
+  .params-error.visible { display:block; }
+  .params-error h1 { margin:0 0 6px; font-size:14pt; color:#c00; }
+  .params-error p { margin:6px 0; font-size:10pt; color:#444; }
+  .params-error ul { margin:8px 0; padding-left:20px; font-size:10pt; }
+  .params-error li { margin:3px 0; }
+  .params-error code { font-family:Consolas,"Courier New",monospace; background:#f6f6f6;
+    border:1px solid #ddd; padding:1px 6px; border-radius:2px; color:#c00; }
+  @media screen and (max-width: 850px) { .page { margin:0; box-shadow:none; } }
+  @media print { body { background:#fff; } .page { margin:0; box-shadow:none; } }
+</style>
+</head>
+<body>
+
+<!-- Aviso: faltan parámetros en la URL (req, at, numerocubicacion) -->
+<div class="params-error" id="params-error" role="alert">
+  <h1>Faltan datos para generar la factura</h1>
+  <p>No se encontraron los siguientes parámetros en la URL de la página:</p>
+  <ul id="params-error-list"></ul>
+  <p>Debe proporcionarlos en la dirección, por ejemplo:</p>
+  <p><code>?req=...&amp;at=...&amp;numerocubicacion=...</code></p>
+</div>
+
+<div class="page">
+  <header class="top">
+    <div class="company">
+      <img class="logo" src="https://drive.google.com/thumbnail?id=1B9d7n3bERrrARfit47yW8ciHKPObJKSI&sz=w1000" alt="Logo Grupo Soluciones Energéticas Soles" onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/d/1B9d7n3bERrrARfit47yW8ciHKPObJKSI';">
+      <div class="company-info">
+        <strong>GRUPO SOLUCIONES ENERGETICAS SOLES, S. R. L.</strong><br>
+        C/ Francisco Petrarca No. 11B, Urb. Renacimiento, Santo Domingo R.D.<br>
+        Tels.: 809-334-1715 / solesdr.com.do/<br>
+        eMail: info.soles@solesdr.com.do<br>
+        <strong>RNC: 101855622</strong>
+      </div>
+    </div>
+    <div class="invoice-title">
+      <strong>Factura<br>Crédito Fiscal Electrónico</strong><br>
+      e-NCF: <strong>{{encf}}</strong><br>
+      Fecha Vencimiento: {{vencimiento}}<br>
+      Factura: <span class="number">{{numero_factura}}</span>
+    </div>
+  </header>
+
+  <div class="date">FECHA: {{fecha_factura}}</div>
+
+  <section class="client">
+    RNC CLIENTE: 401508915<br>
+    INSTITUTO DOMINICANO DE TELECOMUNICACIONES INDOTEL (7088)<br>
+    Edificio Corporativo, Av 27 de Febrero 323, Santo Domingo R.D.<br>
+    Tel.: (829) 732-5555, 8092009707
+  </section>
+
+  <section class="details">
+    <div class="left-details">
+      <strong>Otras Informaciones</strong>&nbsp;&nbsp; <span class="contract">Contrato:</span><br>
+      &nbsp;&nbsp;Orden:<br>
+      &nbsp;&nbsp;Cubicación: &nbsp;&nbsp; {{numero_cubicacion}}<br>
+      &nbsp;&nbsp;Periodo Fact.:<br>
+      &nbsp;&nbsp;Sub-Proyecto:
+    </div>
+    <div class="right-details">
+      <div class="project">{{contrato}}</div>
+      <div class="terms">
+        Condiciones:<br>
+        <span class="lbl">Moneda:</span>DOP<br>
+        <span class="lbl">Plazo:</span>30 días<br>
+        <span class="lbl">Vencimiento:</span>{{fecha_vencimiento}}
+      </div>
+    </div>
+  </section>
+
+  <table class="items">
+    <thead><tr>
+      <th>Cant.</th><th>Número</th><th>Descripción</th><th>Precio</th>
+      <th>Descto<br>(%)</th><th>Itbis</th><th>Valor</th>
+    </tr></thead>
+    <tbody><tr>
+      <td>{{cantidad}}</td><td>ORDIA</td><td class="description">{{descripcion}}</td>
+      <td>{{precio}}</td><td></td><td>{{itbis}}</td><td>{{valor}}</td>
+    </tr></tbody>
+  </table>
+
+  <div class="middle-space"></div>
+  <div class="bottom-row">
+    <div class="qr-area">
+      <img class="qr" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADzCAIAAAA3owxrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEAUlEQVR4nO3WP0tXexzA8bZ6Crk45xSoQ4LQ2uZjaOgxOOrm0ByuLekg1SANSXtOoYN/FpcEdbK0QhLs/rjB5WJWQqCX9329tnO+33P4nMOb3/nd+PaD/f39Fy9eLC0t7e7u/rh6eQcHB2/fvj08PPx+eHZ2tra2dnx8fJlrT05OVlZWFhcXB5cMDj99+vT8+fPByR93fvz48dWrVwsLC+/evfuTaf8jvn79OnjkjY2Nf84MXuPW1tbVT/L06dPp6ekPHz5sb2+vrq6+efNmeXn52bNnc3NzIyMj9+/f/+0d3r9/fy6hP3m6nZ2dly9fnp6e/nrbjcvci/+b169fDw8PD/q7cHV9ff3u3btXPNIlCZrzBl/C27dv37t372cb5ufnZ2ZmrnKkyxM05w3+J9z426NHjwYf+n8vHR0dPX78eHJy8suXL9c13q8Jmgs8efLk1q1b37MeGhoaHx+fmJi4c+fOzZs3Hz58+Pnz5+se8KcEzcX29vYGP8ZTU1NjY2Ojo6MPHjyYnZ3d3Ny87rl+Q9CkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETcpfJoSPn91piHkAAAAASUVORK5CYII=" alt="Código QR de la factura">
+    </div>
+    <table class="totals">
+      <tr><td>Sub-Total:</td><td>RD$ {{subtotal}}</td></tr>
+      <tr><td>Itbis:</td><td>RD$ {{itbis}}</td></tr>
+      <tr><td>Total:</td><td>RD$ {{total}}</td></tr>
+      <tr><td>Amortización:</td><td>RD$ {{amortizacion}}</td></tr>
+      <tr><td>Total a Pagar:</td><td>RD$ {{total_pagar}}</td></tr>
+    </table>
+  </div>
+
+  <footer class="footer">
+    <div class="signature-line">Autorizada por</div>
+    <div class="signature-line">Recibido por</div>
+  </footer>
+  <div class="received-meta"><div class="page-no">Pág. 1</div></div>
+  <div class="copy">Original: Cliente / Copia: Vendedor</div>
+</div>
+
+<script>
+  /* =========================================================================
+     Capa de datos
+     Todo valor entre {{llaves}} del HTML se reemplaza con lo que devuelve la
+     API. Se reenvían los query params de la propia página (req, at,
+     numerocubicacion).
+     ========================================================================= */
+  const CONFIG = {
+    apiUrl: "https://script.google.com/macros/s/AKfycbxwC7UUHK2f2Jz-F4p8OoyT7esVBbVulhldPjqItxoWympSf-qSJAmaxtT8VM9O_cgIhA/exec",
+    params: ["req", "at", "numerocubicacion"],  // query params de la página a reenviar
+    mock: true    // true = usa MOCK si la API falla (cámbialo a false para ver el error)
+  };
+
+  /* Query params presentes en la URL de esta misma página */
+  function paramsPagina() {
+    const p = new URLSearchParams(window.location.search);
+    const q = {};
+    for (const nombre of CONFIG.params) q[nombre] = p.get(nombre) || "";
+    return q;
+  }
+
+  /* Datos de ejemplo: misma forma que debe devolver la API */
+  const MOCK = {
+    encf: "E310000000123",
+    numero_factura: "F-2026-0010",
+    fecha_factura: "23/11/2026",
+    fecha_vencimiento: "23/12/2026",
+    numero_cubicacion: "CG-2026-0451",
+    contrato: "DESCONTAMINACION VISUAL EN EL D.N. LOTE 3",
+    vencimiento: "31/12/2026",
+    cantidad: "1.00",
+    descripcion: "Servicios de ingeniería para levantamiento, cubicación y regularización de infraestructura aérea. Sector Los Mina, Lote L2.",
+    precio: "125,000.00",
+    itbis: "22,500.00",
+    valor: "147,500.00",
+    subtotal: "125,000.00",
+    total: "147,500.00",
+    amortizacion: "25,000.00",
+    total_pagar: "122,500.00"
+  };
+
+  /* Acepta { data: { dataFacturas: [ ... ] } }, { dataFacturas: [ ... ] },
+     { data: { ... } }, un objeto factura plano o un array. Devuelve la
+     primera factura del array. */
+  function desempaquetar(json) {
+    const raiz = (json && typeof json.data === "object" && json.data !== null) ? json.data : json;
+    const lista = Array.isArray(raiz) ? raiz
+                : Array.isArray(raiz && raiz.dataFacturas) ? raiz.dataFacturas
+                : Array.isArray(json && json.dataFacturas) ? json.dataFacturas
+                : [raiz];
+    return lista[0];
+  }
+
+  async function obtenerFactura() {
+    if (!CONFIG.apiUrl) return MOCK;
+
+    /* Arma la URL de la API reenviando req, at y numerocubicacion */
+    const q = paramsPagina();
+    const url = new URL(CONFIG.apiUrl);
+    for (const nombre of CONFIG.params) {
+      if (q[nombre]) url.searchParams.set(nombre, q[nombre]);
+    }
+
+    const res = await fetch(url.toString(), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const json = await res.json();
+    if (json && json.success === false) throw new Error(json.error || "La API devolvió success=false");
+
+    /* Normaliza la respuesta y toma la primera factura */
+    const datos = desempaquetar(json);
+    if (!datos || typeof datos !== "object") throw new Error("Respuesta vacía de la API");
+
+    /* Respaldo: la cubicación desde la URL si la API no la devuelve */
+    if (!datos.numero_cubicacion && q.numerocubicacion) {
+      datos.numero_cubicacion = q.numerocubicacion;
+    }
+    return datos;
+  }
+
+  /* Nombres alternativos que se aceptan si la clave principal no existe */
+  const ALIAS = { total_pagar: ["total_a_pagar"] };
+
+  /* Montos que se muestran con separador de miles y 2 decimales */
+  const CAMPOS_MONEDA = ["cantidad", "precio", "itbis", "valor", "subtotal",
+                         "total", "amortizacion", "total_pagar"];
+
+  /* Longitud fija de identificadores: cubicación 3 dígitos, factura 6 */
+  const CAMPOS_CERO = { numero_cubicacion: 3, numero_factura: 6 };
+
+  /* Lee una clave (admite "cliente.rnc"); si no existe, intenta
+     coincidencia insensible a mayúsculas/minúsculas */
+  function buscarClave(clave, datos) {
+    const partes = clave.split(".");
+    let valor = partes.reduce((obj, k) => (obj == null ? obj : obj[k]), datos);
+    if (valor == null) {
+      valor = partes.reduce((obj, k) => {
+        if (obj == null || typeof obj !== "object") return undefined;
+        const k2 = Object.keys(obj).find((x) => x.toLowerCase() === k.toLowerCase());
+        return k2 ? obj[k2] : undefined;
+      }, datos);
+    }
+    return valor;
+  }
+
+  function leer(clave, datos) {
+    let valor = buscarClave(clave, datos);
+    if (valor == null && ALIAS[clave]) {
+      for (const alternativa of ALIAS[clave]) {
+        valor = buscarClave(alternativa, datos);
+        if (valor != null) break;
+      }
+    }
+    return valor;
+  }
+
+  /* Los montos llegan como números crudos de la API (470464.3432):
+     se muestran con separador de miles y 2 decimales */
+  function formatear(clave, valor) {
+    const nombre = clave.split(".").pop();
+    if (typeof valor === "number" && isFinite(valor) && CAMPOS_MONEDA.includes(nombre)) {
+      return valor.toLocaleString("es-DO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    /* Identificadores con ceros a la izquierda: 1 -> 001, 7447 -> 007447 */
+    const largo = CAMPOS_CERO[nombre];
+    if (largo) {
+      const texto = String(valor).trim();
+      if (/^\d+$/.test(texto)) return texto.padStart(largo, "0");
+    }
+    return String(valor);
+  }
+
+  /* Reemplaza {{clave}} (admite {{cliente.rnc}}) en todos los nodos de texto */
+  function renderizar(datos) {
+    const raiz = document.querySelector(".page");
+    const walker = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT);
+    const nodos = [];
+    while (walker.nextNode()) nodos.push(walker.currentNode);
+    for (const nodo of nodos) {
+      if (!nodo.nodeValue.includes("{{")) continue;
+      nodo.nodeValue = nodo.nodeValue.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, clave) => {
+        const valor = leer(clave, datos);
+        return valor == null ? "" : formatear(clave, valor);
+      });
+    }
+  }
+
+  /* Muestra el aviso de parámetros faltantes y oculta la factura */
+  function mostrarErrorParams(faltan) {
+    const caja = document.getElementById("params-error");
+    const lista = document.getElementById("params-error-list");
+    if (lista) {
+      lista.innerHTML = "";
+      for (const nombre of faltan) {
+        const li = document.createElement("li");
+        const code = document.createElement("code");
+        code.textContent = nombre;
+        li.appendChild(code);
+        lista.appendChild(li);
+      }
+    }
+    if (caja) caja.classList.add("visible");
+    const pagina = document.querySelector(".page");
+    if (pagina) pagina.style.display = "none";
+  }
+
+  (async () => {
+    /* Si la URL no trae req, at o numerocubicacion: aviso y no se pide nada */
+    const faltan = CONFIG.params.filter((nombre) => !paramsPagina()[nombre]);
+    if (faltan.length) {
+      mostrarErrorParams(faltan);
+      return;
+    }
+    try {
+      renderizar(await obtenerFactura());
+    } catch (error) {
+      console.error("No se pudo cargar la factura:", error);
+      if (CONFIG.mock) renderizar(MOCK);
+    }
+  })();
+</script>
+</body>
+</html>
