@@ -606,8 +606,6 @@
                     ${matrixCell('Precio / KM', matrixRD(getField(calle, ["Precio / Km", "Precio_/_Km"])))}
                     ${matrixCell('Distancia Tramo (KM)', matrixKm(getField(calle, ["Distacia \n(Km)", "Distacia_Km", "Distacia (Km)", "Distancia Tramo (Km)", "Distancia_Tramo_Km"])))}
                     ${matrixCell('Monto Total', matrixRD(getField(calle, ["Monto Total Estimado \n(RD$)", "Monto_Total_Estimado_RD$"])))}
-                    ${matrixCell('Descuento Anticipo', matrixRD(getField(calle, ["Descuento Anticipo", "Descuento_Anticipo"])))}
-                    ${matrixCell('Monto Total a Pagar', matrixRD(getField(calle, ["Monto Total a Pagar", "Monto_Total_a_Pagar"])), '', 'sm:col-span-2')}
                 </div>
             `).join('');
         }
